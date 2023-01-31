@@ -1,0 +1,26 @@
+{
+    "success": true,
+    "error": false,
+    "data": [
+        {
+            "_id": "63c69854d162d937ebe97178",
+            "image": "https://protocolsai.s3.us-west-1.amazonaws.com/1673959507689download.jpg",
+            "folderid": "63c68797d772865a5ec8e641",
+            "registerid": "63c0132d680ed8457fbd62b4",
+            "__v": 0
+        },
+        {
+            "_id": "63c695872ab37cab98b84b00",
+            "image": "https://protocolsai.s3.us-west-1.amazonaws.com/1673958790830download.jpg",
+            "folderid": "63c68797d772865a5ec8e641",
+            "registerid": "63c0132d680ed8457fbd62b4",
+            "__v": 0
+        },
+        {
+            "_id": "63c6921519c4197c8bdddba2",
+            "image": "https://protocolsai.s3.us-west-1.amazonaws.com/1673957908608download.jpg",
+            "registerid": "63c0132d680ed8457fbd62b4",
+            "__v": 0
+        }
+    ]
+}

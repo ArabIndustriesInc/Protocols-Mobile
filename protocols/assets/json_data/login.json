@@ -1,0 +1,11 @@
+{
+    "success": true,
+    "error": false,
+    "message": "login successfull",
+    "registerid": "63c046450a93760ca653e31c",
+    "email": "kousallyab95@gmail.com",
+    "companyname": "delta",
+    "role": "0",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtvdXNhbGx5YWI5NUBnbWFpbC5jb20iLCJyb2xlIjoiMCIsInJlZ2lzdGVyaWQiOiI2M2MwNDY0NTBhOTM3NjBjYTY1M2UzMWMiLCJjb21wYW55bmFtZSI6ImRlbHRhIiwiaWF0IjoxNjc0MTk2MzY3LCJleHAiOjE2NzY3ODgzNjd9.zcpldPG0_AXpPEU2CJI3SKO8Cdl0M9R9ku-MkhjGZQY",
+    "expiresIn": "30 days"
+}

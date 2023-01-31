@@ -1,0 +1,14 @@
+{
+    "success": true,
+    "error": false,
+    "message": "Account created successfully,please enter otp to verify your account",
+    "data": {
+        "firstname": "luha",
+        "lastname": "sanniya",
+        "email": "arab1234@gmail.com",
+        "password": "$2a$10$dik18Ynto3WGaXtJb4bc2ug7KvaqrwXH.kVWy9r.Gjv53rTJvqbVe",
+        "companyname": "llllllllllllllll",
+        "_id": "63ca3710f4078e15cea24f99",
+        "__v": 0
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "success": true,
+    "error": false,
+    "data": [
+        {
+            "_id": "63c68797d772865a5ec8e641",
+            "foldername": "Files",
+            "registerid": "63c0132d680ed8457fbd62b4",
+            "__v": 0
+        },
+        {
+            "_id": "63c690e57fd5494453aa73eb",
+            "foldername": "Test Folder",
+            "registerid": "63c0132d680ed8457fbd62b4",
+            "__v": 0
+        },
+        {
+            "_id": "63c6919e9093c30443042d34",
+            "foldername": "folder123",
+            "registerid": "63c0132d680ed8457fbd62b4",
+            "__v": 0
+        },
+        {
+            "_id": "63c693397fd5494453aa747e",
+            "foldername": "data",
+            "registerid": "63c0132d680ed8457fbd62b4",
+            "__v": 0
+        }
+    ]
+}

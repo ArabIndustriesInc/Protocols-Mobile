@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="96" height="96" viewBox="0 0 96 96">
+  <defs>
+    <radialGradient id="radial-gradient" cx="0.179" cy="0.11" r="1.008" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#0370c8"/>
+      <stop offset="0.484" stop-color="#036fc5"/>
+      <stop offset="0.775" stop-color="#036abd"/>
+      <stop offset="1" stop-color="#0362b0"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-2" cx="0.5" cy="1.007" r="1.009" gradientTransform="translate(0.227) scale(0.546 1)" gradientUnits="objectBoundingBox">
+      <stop offset="0"/>
+      <stop offset="1" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-3" cx="0.5" cy="0.5" r="0.5" gradientTransform="matrix(1, 0, 0, 1, 0, 0)" xlink:href="#radial-gradient-2"/>
+    <linearGradient id="linear-gradient" x1="0.161" y1="0.161" x2="0.858" y2="0.858" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#75daff"/>
+      <stop offset="1" stop-color="#1ea2e4"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="0.233" y1="0.086" x2="0.763" y2="1.078" xlink:href="#linear-gradient"/>
+    <clipPath id="clip-Profile">
+      <rect width="96" height="96"/>
+    </clipPath>
+  </defs>
+  <g id="Profile" clip-path="url(#clip-Profile)">
+    <rect width="96" height="96" fill="rgba(255,255,255,0)"/>
+    <g id="icons8-male-user-240" transform="translate(6 6)">
+      <path id="Path_1434" data-name="Path 1434" d="M80,42A38,38,0,1,1,42,4,38,38,0,0,1,80,42Z" fill="url(#radial-gradient)"/>
+      <path id="Path_1435" data-name="Path 1435" d="M37.186,58.4A37.858,37.858,0,0,0,65.023,46.206a30.384,30.384,0,0,0-55.674,0A37.858,37.858,0,0,0,37.186,58.4Z" transform="translate(4.814 21.6)" fill="url(#radial-gradient-2)"/>
+      <circle id="Ellipse_371" data-name="Ellipse 371" cx="18.05" cy="18.05" r="18.05" transform="translate(23.95 16.35)" fill="url(#radial-gradient-3)"/>
+      <ellipse id="Ellipse_372" data-name="Ellipse 372" cx="15" cy="15.5" rx="15" ry="15.5" transform="translate(27 17)" fill="url(#linear-gradient)"/>
+      <path id="Path_1436" data-name="Path 1436" d="M35.788,56.6a37.814,37.814,0,0,0,24.886-9.327,26.564,26.564,0,0,0-49.772,0A37.814,37.814,0,0,0,35.788,56.6Z" transform="translate(6.212 23.4)" fill="url(#linear-gradient-2)"/>
+    </g>
+  </g>
+</svg>

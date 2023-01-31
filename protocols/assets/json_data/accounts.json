@@ -1,0 +1,36 @@
+{
+    "success": true,
+    "error": false,
+    "data": [
+        {
+            "_id": "63c01492680ed8457fbd62be",
+            "bankname": "SBI",
+            "Nickname": "Work",
+            "accountname": "Abhijith Mohan",
+            "ifsc": "IFSC000SBIN",
+            "accountnumber": "78261527836",
+            "registerid": "63c0132d680ed8457fbd62b4",
+            "__v": 0
+        },
+        {
+            "_id": "63c01504680ed8457fbd62d1",
+            "bankname": "ICICI",
+            "Nickname": "Personal",
+            "accountname": "Secondary Account",
+            "ifsc": "ICICI0006753",
+            "accountnumber": "82736493748",
+            "registerid": "63c0132d680ed8457fbd62b4",
+            "__v": 0
+        },
+        {
+            "_id": "63c12012b542f18432bee69a",
+            "bankname": "SBI",
+            "Nickname": "Work",
+            "accountname": "Abhijith Mohanngh",
+            "ifsc": "IFSC000SBINhj",
+            "accountnumber": "78261527836",
+            "registerid": "63c0132d680ed8457fbd62b4",
+            "__v": 0
+        }
+    ]
+}

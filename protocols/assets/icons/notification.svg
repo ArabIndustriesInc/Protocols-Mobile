@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="96" height="96" viewBox="0 0 96 96">
+  <defs>
+    <clipPath id="clip-Notification">
+      <rect width="96" height="96"/>
+    </clipPath>
+  </defs>
+  <g id="Notification" clip-path="url(#clip-Notification)">
+    <rect width="96" height="96" fill="rgba(255,255,255,0)"/>
+    <g id="Icon_ionic-ios-notifications" data-name="Icon ionic-ios-notifications" transform="translate(17.618 9.999)">
+      <path id="Path_694" data-name="Path 694" d="M9.156,10.068c5.908,0,9.137-4.179,9.137-10.068H0C0,5.889,3.229,10.068,9.156,10.068Z" transform="translate(21.189 65.933)" fill="#4ec1f2"/>
+      <path id="Path_695" data-name="Path 695" d="M60,56.284c-2.925-3.856-8.681-6.117-8.681-23.383,0-17.723-7.826-24.846-15.12-26.556-.684-.171-1.178-.4-1.178-1.121V4.673a4.635,4.635,0,1,0-9.27,0v.551c0,.7-.494.95-1.178,1.121C17.257,8.074,9.45,15.178,9.45,32.9c0,17.267-5.756,19.508-8.681,23.383a3.77,3.77,0,0,0,3.02,6.041H57A3.771,3.771,0,0,0,60,56.284Z" transform="translate(0)" fill="#036bbf"/>
+    </g>
+  </g>
+</svg>

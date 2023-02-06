@@ -51,7 +51,7 @@ class DirectorsView extends GetView<DirectorsController> {
                           return (Get.find<DirectorsController>()
                                   .directors
                                   .isEmpty)
-                              ? const EmptyDashMessage(title: 'No Tasks!')
+                              ? const EmptyDashMessage(title: 'No Directors!')
                               : DirectorsCardView(index: index);
                         },
                         itemCount: (Get.find<DirectorsController>()

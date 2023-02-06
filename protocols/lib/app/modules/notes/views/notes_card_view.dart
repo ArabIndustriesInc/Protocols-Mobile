@@ -56,7 +56,7 @@ class NotesCardView extends GetView<NotesController> {
                         return DeleteAlertView(
                           subtitle:
                               'Are you sure, you want to delete this Note? This action can\'t be reversed!',
-                          title: 'Delete Notes',
+                          title: 'Delete Note',
                           action: InkWell(
                             highlightColor: Colors.grey[200],
                             onTap: () {

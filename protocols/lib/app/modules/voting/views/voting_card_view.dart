@@ -37,7 +37,7 @@ class VotingCardView extends GetView<VotingController> {
                   return DeleteAlertView(
                     subtitle:
                         'Are you sure, you want to delete this vote? This action can\'t be reversed!',
-                    title: 'Delete Transaction',
+                    title: 'Delete Vote',
                     action: InkWell(
                       highlightColor: Colors.grey[200],
                       onTap: () {

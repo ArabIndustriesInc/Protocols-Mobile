@@ -46,7 +46,7 @@ class TodoCardView extends GetView<TodoController> {
                     return DeleteAlertView(
                       subtitle:
                           'Are you sure, you want to delete this task? This action can\'t be reversed!',
-                      title: 'Delete Transaction',
+                      title: 'Delete Task',
                       action: InkWell(
                         highlightColor: Colors.grey[200],
                         onTap: () {

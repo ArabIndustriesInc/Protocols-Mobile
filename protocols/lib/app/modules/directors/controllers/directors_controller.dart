@@ -1,17 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:protocols/app/data/providers/directors_provider.dart';
 import 'package:protocols/app/routes/app_pages.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DirectorsController extends GetxController {
-  List<DirectorsModel> directorsList = [];
-  add(DirectorsModel directors) {
+  List<DirectorModel> directorsList = [];
+  add(DirectorModel directors) {
     directorsList.add(directors);
     update();
   }
+
+  RxList directors = [].obs;
+  var loading = true.obs;
+  var loadingDelete = false.obs;
+  getAllTodo() async {
+    directors.value = await DirectorsProvider()
+        .getAllDirectors()
+        .whenComplete(() => loading.value = false);
+    update();
+  }
+
+  @override
+  void onInit() async {
+    getAllTodo();
+    update();
+    super.onInit();
+  }
 }
 
-class DirectorsModel {
+class DirectorModel {
   final String fName;
   final String dob;
   final String fatherName;
@@ -22,7 +40,7 @@ class DirectorsModel {
   String? mName;
   String? lName;
   final String image;
-  DirectorsModel(
+  DirectorModel(
     this.mName,
     this.lName, {
     required this.fName,

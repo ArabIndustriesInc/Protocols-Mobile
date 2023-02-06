@@ -6,13 +6,6 @@ import 'package:protocols/app/data/providers/voting_provider.dart';
 import 'package:protocols/app/routes/app_pages.dart';
 
 class VotingController extends GetxController {
-  List<VoteModel> votingList = [];
-  add(VoteModel vote) {
-    votingList.add(vote);
-    update();
-  }
-
-  var voteStatus = ''.obs;
   List<Voting> votes = [];
   var loading = true.obs;
   var loadingDelete = false.obs;
@@ -27,18 +20,6 @@ class VotingController extends GetxController {
     update();
     super.onInit();
   }
-}
-
-class VoteModel {
-  final String title;
-  final String description;
-  final String date;
-  String? answer;
-  VoteModel(
-      {required this.title,
-      this.answer,
-      required this.description,
-      required this.date});
 }
 
 class VotingButtonView extends GetView {

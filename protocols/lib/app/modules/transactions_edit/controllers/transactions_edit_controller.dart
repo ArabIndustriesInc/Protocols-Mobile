@@ -92,9 +92,15 @@ class TransactionsEditButton extends StatelessWidget {
                         .substring(0, 10);
                     final timeOfDay =
                         Get.find<TransactionsEditDateController>().pickedTime;
-                    final now = DateTime.now();
-                    final time = DateTime(now.year, now.month, now.day,
-                        timeOfDay.hour, timeOfDay.minute);
+                    // final now = DateTime.now();
+                    // final hour = (timeOfDay.hour.toString().length > 1)
+                    //     ? timeOfDay.hour
+                    //     : '0${timeOfDay.hour}';
+                    // final minute = (timeOfDay.minute.toString().length > 1)
+                    //     ? timeOfDay.minute
+                    //     : '0${timeOfDay.hour}';
+                    // final time = ('$hour:$minute');
+                    final time = timeOfDay.toString().substring(10, 15);
                     final typeController =
                         Get.find<TransactionsEditController>()
                             .transTypeValue

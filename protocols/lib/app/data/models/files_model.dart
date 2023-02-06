@@ -1,8 +1,5 @@
-// To parse this JSON data, do
-//
-//     final filesModel = filesModelFromJson(jsonString);
-
 import 'dart:convert';
+import 'dart:io';
 
 FilesModel filesModelFromJson(String str) =>
     FilesModel.fromJson(json.decode(str));
@@ -37,15 +34,17 @@ class Files {
   Files({
     required this.id,
     required this.image,
-    this.folderid,
+    required this.folderid,
     required this.registerid,
+    required this.filename,
     required this.v,
   });
 
   String id;
   String image;
-  String? folderid;
+  String folderid;
   String registerid;
+  String filename;
   int v;
 
   factory Files.fromJson(Map<String, dynamic> json) => Files(
@@ -53,6 +52,7 @@ class Files {
         image: json["image"],
         folderid: json["folderid"],
         registerid: json["registerid"],
+        filename: json["filename"],
         v: json["__v"],
       );
 
@@ -61,6 +61,19 @@ class Files {
         "image": image,
         "folderid": folderid,
         "registerid": registerid,
+        "filename": filename,
         "__v": v,
       };
+}
+
+class AddFiles {
+  AddFiles({
+    required this.image,
+    required this.folderid,
+    required this.filename,
+  });
+
+  File image;
+  String folderid;
+  String filename;
 }

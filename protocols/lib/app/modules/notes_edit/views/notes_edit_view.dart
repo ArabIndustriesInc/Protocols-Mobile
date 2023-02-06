@@ -161,8 +161,8 @@ class NotesEditView extends GetView<NotesEditController> {
     //   Get.find<NotesEditController>().controllers[i].text = notes.sections[i];
     // }
     Get.find<NotesEditController>().titleController.text =
-        Get.find<NotesController>().notes[index].noteid.title;
+        Get.find<NotesController>().notes[index].title;
     Get.find<NotesEditController>().contentController.text =
-        Get.find<NotesController>().notes[index].noteid.description;
+        Get.find<NotesController>().notes[index].description;
   }
 }

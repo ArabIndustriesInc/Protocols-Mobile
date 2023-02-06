@@ -145,7 +145,7 @@ class AddDirectorsButton extends GetView {
                           );
                         });
                   } else {
-                    final director = DirectorsModel(
+                    final director = DirectorModel(
                       middleName,
                       lastName,
                       fName: firstName,

@@ -1,14 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:protocols/app/data/providers/todo_provider.dart';
 import 'package:protocols/app/routes/app_pages.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TodoController extends GetxController {
   final List<String> menuItems = ['Edit', 'Delete'];
-  List<ToDoModel> toDoList = [];
-  add(ToDoModel todo) {
-    toDoList.add(todo);
+
+  RxList todoDetails = [].obs;
+  var loading = true.obs;
+  var loadingDelete = false.obs;
+  getAllTodo() async {
+    todoDetails.value = await TodoProvider()
+        .getAllTodo()
+        .whenComplete(() => loading.value = false);
     update();
+  }
+
+  @override
+  void onInit() async {
+    getAllTodo();
+    update();
+    super.onInit();
   }
 }
 

@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -13,22 +14,27 @@ void login(String email, password, BuildContext context) async {
   try {
     final response = await http.post(Uri.parse('${baseUrlApi}login/check'),
         body: {'email': email, 'password': password});
-
+    var data = jsonDecode(response.body.toString());
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body.toString());
-      box.write('login_token', data['token']);
-      Get.offAllNamed(Routes.HOME);
-      SnackbarMessage().snackBarMessage('Logged in successfully!', context);
-    } else {
-      var data = jsonDecode(response.body.toString());
-      if (data['message'] != 'Payment is not done') {
-        Get.find<LoginController>().visibleOff(data['message'].toString());
+      log(response.body);
+      if (data["paid"] == true) {
+        box.write('login_token', data['token']);
+        box.write('paid_user', data['paid']);
+        Get.offAllNamed(Routes.HOME);
+        SnackbarMessage().snackBarMessage('Logged in successfully!', context);
       } else {
+        box.write('paid_user', data['paid']);
+        box.write('login_token', data['token']);
         Get.toNamed(Routes.PRICING_PLAN);
       }
+    } else {
+      Get.find<LoginController>().isVisible.value = false;
+      Get.find<LoginController>().visibleOff(data['message'].toString());
     }
   } catch (e) {
-    SnackbarMessage()
-        .snackBarMessage('Oops something went wrong!, Retry', context);
+    Get.find<LoginController>().isVisible.value = false;
+    log(e.toString());
+    SnackbarMessage().snackBarMessage(
+        'Oops something went wrong!, Try again later', context);
   }
 }

@@ -20,11 +20,20 @@ final appTheme = ThemeData(
   fontFamily: 'Montserrat SemiBold',
   primaryColor: const Color(0xff2D9CEA),
 );
-
+final taskDeco = InputDecoration(
+    focusedErrorBorder: textDeco,
+    errorBorder: textDeco,
+    contentPadding: const EdgeInsets.all(19),
+    focusedBorder: textDeco,
+    enabledBorder: textDeco,
+    hintText: 'Enter task...',
+    hintStyle: const TextStyle(
+      color: Color(0xffADADAD),
+    ));
 final textDeco = OutlineInputBorder(
   borderRadius: BorderRadius.circular(15),
   borderSide: const BorderSide(color: Color(0xffCBCBCB), width: .8),
 );
-String token = box.read('login_token') ?? '';
-final initRoute = (token.isEmpty) ? AppPages.INITIAL : Routes.HOME;
+bool paid = box.read('paid_user') ?? false;
+final initRoute = (!paid) ? AppPages.INITIAL : Routes.HOME;
 // final initRoute = Routes.PRICING_PLAN;

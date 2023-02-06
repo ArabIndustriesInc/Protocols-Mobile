@@ -36,51 +36,31 @@ class TodoView extends GetView<TodoController> {
               SizedBox(
                 height: 30.h,
               ),
-              (Get.find<TodoController>().toDoList.isEmpty)
-                  ? SizedBox(
-                      height: MediaQuery.of(context).size.height / 1.5,
-                      child: Center(
-                        child: Text(
-                          'No Tasks!',
-                          style:
-                              TextStyle(color: Colors.black, fontSize: 18.sp),
+              Obx(
+                () => (Get.find<TodoController>().loading.value)
+                    ? SizedBox(
+                        height: MediaQuery.of(context).size.height / 1.5,
+                        child: const Center(child: CircularProgressIndicator()))
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 35.0),
+                        child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, index) {
+                            return (Get.find<TodoController>()
+                                    .todoDetails
+                                    .isEmpty)
+                                ? const EmptyDashMessage(title: 'No Tasks!')
+                                : TodoCardView(index: index);
+                          },
+                          itemCount: (Get.find<TodoController>()
+                                  .todoDetails
+                                  .isEmpty)
+                              ? 1
+                              : Get.find<TodoController>().todoDetails.length,
                         ),
                       ),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                      child: GetBuilder<TodoController>(
-                          init: TodoController(),
-                          builder: (_) {
-                            return ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (BuildContext context, index) {
-                                final todo =
-                                    Get.find<TodoController>().toDoList[index];
-                                final total = Get.find<TodoController>()
-                                    .toDoList[index]
-                                    .subTasks
-                                    .length;
-                                var done = 0;
-                                for (var i = 0; i < total; i++) {
-                                  if (Get.find<TodoController>()
-                                          .toDoList[index]
-                                          .subTasks[i]
-                                          .isDone ==
-                                      true) {
-                                    done++;
-                                  }
-                                }
-                                final percent = done / total * 100;
-                                return TodoCardView(
-                                    todo: todo, percent: percent.toString());
-                              },
-                              itemCount:
-                                  Get.find<TodoController>().toDoList.length,
-                            );
-                          }),
-                    )
+              )
             ],
           ),
         )),

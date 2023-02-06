@@ -80,6 +80,18 @@ class DocsButtonView extends GetView<DocumentsController> {
                             );
                     }),
                   ),
+                  isWarning: true,
+                  warning: Obx(() =>
+                      (Get.find<DocumentsController>().errorIsVisible.value)
+                          ? Text(
+                              Get.find<DocumentsController>().errorMesage.value,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                color: const Color(0xFFD40A0A),
+                              ),
+                            )
+                          : const SizedBox()),
                 );
               });
         },

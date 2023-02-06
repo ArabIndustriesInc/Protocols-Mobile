@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -155,10 +153,6 @@ class TransactionsCardView extends GetView {
   }
 
   TransactionDescriptionView transactionTime(BuildContext context) {
-    log(Get.find<TransactionsController>()
-        .transactions[index]
-        .selecttime
-        .toString());
     DateTime dateTime = DateFormat("HH:mm").parse(
         Get.find<TransactionsController>().transactions[index].selecttime);
     final timeDay = DateFormat.jm().format(dateTime);

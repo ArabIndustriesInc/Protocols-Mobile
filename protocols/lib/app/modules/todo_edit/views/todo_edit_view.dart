@@ -9,8 +9,8 @@ import 'package:protocols/app/modules/todo_edit/controllers/todo_edit_date_contr
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TodoEditView extends GetView<TodoEditController> {
-  final ToDoModel todo;
-  const TodoEditView({Key? key, required this.todo}) : super(key: key);
+  final int index;
+  const TodoEditView({Key? key, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     initValue();
@@ -80,7 +80,11 @@ class TodoEditView extends GetView<TodoEditController> {
                     padding: EdgeInsets.all(10.h),
                   ),
                   ToDoDueDatePickCardEdit(
-                    date: todo.dueDate,
+                    date: Get.find<TodoController>()
+                        .todoDetails[index]
+                        .todoid
+                        .deadline
+                        .toString(),
                     icon: Icons.calendar_today,
                     subTitle: 'Due Date',
                     title: Obx(
@@ -92,44 +96,59 @@ class TodoEditView extends GetView<TodoEditController> {
                     iconSize: 25.w,
                   ),
                   Container(
-                    height: 1.h,
+                    height: 10.h,
                     padding: EdgeInsets.all(10.h),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Sub Tasks: ',
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontFamily: 'Montserrat Bold',
-                        ),
-                      ),
-                      TextButton(
-                          style: TextButton.styleFrom(
-                              padding: const EdgeInsets.all(7),
-                              minimumSize: Size.zero,
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              shape: const CircleBorder()),
-                          onPressed: () {
-                            Get.find<TodoEditController>().add();
-                          },
-                          child: Icon(
-                            Icons.add_rounded,
-                            color: Colors.black,
-                            size: 22.w,
-                          ))
-                    ],
+                  Text(
+                    'Task: ',
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontFamily: 'Montserrat Bold',
+                    ),
                   ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Text(
+                  //       'Task: ',
+                  //       style: TextStyle(
+                  //         fontSize: 18.sp,
+                  //         fontFamily: 'Montserrat Bold',
+                  //       ),
+                  //     ),
+                  //     TextButton(
+                  //         style: TextButton.styleFrom(
+                  //             padding: const EdgeInsets.all(7),
+                  //             minimumSize: Size.zero,
+                  //             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  //             shape: const CircleBorder()),
+                  //         onPressed: () {
+                  //           Get.find<TodoEditController>().add();
+                  //         },
+                  //         child: Icon(
+                  //           Icons.add_rounded,
+                  //           color: Colors.black,
+                  //           size: 22.w,
+                  //         ))
+                  //   ],
+                  // ),
                   Container(
                     height: .5.h,
                     padding: EdgeInsets.all(10.h),
                   ),
-                  GetBuilder<TodoEditController>(builder: ((_) {
-                    return Column(
-                      children: Get.find<TodoEditController>().subTasks,
-                    );
-                  })),
+                  TextFormField(
+                    maxLines: 3,
+                    style: const TextStyle(fontSize: 14),
+                    validator: ((value) {
+                      if (value!.isEmpty) {
+                        return "This field should be filled!";
+                      } else {
+                        return null;
+                      }
+                    }),
+                    decoration: taskDeco,
+                    controller: Get.find<TodoEditController>().taskController,
+                  ),
                 ],
               ),
             ),
@@ -137,18 +156,22 @@ class TodoEditView extends GetView<TodoEditController> {
         ],
       ),
       //floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: const ToDoEditButton(),
+      bottomNavigationBar: ToDoEditButton(
+        index: index,
+      ),
     );
   }
 
   void initValue() {
-    final date = DateTime.parse(todo.dueDate);
+    final date = DateTime.parse(Get.find<TodoController>()
+        .todoDetails[index]
+        .todoid
+        .deadline
+        .toString());
     Get.find<TodoEditDateController>().initDateToDo(date);
-    Get.find<TodoEditController>().titleController.text = todo.title;
-    for (var i = 0; i < todo.subTasks.length; i++) {
-      Get.find<TodoEditController>().add();
-      Get.find<TodoEditController>().controllers[i].text =
-          todo.subTasks[i].task;
-    }
+    Get.find<TodoEditController>().titleController.text =
+        Get.find<TodoController>().todoDetails[index].todoid.title;
+    Get.find<TodoEditController>().taskController.text =
+        Get.find<TodoController>().todoDetails[index].task;
   }
 }

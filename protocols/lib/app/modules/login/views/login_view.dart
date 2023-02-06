@@ -76,21 +76,23 @@ class LoginView extends GetView<LoginController> {
                   child: Obx(() {
                     return ElevatedButton(
                       onPressed: () {
-                        if (Get.find<LoginFieldController>()
-                            .formKeyLogin
-                            .currentState!
-                            .validate()) {
-                          Get.find<LoginController>().visibleOn();
-                          final email = Get.find<LoginFieldController>()
-                              .emailController
-                              .text
-                              .trim()
-                              .toLowerCase();
-                          final password = Get.find<LoginFieldController>()
-                              .passwordController
-                              .text
-                              .trim();
-                          login(email, password, context);
+                        if (!Get.find<LoginController>().isVisible.value) {
+                          if (Get.find<LoginFieldController>()
+                              .formKeyLogin
+                              .currentState!
+                              .validate()) {
+                            Get.find<LoginController>().visibleOn();
+                            final email = Get.find<LoginFieldController>()
+                                .emailController
+                                .text
+                                .trim()
+                                .toLowerCase();
+                            final password = Get.find<LoginFieldController>()
+                                .passwordController
+                                .text
+                                .trim();
+                            login(email, password, context);
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(

@@ -73,6 +73,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.2"
+  dio:
+    dependency: "direct main"
+    description:
+      name: dio
+      sha256: "7d328c4d898a61efc3cd93655a0955858e29a0aa647f0f9e02d59b3bb275e2e8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.6"
   equatable:
     dependency: "direct main"
     description:
@@ -202,10 +210,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_stripe
-      sha256: f6e2a01c499f4b4db65e80fbed732ecfe602ec0e67bdcb3d6d5a4e02f807a28f
+      sha256: "00e612c11ea57f9b78510e5b2aa8719022698bd8a023140e9b7f52c1dfa2e27d"
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.0"
+    version: "8.0.0+1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -553,26 +561,26 @@ packages:
     dependency: transitive
     description:
       name: stripe_android
-      sha256: "32cfef01ba3ca027b2100350aa0058de72cdf314ad575cb492aa408adca88557"
+      sha256: "3cf43dfb70d8011ded0730c091e741b94cd4aaccaad22732a19f5941503072d6"
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.1"
+    version: "8.0.0+1"
   stripe_ios:
     dependency: transitive
     description:
       name: stripe_ios
-      sha256: "89d51e4357f8769452600591fdfd6c506d7bfd4d58072139b66dcd2b2914433c"
+      sha256: b3da653013be8aada352b158439024963a0d5dc0648524127d3ef4fd6b0a0cc7
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.0"
+    version: "8.0.0"
   stripe_platform_interface:
     dependency: transitive
     description:
       name: stripe_platform_interface
-      sha256: a51317308eeac4c39a718786f0fdd7449974301fd0d48ebbcd161c9057a0a25c
+      sha256: "28c409b0c0e98115c4ab38a9a34a883010811036e6d9fa8d495f67c3ba01c034"
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.0"
+    version: "8.0.0"
   term_glyph:
     dependency: transitive
     description:
@@ -630,5 +638,5 @@ packages:
     source: hosted
     version: "6.2.2"
 sdks:
-  dart: ">=2.18.0 <4.0.0"
+  dart: ">=2.18.0 <3.0.0"
   flutter: ">=3.3.0"

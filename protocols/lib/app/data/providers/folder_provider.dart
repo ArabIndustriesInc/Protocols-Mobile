@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,11 +56,21 @@ class FolderProvider extends GetConnect {
             .snackBarMessage('New Folder added successfully!', context);
         Get.find<DocumentsController>().loadingAdd.value = false;
         Get.find<DocumentsController>().controller.clear();
+        Get.find<DocumentsController>().errorIsVisible.value = false;
       } else {
-        SnackbarMessage()
-            .snackBarMessage('Oops! Action failed. Please try again', context);
+        var data = jsonDecode(response.body.toString());
+        if (data['message'] != 'Payment is not done') {
+          Get.find<DocumentsController>().loadingAdd.value = false;
+          Get.find<DocumentsController>()
+              .visibleOff(data['message'].toString());
+        } else {
+          Get.find<DocumentsController>().loadingAdd.value = false;
+          SnackbarMessage().snackBarMessage(
+              'Oops! Action failed. Please try again', context);
+        }
       }
     } catch (e) {
+      Get.find<DocumentsController>().loadingAdd.value = false;
       SnackbarMessage().snackBarMessage(
           'Oops! Something went Wrong. Please try again', context);
     }

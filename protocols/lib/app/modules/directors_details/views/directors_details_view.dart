@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
@@ -8,10 +7,9 @@ import 'package:protocols/app/modules/drawer/views/drawer_view.dart';
 import 'package:protocols/app/modules/employees_details/views/employee_details_card_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class DirectorsDetailsView extends GetView<DirectorsDetailsController> {
-  final DirectorsModel director;
-  const DirectorsDetailsView({Key? key, required this.director})
-      : super(key: key);
+class DirectorsDetailsView extends GetView<DirectorsController> {
+  final int index;
+  const DirectorsDetailsView({Key? key, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +29,11 @@ class DirectorsDetailsView extends GetView<DirectorsDetailsController> {
               ),
               Center(
                 child: Text(
-                  "${director.fName} ${director.mName} ${director.lName}",
+                  Get.find<DirectorsController>().directors[index].firstname +
+                      Get.find<DirectorsController>()
+                          .directors[index]
+                          .middlename +
+                      Get.find<DirectorsController>().directors[index].lastname,
                   style: TextStyle(
                       fontSize: 25.sp,
                       letterSpacing: .9,
@@ -39,39 +41,48 @@ class DirectorsDetailsView extends GetView<DirectorsDetailsController> {
                 ),
               ),
               SizedBox(height: 25.h),
-              CircleAvatar(
-                backgroundColor: Colors.grey,
-                radius: MediaQuery.of(context).size.width / 8,
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  radius: MediaQuery.of(context).size.width / 8.15,
-                  backgroundImage: MemoryImage(
-                    const Base64Decoder().convert(director.image),
-                  ),
-                ),
-              ),
+              // CircleAvatar(
+              //   backgroundColor: Colors.grey,
+              //   radius: MediaQuery.of(context).size.width / 8,
+              //   child: CircleAvatar(
+              //     backgroundColor: Colors.white,
+              //     radius: MediaQuery.of(context).size.width / 8.15,
+              //     backgroundImage: MemoryImage(
+              //       const Base64Decoder().convert(
+              //           Get.find<DirectorsController>().directors[index].image),
+              //     ),
+              //   ),
+              // ),
               EmpDrsInvDetailsCardView(
                 title: 'Personal Details',
                 contents: [
                   dobDate(),
                   EmpDrsInvTableContent(
-                    content: '+91 ${director.mobNo}',
+                    content:
+                        Get.find<DirectorsController>().directors[index].mobile,
                     title: 'Mob No.',
                   ),
                   EmpDrsInvTableContent(
-                    content: director.emailID,
+                    content:
+                        Get.find<DirectorsController>().directors[index].email,
                     title: 'Mail ID',
                   ),
                   EmpDrsInvTableContent(
-                    content: director.fatherName,
+                    content: Get.find<DirectorsController>()
+                        .directors[index]
+                        .fathersname,
                     title: 'Fathers name',
                   ),
                   EmpDrsInvTableContent(
-                    content: director.panNo,
+                    content: Get.find<DirectorsController>()
+                        .directors[index]
+                        .pannumber,
                     title: 'PAN No.',
                   ),
                   EmpDrsInvTableContent(
-                    content: director.address,
+                    content: Get.find<DirectorsController>()
+                        .directors[index]
+                        .address,
                     title: 'Address',
                   ),
                 ],
@@ -80,12 +91,13 @@ class DirectorsDetailsView extends GetView<DirectorsDetailsController> {
           ),
         )),
         bottomNavigationBar: DirectorDetailsButtonView(
-          director: director,
+          index: index,
         ));
   }
 
   EmpDrsInvTableContent dobDate() {
-    final dateOg = DateTime.parse(director.dob);
+    final dateOg =
+        DateTime.parse(Get.find<DirectorsController>().directors[index].dob);
     final year = dateOg.year;
     final monthOg = dateOg.month;
     final dayOg = dateOg.day;

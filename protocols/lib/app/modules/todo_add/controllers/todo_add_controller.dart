@@ -1,68 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:protocols/app/modules/consts/appbar.dart';
-import 'package:protocols/app/modules/consts/theme_const.dart';
-import 'package:protocols/app/modules/todo/controllers/todo_controller.dart';
+import 'package:protocols/app/data/models/todo_model.dart';
+import 'package:protocols/app/data/providers/todo_provider.dart';
 import 'package:protocols/app/modules/todo_add/controllers/todo_add_date_controller.dart';
 
 class TodoAddController extends GetxController {
   GlobalKey<FormState> formKey = GlobalKey();
   TextEditingController titleController = TextEditingController();
-  TextEditingController contentController = TextEditingController();
-  List<Widget> subTasks = [];
-  int count = 0;
-  int controllerIndex = 0;
-  List<TextEditingController> controllers = [];
-  addController(TextEditingController controller) {
-    controllerIndex++;
-    controllers.add(controller);
-    update();
-  }
-
-  updateCount() {
-    count++;
-    update();
-  }
-
-  void add() {
-    // log(count.toString());
-    TextEditingController controller = TextEditingController();
-    addController(controller);
-    subTasks = List.from(subTasks)
-      ..add(Padding(
-        padding: EdgeInsets.only(bottom: 20.h),
-        child: TextFormField(
-          maxLines: 4,
-          style: TextStyle(fontSize: 14.sp),
-          validator: ((value) {
-            if (value!.isEmpty) {
-              return "This field should be filled!";
-            } else {
-              return null;
-            }
-          }),
-          decoration: InputDecoration(
-              focusedErrorBorder: textDeco,
-              errorBorder: textDeco,
-              contentPadding: const EdgeInsets.all(19),
-              focusedBorder: textDeco,
-              enabledBorder: textDeco,
-              hintText: 'Enter task ${count + 1}...',
-              hintStyle: const TextStyle(
-                color: Color(0xffADADAD),
-              )),
-          controller: controller,
-        ),
-      ));
-    updateCount();
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
-    add();
-  }
+  TextEditingController taskController = TextEditingController();
+  var loadingAdd = false.obs;
 }
 
 class ToDoAddButton extends GetView {
@@ -108,30 +55,27 @@ class ToDoAddButton extends GetView {
                     end: Alignment.bottomCenter)),
             child: TextButton(
               onPressed: () {
-                if (Get.find<TodoAddController>()
-                    .formKey
-                    .currentState!
-                    .validate()) {
-                  List<SubTaskModel> subTasks = [];
-                  final title =
-                      Get.find<TodoAddController>().titleController.text.trim();
-                  final no = Get.find<TodoAddController>().subTasks.length;
-                  for (var i = 0; i < no; i++) {
-                    String task =
-                        Get.find<TodoAddController>().controllers[i].text;
-                    var subTask = SubTaskModel(task: task, isDone: false);
-                    subTasks.add(subTask);
+                if (!Get.find<TodoAddController>().loadingAdd.value) {
+                  if (Get.find<TodoAddController>()
+                      .formKey
+                      .currentState!
+                      .validate()) {
+                    Get.find<TodoAddController>().loadingAdd.value = true;
+                    final title = Get.find<TodoAddController>()
+                        .titleController
+                        .text
+                        .trim();
+                    final task = Get.find<TodoAddController>()
+                        .taskController
+                        .text
+                        .trim();
+                    final deadline = Get.find<TodoAddDateController>()
+                        .pickedDateToDo
+                        .toString();
+                    final todo =
+                        AddTodo(title: title, deadline: deadline, task: task);
+                    TodoProvider().addTodo(todo, context);
                   }
-                  final dueDate = Get.find<TodoAddDateController>()
-                      .pickedDateToDo
-                      .toString();
-                  final todo = ToDoModel(
-                      title: title, dueDate: dueDate, subTasks: subTasks);
-                  Get.find<TodoController>().add(todo);
-                  Get.find<TodoController>().update();
-                  Get.back();
-                  SnackbarMessage()
-                      .snackBarMessage('New task added successfully!', context);
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -141,11 +85,21 @@ class ToDoAddButton extends GetView {
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10))),
-              child: Icon(
-                Icons.check_rounded,
-                color: Colors.white,
-                size: 30.h,
-              ),
+              child: Obx(() {
+                return (Get.find<TodoAddController>().loadingAdd.value)
+                    ? Transform.scale(
+                        scale: 0.6,
+                        child: const CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 1.7,
+                        ),
+                      )
+                    : Icon(
+                        Icons.check_rounded,
+                        color: Colors.white,
+                        size: 30.h,
+                      );
+              }),
             ),
           ),
         ],

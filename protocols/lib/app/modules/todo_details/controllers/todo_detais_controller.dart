@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:protocols/app/modules/todo/controllers/todo_controller.dart';
 import 'package:protocols/app/modules/todo_edit/bindings/todo_edit_binding.dart';
 import 'package:protocols/app/modules/todo_edit/views/todo_edit_view.dart';
 
@@ -100,8 +99,8 @@ class TodoDetailsDateTimeCard extends GetView {
 }
 
 class ToDoDetailsButtonView extends GetView {
-  final ToDoModel todo;
-  const ToDoDetailsButtonView({super.key, required this.todo});
+  final int index;
+  const ToDoDetailsButtonView({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +138,7 @@ class ToDoDetailsButtonView extends GetView {
             child: TextButton(
               onPressed: () {
                 Get.to(
-                  () => TodoEditView(todo: todo),
+                  () => TodoEditView(index: index),
                   binding: TodoEditBinding(),
                 );
               },

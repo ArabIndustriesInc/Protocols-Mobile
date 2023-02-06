@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/delete_alert/views/delete_alert_view.dart';
-import 'package:protocols/app/modules/directors/controllers/directors_controller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:protocols/app/modules/directors/controllers/directors_controller.dart';
 import 'package:protocols/app/modules/directors_details/bindings/directors_details_binding.dart';
 import 'package:protocols/app/modules/directors_details/views/directors_details_view.dart';
 
 class DirectorsCardView extends GetView {
-  final DirectorsModel director;
-  const DirectorsCardView({Key? key, required this.director}) : super(key: key);
+  final int index;
+  const DirectorsCardView({Key? key, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -65,7 +65,7 @@ class DirectorsCardView extends GetView {
         onPressed: () {
           Get.to(
             () => DirectorsDetailsView(
-              director: director,
+              index: index,
             ),
             binding: DirectorsDetailsBinding(),
           );
@@ -78,20 +78,20 @@ class DirectorsCardView extends GetView {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12.h),
-                    // borderRadius: BorderRadius.only(
-                    //     topLeft: Radius.circular(12.h),
-                    //     topRight: Radius.circular(12.h)),
-                    child: Image(
-                      height: 75.h,
-                      width: 70.w,
-                      fit: BoxFit.cover,
-                      image: MemoryImage(
-                        const Base64Decoder().convert(director.image),
-                      ),
-                    ),
-                  ),
+                  // ClipRRect(
+                  //   borderRadius: BorderRadius.circular(12.h),
+                  //   // borderRadius: BorderRadius.only(
+                  //   //     topLeft: Radius.circular(12.h),
+                  //   //     topRight: Radius.circular(12.h)),
+                  //   child: Image(
+                  //     height: 75.h,
+                  //     width: 70.w,
+                  //     fit: BoxFit.cover,
+                  //     image: MemoryImage(
+                  //       const Base64Decoder().convert(Get.find<DirectorsController>().directors[index].image),
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(
                     width: 20.w,
                   ),
@@ -100,7 +100,7 @@ class DirectorsCardView extends GetView {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${director.fName} ${director.lName}',
+                          '${Get.find<DirectorsController>().directors[index].firstname} ${Get.find<DirectorsController>().directors[index].lastname}',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 18.sp,
@@ -110,14 +110,18 @@ class DirectorsCardView extends GetView {
                           height: 5.h,
                         ),
                         Text(
-                          director.mobNo,
+                          Get.find<DirectorsController>()
+                              .directors[index]
+                              .mobile,
                           style: TextStyle(
                             fontSize: 13.sp,
                             color: const Color(0xff716A6A),
                           ),
                         ),
                         Text(
-                          director.emailID,
+                          Get.find<DirectorsController>()
+                              .directors[index]
+                              .email,
                           style: TextStyle(
                             fontSize: 13.sp,
                             color: const Color(0xff716A6A),

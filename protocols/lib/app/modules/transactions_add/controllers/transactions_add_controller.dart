@@ -91,9 +91,13 @@ class TransactionsAddButton extends StatelessWidget {
                         .substring(0, 10);
                     final timeOfDay =
                         Get.find<TransactionsAddDateController>().pickedTime;
-                    final now = DateTime.now();
-                    final time = DateTime(now.year, now.month, now.day,
-                        timeOfDay.hour, timeOfDay.minute);
+                    final hour = (timeOfDay.hour.toString().length > 1)
+                        ? timeOfDay.hour
+                        : '0${timeOfDay.hour}';
+                    final minute = (timeOfDay.minute.toString().length > 1)
+                        ? timeOfDay.minute
+                        : '0${timeOfDay.hour}';
+                    final time = ('$hour:$minute');
                     final typeController = Get.find<TransactionsAddController>()
                         .transTypeValue
                         .value;

@@ -1,16 +1,23 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/modules/custom_alert/controllers/custom_alert_controller.dart';
+import 'package:protocols/app/modules/documents/controllers/documents_controller.dart';
 
 class CustomAlert extends GetView<CustomAlertController> {
   final String title;
   final Widget action;
   final Widget content;
+  final Widget? warning;
   final Color color;
+  bool? isWarning = false;
 
-  const CustomAlert({
+  CustomAlert({
     Key? key,
+    this.warning,
+    this.isWarning,
     required this.title,
     required this.action,
     required this.content,
@@ -36,6 +43,8 @@ class CustomAlert extends GetView<CustomAlertController> {
           ),
           const SizedBox(height: 20),
           content,
+          const SizedBox(height: 10),
+          warning!,
           const SizedBox(height: 30),
           const Divider(
             color: Colors.black45,
@@ -53,6 +62,11 @@ class CustomAlert extends GetView<CustomAlertController> {
                     highlightColor: Colors.grey[200],
                     onTap: () {
                       Get.back();
+                      if (isWarning!) {
+                        Get.find<DocumentsController>().errorIsVisible.value =
+                            false;
+                        Get.find<DocumentsController>().controller.clear();
+                      }
                     },
                     child: Text(
                       "Cancel",

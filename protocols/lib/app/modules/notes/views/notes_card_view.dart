@@ -66,10 +66,8 @@ class NotesCardView extends GetView<NotesController> {
                                 Get.find<NotesController>()
                                     .loadingDelete
                                     .value = true;
-                                final id = Get.find<NotesController>()
-                                    .notes[index]
-                                    .noteid
-                                    .id;
+                                final id =
+                                    Get.find<NotesController>().notes[index].id;
                                 NotesProvider().deleteNote(context, id);
                               }
                             },
@@ -119,7 +117,7 @@ class NotesCardView extends GetView<NotesController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        Get.find<NotesController>().notes[index].noteid.title,
+                        Get.find<NotesController>().notes[index].title,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 16.sp,

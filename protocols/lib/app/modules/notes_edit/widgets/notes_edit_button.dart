@@ -63,8 +63,7 @@ class NotesEditButton extends GetView {
                       title: title,
                       description: description,
                     );
-                    final id =
-                        Get.find<NotesController>().notes[index].noteid.id;
+                    final id = Get.find<NotesController>().notes[index].id;
                     NotesProvider().editNote(note, context, id);
                   }
                 }

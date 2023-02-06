@@ -12,8 +12,8 @@ import 'package:protocols/app/modules/directors_edit/views/directors_edit_field_
 import 'package:protocols/app/modules/drawer/views/drawer_view.dart';
 
 class DirectorsEditView extends GetView<DirectorsEditController> {
-  final DirectorsModel director;
-  const DirectorsEditView({Key? key, required this.director}) : super(key: key);
+  final int index;
+  const DirectorsEditView({Key? key, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     initValues();
@@ -45,37 +45,37 @@ class DirectorsEditView extends GetView<DirectorsEditController> {
               SizedBox(
                 height: MediaQuery.of(context).size.height / 30,
               ),
-              Obx(() => (Get.find<DirectorsEditController>()
-                      .imageSample
-                      .value
-                      .isNotEmpty)
-                  ? ImageDisplayDirectorsAdd(
-                      image: FileImage(File(Get.find<DirectorsEditController>()
-                          .imageSample
-                          .value)),
-                      pickMedia: InkWell(
-                          child: const Icon(
-                            Icons.face_retouching_natural_rounded,
-                            color: Colors.white,
-                            size: 22,
-                          ),
-                          onTap: () {
-                            Get.find<DirectorsEditController>().pickimage();
-                          }))
-                  : ImageDisplayDirectorsAdd(
-                      image: MemoryImage(
-                        const Base64Decoder().convert(director.image),
-                      ),
-                      pickMedia: InkWell(
-                          child: const Icon(
-                            Icons.face_retouching_natural_rounded,
-                            color: Colors.white,
-                            size: 22,
-                          ),
-                          onTap: () {
-                            Get.find<DirectorsEditController>().pickimage();
-                          }),
-                    )),
+              // Obx(() => (Get.find<DirectorsEditController>()
+              //         .imageSample
+              //         .value
+              //         .isNotEmpty)
+              //     ? ImageDisplayDirectorsAdd(
+              //         image: FileImage(File(Get.find<DirectorsEditController>()
+              //             .imageSample
+              //             .value)),
+              //         pickMedia: InkWell(
+              //             child: const Icon(
+              //               Icons.face_retouching_natural_rounded,
+              //               color: Colors.white,
+              //               size: 22,
+              //             ),
+              //             onTap: () {
+              //               Get.find<DirectorsEditController>().pickimage();
+              //             }))
+              //     : ImageDisplayDirectorsAdd(
+              //         image: MemoryImage(
+              //           const Base64Decoder().convert( Get.find<DirectorsController>().directors[index].image),
+              //         ),
+              //         pickMedia: InkWell(
+              //             child: const Icon(
+              //               Icons.face_retouching_natural_rounded,
+              //               color: Colors.white,
+              //               size: 22,
+              //             ),
+              //             onTap: () {
+              //               Get.find<DirectorsEditController>().pickimage();
+              //             }),
+              //       )),
               SizedBox(
                 height: MediaQuery.of(context).size.height / 30,
               ),
@@ -93,7 +93,7 @@ class DirectorsEditView extends GetView<DirectorsEditController> {
               Form(
                 key: Get.find<DirectorsEditController>().formKey,
                 child: DirectorsEditFieldView(
-                  date: director.dob,
+                  date: Get.find<DirectorsController>().directors[index].dob,
                 ),
               ),
               const SizedBox(
@@ -108,22 +108,25 @@ class DirectorsEditView extends GetView<DirectorsEditController> {
   }
 
   initValues() {
-    final dob = DateTime.parse(director.dob);
+    final dob =
+        DateTime.parse(Get.find<DirectorsController>().directors[index].dob);
     Get.find<DirectorsEditDateController>().initDatePersonal(dob);
     Get.find<DirectorsEditController>().addressController.text =
-        director.address;
+        Get.find<DirectorsController>().directors[index].address;
     Get.find<DirectorsEditController>().fatherNameController.text =
-        director.fatherName;
+        Get.find<DirectorsController>().directors[index].fathersname;
     Get.find<DirectorsEditController>().firstNameController.text =
-        director.fName;
+        Get.find<DirectorsController>().directors[index].firstname;
     Get.find<DirectorsEditController>().lastNameController.text =
-        director.lName!;
+        Get.find<DirectorsController>().directors[index].lastname!;
     Get.find<DirectorsEditController>().mailIdController.text =
-        director.emailID;
+        Get.find<DirectorsController>().directors[index].emailID;
     Get.find<DirectorsEditController>().midNameController.text =
-        director.mName!;
-    Get.find<DirectorsEditController>().mobNoController.text = director.mobNo;
-    Get.find<DirectorsEditController>().panNoController.text = director.panNo;
+        Get.find<DirectorsController>().directors[index].middlename!;
+    Get.find<DirectorsEditController>().mobNoController.text =
+        Get.find<DirectorsController>().directors[index].mobile;
+    Get.find<DirectorsEditController>().panNoController.text =
+        Get.find<DirectorsController>().directors[index].pannumber;
   }
 }
  // : ImageDisplay(

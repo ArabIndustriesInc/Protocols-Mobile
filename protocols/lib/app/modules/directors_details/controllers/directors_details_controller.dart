@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:protocols/app/modules/directors/controllers/directors_controller.dart';
 import 'package:protocols/app/modules/directors_edit/bindings/directors_edit_binding.dart';
 import 'package:protocols/app/modules/directors_edit/views/directors_edit_view.dart';
 
 class DirectorsDetailsController extends GetxController {}
 
 class DirectorDetailsButtonView extends GetView {
-  final DirectorsModel director;
-  const DirectorDetailsButtonView({super.key, required this.director});
+  final int index;
+  const DirectorDetailsButtonView({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +47,7 @@ class DirectorDetailsButtonView extends GetView {
             child: TextButton(
               onPressed: () {
                 Get.to(
-                  () => DirectorsEditView(director: director),
+                  () => DirectorsEditView(index: index),
                   binding: DirectorsEditBinding(),
                 );
               },

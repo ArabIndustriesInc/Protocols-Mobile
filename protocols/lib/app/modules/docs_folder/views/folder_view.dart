@@ -36,7 +36,7 @@ class FolderView extends GetView<FolderController> {
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height / 40,
+                height: 30.h,
               ),
               const FoldStructureView()
             ],
@@ -48,7 +48,9 @@ class FolderView extends GetView<FolderController> {
         padding: EdgeInsets.only(
           right: 10.w,
         ),
-        child: const FolderViewButton(),
+        child: FolderViewButton(
+          folderid: Get.find<FolderController>().folderId,
+        ),
       ),
     );
   }

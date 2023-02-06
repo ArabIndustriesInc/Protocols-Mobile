@@ -29,8 +29,9 @@ class NotesProvider extends GetConnect {
     final response = await get('${baseUrlApi}notes/show',
         headers: {'Authorization': 'Bearer $token'});
     Get.find<NotesController>().loading.value = false;
-    // log(response.statusCode.toString());
-    NotesModel notes = notesModelFromJson(response.bodyString!);
+    log(response.statusCode.toString());
+    log(response.bodyString!.toString());
+    NotesModel notes = notesFromJson(response.bodyString!);
     return notes.data;
   }
 
@@ -97,6 +98,7 @@ class NotesProvider extends GetConnect {
           headers: {'Authorization': 'Bearer $token'});
 
       if (response.statusCode == 200) {
+        Get.find<NotesController>().loadingDelete.value = false;
         getAllNotes();
         Get.find<NotesController>().getAllNotes();
         Get.back();

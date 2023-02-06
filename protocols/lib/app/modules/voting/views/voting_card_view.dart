@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:protocols/app/data/providers/voting_provider.dart';
+import 'package:protocols/app/modules/delete_alert/views/delete_alert_view.dart';
 import 'package:protocols/app/modules/voting/controllers/voting_controller.dart';
 import 'package:protocols/app/modules/voting_details/bindings/voting_details_binding.dart';
 import 'package:protocols/app/modules/voting_details/views/voting_details_view.dart';
@@ -27,6 +29,47 @@ class VotingCardView extends GetView<VotingController> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12))),
+        onLongPress: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return Obx(() {
+                  return DeleteAlertView(
+                    subtitle:
+                        'Are you sure, you want to delete this vote? This action can\'t be reversed!',
+                    title: 'Delete Transaction',
+                    action: InkWell(
+                      highlightColor: Colors.grey[200],
+                      onTap: () {
+                        if (!Get.find<VotingController>().loadingDelete.value) {
+                          final id =
+                              Get.find<VotingController>().votes[index].id;
+                          VotingProvider().deleteVote(id, context);
+                        }
+                      },
+                      child: (!Get.find<VotingController>().loadingDelete.value)
+                          ? const Text(
+                              "Confirm",
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                color: Color.fromARGB(255, 227, 0, 0),
+                                fontWeight: FontWeight.normal,
+                              ),
+                            )
+                          : Transform.scale(
+                              scale: 0.8,
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 15.w),
+                                child: const CircularProgressIndicator(
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            ),
+                    ),
+                  );
+                });
+              });
+        },
         onPressed: () {
           Get.to(() => VotingDetailsView(index: index),
               binding: VotingDetailsBinding());

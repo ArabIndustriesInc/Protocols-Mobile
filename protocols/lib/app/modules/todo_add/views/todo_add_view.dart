@@ -25,7 +25,7 @@ class TodoAddView extends GetView<TodoAddController> {
           ),
           Center(
             child: Text(
-              'Add Tasks',
+              'Edit Task',
               style: TextStyle(
                   fontSize: 25.sp,
                   letterSpacing: .9,
@@ -89,50 +89,66 @@ class TodoAddView extends GetView<TodoAddController> {
                     iconSize: 25.w,
                   ),
                   Container(
-                    height: 1.h,
+                    height: 10.h,
                     padding: EdgeInsets.all(10.h),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Sub Tasks: ',
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontFamily: 'Montserrat Bold',
-                        ),
-                      ),
-                      TextButton(
-                          style: TextButton.styleFrom(
-                              padding: const EdgeInsets.all(7),
-                              minimumSize: Size.zero,
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              shape: const CircleBorder()),
-                          onPressed: () {
-                            Get.find<TodoAddController>().add();
-                          },
-                          child: Icon(
-                            Icons.add_rounded,
-                            color: Colors.black,
-                            size: 22.w,
-                          ))
-                    ],
+                  Text(
+                    'Task: ',
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontFamily: 'Montserrat Bold',
+                    ),
                   ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Text(
+                  //       'Task: ',
+                  //       style: TextStyle(
+                  //         fontSize: 18.sp,
+                  //         fontFamily: 'Montserrat Bold',
+                  //       ),
+                  //     ),
+                  //     TextButton(
+                  //         style: TextButton.styleFrom(
+                  //             padding: const EdgeInsets.all(7),
+                  //             minimumSize: Size.zero,
+                  //             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  //             shape: const CircleBorder()),
+                  //         onPressed: () {
+                  //           Get.find<TodoAddController>().add();
+                  //         },
+                  //         child: Icon(
+                  //           Icons.add_rounded,
+                  //           color: Colors.black,
+                  //           size: 22.w,
+                  //         ))
+                  //   ],
+                  // ),
                   Container(
                     height: .5.h,
                     padding: EdgeInsets.all(10.h),
                   ),
-                  GetBuilder<TodoAddController>(builder: ((_) {
-                    return Column(
-                      children: Get.find<TodoAddController>().subTasks,
-                    );
-                  })),
+                  TextFormField(
+                    maxLines: 3,
+                    style: const TextStyle(fontSize: 14),
+                    validator: ((value) {
+                      if (value!.isEmpty) {
+                        return "This field should be filled!";
+                      } else {
+                        return null;
+                      }
+                    }),
+                    decoration: taskDeco,
+                    controller: Get.find<TodoAddController>().taskController,
+                  ),
                 ],
               ),
             ),
           ),
         ],
       ),
+      //floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: const ToDoAddButton(),
     );
   }

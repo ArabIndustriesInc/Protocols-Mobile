@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:protocols/app/data/providers/folder_provider.dart';
 import 'package:protocols/app/modules/delete_alert/views/delete_alert_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:protocols/app/modules/docs_folder/bindings/folder_binding.dart';
+import 'package:protocols/app/modules/docs_folder/views/folder_view.dart';
 import 'package:protocols/app/modules/documents/controllers/documents_controller.dart';
 
 class FileCardView extends GetView<DocumentsController> {
@@ -16,13 +18,13 @@ class FileCardView extends GetView<DocumentsController> {
       padding: const EdgeInsets.only(top: 10.0),
       child: ListTile(
         onTap: () {
-          // final folderId = Get.find<DocumentsController>().folders[index].id;
-          // Get.to(
-          //   () => FolderView(
-          //       folderName:
-          //           Get.find<DocumentsController>().folders[index].foldername),
-          //   binding: FolderBinding(folderId: folderId),
-          // );
+          final folderId = Get.find<DocumentsController>().folders[index].id;
+          Get.to(
+            () => FolderView(
+                folderName:
+                    Get.find<DocumentsController>().folders[index].foldername),
+            binding: FolderBinding(folderId: folderId),
+          );
         },
         onLongPress: () {
           showDialog(

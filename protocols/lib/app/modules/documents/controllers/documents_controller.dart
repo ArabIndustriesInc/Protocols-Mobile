@@ -8,15 +8,19 @@ class DocumentsController extends GetxController {
   var loading = true.obs;
   var loadingAdd = false.obs;
   var loadingDelete = false.obs;
-  // late AccountsModel accountSingle;
+  RxBool errorIsVisible = false.obs;
+  RxString errorMesage = 'Oops wrong Email or Password! Try again'.obs;
 
-  // getAccount(int id) async {
-  //   accountSingle = await AccountsModelProvider().getAccount(id);
-  // }
   getAllFolders() async {
     folders = await FolderProvider()
         .getAllFolders()
         .whenComplete(() => loading.value = false);
+    update();
+  }
+
+  visibleOff(String message) {
+    errorMesage.value = message;
+    errorIsVisible.value = true;
     update();
   }
 

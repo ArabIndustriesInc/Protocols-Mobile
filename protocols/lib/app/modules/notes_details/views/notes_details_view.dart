@@ -40,7 +40,6 @@ class NotesDetailsView extends GetView<NotesDetailsController> {
                             child: Text(
                               Get.find<NotesController>()
                                   .notesDetails[index]
-                                  .noteid
                                   .title,
                               // overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -70,7 +69,6 @@ class NotesDetailsView extends GetView<NotesDetailsController> {
                           child: Text(
                             Get.find<NotesController>()
                                 .notesDetails[index]
-                                .noteid
                                 .description,
                             textAlign: TextAlign.justify,
                             style: TextStyle(

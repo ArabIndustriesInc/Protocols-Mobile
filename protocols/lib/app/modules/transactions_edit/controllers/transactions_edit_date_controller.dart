@@ -24,14 +24,16 @@ class TransactionsEditDateController extends GetxController {
 
   var yrShort = DateFormat.y().format(DateTime.now()).substring(2, 4).obs;
   initTime(String timeDate, BuildContext context) {
-    DateTime dateTime = DateTime.parse(timeDate);
+    DateTime dateTime =
+        DateTime.parse('${todayDay.toString().substring(0, 10)} $timeDate');
     final time = DateFormat.jm().format(dateTime);
     selectedTime.value = time;
     update();
   }
 
   Future timePicker(BuildContext context, String timeDate) async {
-    final dt = DateTime.parse(timeDate);
+    final dt =
+        DateTime.parse('${todayDay.toString().substring(0, 10)} $timeDate');
     final time = TimeOfDay.fromDateTime(dt);
     pickedTime = (await showTimePicker(
             context: context,

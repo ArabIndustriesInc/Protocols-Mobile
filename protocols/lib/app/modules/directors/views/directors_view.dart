@@ -37,41 +37,31 @@ class DirectorsView extends GetView<DirectorsController> {
             SizedBox(
               height: MediaQuery.of(context).size.height / 20,
             ),
-            (Get.find<DirectorsController>().directorsList.isEmpty)
-                ? SizedBox(
-                    height: MediaQuery.of(context).size.height / 1.5,
-                    child: Center(
-                      child: Text(
-                        'No Directors!',
-                        style: TextStyle(color: Colors.black, fontSize: 18.sp),
+            Obx(
+              () => (Get.find<DirectorsController>().loading.value)
+                  ? SizedBox(
+                      height: MediaQuery.of(context).size.height / 1.5,
+                      child: const Center(child: CircularProgressIndicator()))
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 35.0),
+                      child: ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, index) {
+                          return (Get.find<DirectorsController>()
+                                  .directors
+                                  .isEmpty)
+                              ? const EmptyDashMessage(title: 'No Tasks!')
+                              : DirectorsCardView(index: index);
+                        },
+                        itemCount: (Get.find<DirectorsController>()
+                                .directors
+                                .isEmpty)
+                            ? 1
+                            : Get.find<DirectorsController>().directors.length,
                       ),
                     ),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                    child: GetBuilder<DirectorsController>(
-                        init: DirectorsController(),
-                        builder: (_) {
-                          return ListView.separated(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (BuildContext context, index) {
-                                final director = Get.find<DirectorsController>()
-                                    .directorsList[index];
-                                return DirectorsCardView(
-                                  director: director,
-                                );
-                              },
-                              separatorBuilder: (BuildContext context, index) {
-                                return const SizedBox(
-                                  height: 30,
-                                );
-                              },
-                              itemCount: Get.find<DirectorsController>()
-                                  .directorsList
-                                  .length);
-                        }),
-                  ),
+            ),
             const SizedBox(
               height: 20,
             )

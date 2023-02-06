@@ -1,13 +1,12 @@
 // To parse this JSON data, do
 //
-//     final notesModel = notesModelFromJson(jsonString);
+//     final noteModel = noteModelFromJson(jsonString);
 
 import 'dart:convert';
 
-NotesModel notesModelFromJson(String str) =>
-    NotesModel.fromJson(json.decode(str));
+NotesModel notesFromJson(String str) => NotesModel.fromJson(json.decode(str));
 
-String notesModelToJson(NotesModel data) => json.encode(data.toJson());
+String noteModelToJson(NotesModel data) => json.encode(data.toJson());
 
 class NotesModel {
   NotesModel({
@@ -36,34 +35,6 @@ class NotesModel {
 class Notes {
   Notes({
     required this.id,
-    required this.noteid,
-    required this.registerid,
-    required this.v,
-  });
-
-  String id;
-  Noteid noteid;
-  String registerid;
-  int v;
-
-  factory Notes.fromJson(Map<String, dynamic> json) => Notes(
-        id: json["_id"],
-        noteid: Noteid.fromJson(json["noteid"]),
-        registerid: json["registerid"],
-        v: json["__v"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "noteid": noteid.toJson(),
-        "registerid": registerid,
-        "__v": v,
-      };
-}
-
-class Noteid {
-  Noteid({
-    required this.id,
     required this.title,
     required this.description,
     required this.registerid,
@@ -76,7 +47,7 @@ class Noteid {
   String registerid;
   int v;
 
-  factory Noteid.fromJson(Map<String, dynamic> json) => Noteid(
+  factory Notes.fromJson(Map<String, dynamic> json) => Notes(
         id: json["_id"],
         title: json["title"],
         description: json["description"],

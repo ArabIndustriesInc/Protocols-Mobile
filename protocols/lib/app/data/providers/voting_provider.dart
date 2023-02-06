@@ -121,4 +121,28 @@ class VotingProvider extends GetConnect {
       SnackbarMessage().snackBarMessage('Oops! $e. Please try again', context);
     }
   }
+
+  deleteVote(String voteId, BuildContext context) async {
+    Get.find<VotingController>().loadingDelete.value = true;
+    try {
+      final token = box.read('login_token');
+      final response = await http.post(
+          Uri.parse('${baseUrlApi}vote/delete/$voteId'),
+          headers: {'Authorization': 'Bearer $token'});
+      if (response.statusCode == 200) {
+        getAllVotes();
+        Get.find<VotingController>().getAllVotes();
+        Get.back(result: Get.find<VotingController>().getAllVotes());
+        SnackbarMessage()
+            .snackBarMessage('Vote deleted successfully!', context);
+        Get.find<VotingController>().loadingDelete.value = false;
+      } else {
+        SnackbarMessage()
+            .snackBarMessage('Oops! Action failed. Please try again', context);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarMessage().snackBarMessage('Oops! $e. Please try again', context);
+    }
+  }
 }

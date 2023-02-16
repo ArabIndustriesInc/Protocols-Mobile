@@ -109,8 +109,18 @@ class InvestorsAddView extends GetView<InvestorsAddController> {
                 child: const InvestorsAddFieldView(),
               ),
               const SizedBox(
-                height: 10,
+                height: 5,
               ),
+              Obx(() => (Get.find<InvestorsAddController>().isWarning.value)
+                  ? Text(
+                      Get.find<InvestorsAddController>().warning.value,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: const Color(0xFFD40A0A),
+                      ),
+                    )
+                  : const SizedBox())
             ],
           ),
         ),

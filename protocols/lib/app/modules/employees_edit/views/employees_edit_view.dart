@@ -6,17 +6,17 @@ import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/drawer/views/drawer_view.dart';
 import 'package:protocols/app/modules/employees/controllers/employees_controller.dart';
 import 'package:protocols/app/modules/employees_edit/controllers/employees_edit_controller.dart';
-import 'package:protocols/app/modules/employees_edit/controllers/employees_edit_date_controller.dart';
+import 'package:protocols/app/modules/employees_edit/functions/employees_edit_functions.dart';
 import 'package:protocols/app/modules/employees_edit/views/employees_edit_field_pr_py_details_view.dart';
 import 'package:protocols/app/modules/employees_edit/views/employees_edit_field_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EmployeesEditView extends GetView<EmployeesEditController> {
-  final EmployeeModel employee;
-  const EmployeesEditView({Key? key, required this.employee}) : super(key: key);
+  final int index;
+  const EmployeesEditView({Key? key, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    initValues();
+    EmployeesInitValues(index: index).initValues();
     return Scaffold(
       appBar: AppBarCustom().appBar,
       drawer: DrawerView(),
@@ -43,40 +43,44 @@ class EmployeesEditView extends GetView<EmployeesEditController> {
               SizedBox(
                 height: MediaQuery.of(context).size.height / 30,
               ),
-              Obx(() => (Get.find<EmployeesEditController>()
-                      .imageSample
-                      .value
-                      .isNotEmpty)
-                  ? ImageDisplayEdit(
-                      image: FileImage(File(Get.find<EmployeesEditController>()
-                          .imageSample
-                          .value)),
-                      pickMedia: InkWell(
-                          child: const Icon(
-                            Icons.face_retouching_natural_rounded,
-                            color: Colors.white,
-                            size: 22,
-                          ),
-                          onTap: () {
-                            Get.find<EmployeesEditController>().pickImageEdit();
-                          }))
-                  :
-                  // : (Get.find<EmployeesEditController>().assetImage.isEmpty)
-                  //     ?
-                  ImageDisplayEdit(
-                      image: MemoryImage(
-                        const Base64Decoder().convert(employee.image!),
+              Obx(
+                () => (Get.find<EmployeesEditController>()
+                        .imageSample
+                        .value
+                        .isNotEmpty)
+                    ? ImageDisplayEdit(
+                        image: FileImage(File(
+                            Get.find<EmployeesEditController>()
+                                .imageSample
+                                .value)),
+                        pickMedia: InkWell(
+                            child: const Icon(
+                              Icons.face_retouching_natural_rounded,
+                              color: Colors.white,
+                              size: 22,
+                            ),
+                            onTap: () {
+                              Get.find<EmployeesEditController>()
+                                  .pickImageEdit();
+                            }))
+                    : ImageDisplayEdit(
+                        image: NetworkImage(
+                          Get.find<EmployeesController>()
+                              .employees[index]
+                              .image,
+                        ),
+                        pickMedia: InkWell(
+                            child: const Icon(
+                              Icons.face_retouching_natural_rounded,
+                              color: Colors.white,
+                              size: 22,
+                            ),
+                            onTap: () {
+                              Get.find<EmployeesEditController>()
+                                  .pickImageEdit();
+                            }),
                       ),
-                      pickMedia: InkWell(
-                          child: const Icon(
-                            Icons.face_retouching_natural_rounded,
-                            color: Colors.white,
-                            size: 22,
-                          ),
-                          onTap: () {
-                            Get.find<EmployeesEditController>().pickImageEdit();
-                          }),
-                    )),
+              ),
               SizedBox(
                 height: MediaQuery.of(context).size.height / 30,
               ),
@@ -97,7 +101,9 @@ class EmployeesEditView extends GetView<EmployeesEditController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     EmployeesEditFieldView(
-                      date: employee.joiningDate,
+                      date: Get.find<EmployeesController>()
+                          .employees[index]
+                          .joiningdate,
                     ),
                     Padding(
                       padding: EdgeInsets.only(
@@ -113,7 +119,10 @@ class EmployeesEditView extends GetView<EmployeesEditController> {
                     const SizedBox(
                       height: 5,
                     ),
-                    EmployeesEditFieldPersonalDetailsView(date: employee.dob),
+                    EmployeesEditFieldPersonalDetailsView(
+                        date: Get.find<EmployeesController>()
+                            .employees[index]
+                            .dob),
                     Padding(
                       padding: EdgeInsets.only(
                         left: MediaQuery.of(context).size.width / 7,
@@ -141,46 +150,6 @@ class EmployeesEditView extends GetView<EmployeesEditController> {
       ),
       bottomNavigationBar: const EditEmployeeButton(),
     );
-  }
-
-  initValues() {
-    final jd = DateTime.parse(employee.joiningDate);
-    Get.find<EmployeesEditDateController>().initDateWork(jd);
-    final dob = DateTime.parse(employee.dob);
-    Get.find<EmployeesEditDateController>().initDatePersonal(dob);
-    Get.find<EmployeesEditController>().accHolderNameController.text =
-        employee.accHolder;
-    Get.find<EmployeesEditController>().accNoController.text = employee.accNo;
-    Get.find<EmployeesEditController>().accTypeController.text =
-        employee.accType;
-    Get.find<EmployeesEditController>().addressController.text =
-        employee.address;
-    Get.find<EmployeesEditController>().bankNameController.text =
-        employee.bankName;
-    Get.find<EmployeesEditController>().empIdController.text = employee.empID;
-    Get.find<EmployeesEditController>().esiNoController.text = employee.esiNo!;
-    Get.find<EmployeesEditController>().fatherNameController.text =
-        employee.fatherName;
-    Get.find<EmployeesEditController>().firstNameController.text =
-        employee.fName;
-    Get.find<EmployeesEditController>().ifscController.text = employee.ifsc;
-    Get.find<EmployeesEditController>().lastNameController.text =
-        employee.lName!;
-    Get.find<EmployeesEditController>().mailIdController.text =
-        employee.emailID;
-    Get.find<EmployeesEditController>().midNameController.text =
-        employee.mName!;
-    Get.find<EmployeesEditController>().designationController.text =
-        employee.designation;
-    Get.find<EmployeesEditController>().mobNoController.text = employee.mobNo;
-    Get.find<EmployeesEditController>().panNoController.text = employee.panNo;
-    Get.find<EmployeesEditController>().payModeController.text =
-        employee.payment;
-    Get.find<EmployeesEditController>().pfAccNoController.text =
-        employee.pfAcNo!;
-    Get.find<EmployeesEditController>().uanNoController.text = employee.uanNo!;
-    Get.find<EmployeesEditController>().workLocController.text =
-        employee.location;
   }
 }
 

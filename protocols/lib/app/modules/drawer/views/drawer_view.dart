@@ -5,6 +5,8 @@ import 'package:protocols/app/data/consts/api_consts.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/delete_alert/views/delete_alert_view.dart';
 import 'package:protocols/app/modules/drawer/views/contents_view.dart';
+import 'package:protocols/app/modules/pricing_plan/bindings/pricing_plan_binding.dart';
+import 'package:protocols/app/modules/pricing_plan/views/pricing_plan_view.dart';
 import 'package:protocols/app/routes/app_pages.dart';
 
 class DrawerView extends GetView {
@@ -39,8 +41,12 @@ class DrawerView extends GetView {
             },
           ),
           DashbaordNavButtons(
-            title: 'Help',
+            title: 'Pricing',
             onTap: () {
+              Get.to(
+                  () => const PricingPlanView(
+                      title: 'Upgrade the plan for a better experience'),
+                  binding: PricingPlanBinding());
               //  Scaffold.of(context).closeDrawer();
               // Get.offAllNamed(Routes.HOME);
             },

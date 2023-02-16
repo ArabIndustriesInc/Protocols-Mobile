@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:protocols/app/data/providers/employees_provider.dart';
 import 'package:protocols/app/routes/app_pages.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -8,6 +9,23 @@ class EmployeesController extends GetxController {
   add(EmployeeModel employee) {
     employeeList.add(employee);
     update();
+  }
+
+  RxList employees = [].obs;
+  var loading = true.obs;
+  var loadingDelete = false.obs;
+  getAllEmployees() async {
+    employees.value = (await EmployeesProvider()
+        .getAllEmployees()
+        .whenComplete(() => loading.value = false));
+    update();
+  }
+
+  @override
+  void onInit() async {
+    getAllEmployees();
+    update();
+    super.onInit();
   }
 }
 

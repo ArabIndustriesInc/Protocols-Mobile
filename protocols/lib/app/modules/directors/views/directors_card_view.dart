@@ -1,8 +1,9 @@
-import 'dart:convert';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:protocols/app/modules/consts/appbar.dart';
+import 'package:protocols/app/data/consts/api_consts.dart';
+import 'package:protocols/app/data/providers/directors_provider.dart';
+import 'package:protocols/app/modules/consts/empinvdir_consts.dart';
 import 'package:protocols/app/modules/delete_alert/views/delete_alert_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:protocols/app/modules/directors/controllers/directors_controller.dart';
@@ -16,11 +17,11 @@ class DirectorsCardView extends GetView {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 248, 251, 255),
+        color: const Color(0xFFF5F9FF),
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            offset: const Offset(2, 4),
+            offset: const Offset(1, 2),
             blurRadius: 4,
             color: Colors.black.withOpacity(.28),
           ),
@@ -46,18 +47,34 @@ class DirectorsCardView extends GetView {
                   action: InkWell(
                     highlightColor: Colors.grey[200],
                     onTap: () {
-                      Get.back();
-                      SnackbarMessage().snackBarMessage(
-                          'Director deleted successfully!', context);
+                      if (!Get.find<DirectorsController>()
+                          .loadingDelete
+                          .value) {
+                        final id =
+                            Get.find<DirectorsController>().directors[index].id;
+                        DirectorsProvider().deleteDirector(id, context);
+                      }
                     },
-                    child: const Text(
-                      "Confirm",
-                      style: TextStyle(
-                        fontSize: 15.0,
-                        color: Color.fromARGB(255, 227, 0, 0),
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
+                    child: Obx(() {
+                      return (Get.find<DirectorsController>()
+                              .loadingDelete
+                              .value)
+                          ? Transform.scale(
+                              scale: 0.6,
+                              child: const CircularProgressIndicator(
+                                color: Colors.blue,
+                                strokeWidth: 1.7,
+                              ),
+                            )
+                          : const Text(
+                              "Confirm",
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                color: Color(0xffE30000),
+                                fontWeight: FontWeight.normal,
+                              ),
+                            );
+                    }),
                   ),
                 );
               });
@@ -73,25 +90,15 @@ class DirectorsCardView extends GetView {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 15.w),
+              padding: EdgeInsets.symmetric(
+                horizontal: 15.w,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // ClipRRect(
-                  //   borderRadius: BorderRadius.circular(12.h),
-                  //   // borderRadius: BorderRadius.only(
-                  //   //     topLeft: Radius.circular(12.h),
-                  //   //     topRight: Radius.circular(12.h)),
-                  //   child: Image(
-                  //     height: 75.h,
-                  //     width: 70.w,
-                  //     fit: BoxFit.cover,
-                  //     image: MemoryImage(
-                  //       const Base64Decoder().convert(Get.find<DirectorsController>().directors[index].image),
-                  //     ),
-                  //   ),
-                  // ),
+                  imageApi(
+                      Get.find<DirectorsController>().directors[index].image),
                   SizedBox(
                     width: 20.w,
                   ),
@@ -134,7 +141,7 @@ class DirectorsCardView extends GetView {
               ),
             ),
             SizedBox(
-              height: 5.h,
+              height: 10.h,
             ),
             const Divider(
               height: 1,
@@ -157,5 +164,22 @@ class DirectorsCardView extends GetView {
         ),
       ),
     );
+  }
+
+  Widget imageApi(String img) {
+    // final token = box.read('login_token');
+    return EmpInvDirImageShow(
+        img: img,
+        image: ClipRRect(
+          borderRadius: BorderRadius.circular(12.h),
+          child: Image(
+              height: 80.h,
+              width: 70.w,
+              fit: BoxFit.fill,
+              image: NetworkImage(
+                img,
+                // headers: {"Authorization": "Bearer $token"},
+              )),
+        ));
   }
 }

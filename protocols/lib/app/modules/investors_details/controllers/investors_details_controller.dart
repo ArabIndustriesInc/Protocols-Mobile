@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/modules/employees_details/views/employee_details_card_view.dart';
-import 'package:protocols/app/modules/investors/controllers/investors_controller.dart';
 import 'package:protocols/app/modules/investors_edit/bindings/investors_edit_binding.dart';
 import 'package:protocols/app/modules/investors_edit/views/investors_edit_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -80,10 +79,10 @@ class InvestorsDetailsController extends GetxController {
 }
 
 class InvestorsDetailsButtonView extends GetView {
-  final InvestorsModel investor;
+  final int index;
   const InvestorsDetailsButtonView({
     super.key,
-    required this.investor,
+    required this.index,
   });
 
   @override
@@ -123,7 +122,7 @@ class InvestorsDetailsButtonView extends GetView {
             child: TextButton(
               onPressed: () {
                 Get.to(
-                  () => InvestorsEditView(investor: investor),
+                  () => InvestorsEditView(index: index),
                   binding: InvestorsEditBinding(),
                 );
               },

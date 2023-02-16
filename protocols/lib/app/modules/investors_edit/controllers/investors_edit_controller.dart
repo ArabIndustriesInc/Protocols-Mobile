@@ -1,11 +1,18 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as path;
 import 'package:image_picker/image_picker.dart';
-
-import '../../consts/appbar.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:protocols/app/data/models/investors_model.dart';
+import 'package:protocols/app/data/providers/investors_provider.dart';
+import 'package:protocols/app/modules/investors/controllers/investors_controller.dart';
+import 'package:protocols/app/modules/investors_edit/controllers/investors_edit_date_controller.dart';
 
 class InvestorsEditController extends GetxController {
   GlobalKey<FormState> formKey = GlobalKey();
@@ -18,9 +25,11 @@ class InvestorsEditController extends GetxController {
   TextEditingController panNoController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   RxString image = ''.obs;
+  var loadingEdit = false.obs;
   RxString imageSample = ''.obs;
   XFile? pickedImage;
   String? img;
+  Directory? dir;
 
   pickimage() async {
     pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -36,7 +45,8 @@ class InvestorsEditController extends GetxController {
 }
 
 class InvestorsEditButton extends GetView {
-  const InvestorsEditButton({super.key});
+  final int index;
+  const InvestorsEditButton({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +82,95 @@ class InvestorsEditButton extends GetView {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter)),
             child: TextButton(
-              onPressed: () {
-                Get.back();
-                SnackbarMessage()
-                    .snackBarMessage('Investor edited successfully!', context);
+              onPressed: () async {
+                if (!Get.find<InvestorsEditController>().loadingEdit.value) {
+                  if (Get.find<InvestorsEditController>()
+                      .formKey
+                      .currentState!
+                      .validate()) {
+                    Get.find<InvestorsEditController>().loadingEdit.value =
+                        true;
+                    final firstName = Get.find<InvestorsEditController>()
+                        .firstNameController
+                        .text
+                        .trim();
+                    final middleName = Get.find<InvestorsEditController>()
+                        .midNameController
+                        .text
+                        .trim();
+                    final lastName = Get.find<InvestorsEditController>()
+                        .lastNameController
+                        .text
+                        .trim();
+                    final mobNo = Get.find<InvestorsEditController>()
+                        .mobNoController
+                        .text
+                        .trim();
+                    final emailId = Get.find<InvestorsEditController>()
+                        .mailIdController
+                        .text
+                        .trim();
+                    final panNo = Get.find<InvestorsEditController>()
+                        .panNoController
+                        .text
+                        .trim();
+                    final fatherName = Get.find<InvestorsEditController>()
+                        .fatherNameController
+                        .text
+                        .trim();
+                    final address = Get.find<InvestorsEditController>()
+                        .addressController
+                        .text
+                        .trim();
+
+                    final String imageName = Get.find<InvestorsController>()
+                        .investors[index]
+                        .image
+                        .split('/')
+                        .last;
+                    final response = await http.get(Uri.parse(
+                        Get.find<InvestorsController>()
+                            .investors[index]
+                            .image));
+
+                    final documentDirectory =
+                        await getApplicationDocumentsDirectory();
+
+                    final newfile =
+                        File(path.join(documentDirectory.path, imageName));
+
+                    newfile.writeAsBytesSync(response.bodyBytes);
+                    final file =
+                        (Get.find<InvestorsEditController>().img == null)
+                            ? newfile
+                            : File(Get.find<InvestorsEditController>()
+                                .pickedImage!
+                                .path);
+
+                    final investor = AddInvestors(
+                      firstname: firstName,
+                      lastname: lastName,
+                      middlename: middleName,
+                      email: emailId,
+                      mobile: mobNo,
+                      dob: Get.find<InvestorsEditDateController>()
+                          .pickedDatePersonal
+                          .toString()
+                          .substring(0, 10),
+                      pannumber: panNo,
+                      fathersname: fatherName,
+                      address: address,
+                      image: file,
+                    );
+                    final id =
+                        Get.find<InvestorsController>().investors[index].id;
+                    final filename = path.basename(file.path);
+                    Get.find<InvestorsEditController>().dir =
+                        Directory(documentDirectory.path);
+                    await InvestorsProvider()
+                        .editInvestor(investor, filename, id, context);
+                  }
+                }
               },
               style: ElevatedButton.styleFrom(
                   shadowColor: Colors.transparent,
@@ -84,11 +179,21 @@ class InvestorsEditButton extends GetView {
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10))),
-              child: Icon(
-                Icons.check_rounded,
-                color: Colors.white,
-                size: 30.h,
-              ),
+              child: Obx(() {
+                return (Get.find<InvestorsEditController>().loadingEdit.value)
+                    ? Transform.scale(
+                        scale: 0.6,
+                        child: const CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 1.7,
+                        ),
+                      )
+                    : Icon(
+                        Icons.check_rounded,
+                        color: Colors.white,
+                        size: 30.h,
+                      );
+              }),
             ),
           ),
         ],

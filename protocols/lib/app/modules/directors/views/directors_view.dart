@@ -35,7 +35,7 @@ class DirectorsView extends GetView<DirectorsController> {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height / 20,
+              height: 30.h,
             ),
             Obx(
               () => (Get.find<DirectorsController>().loading.value)
@@ -44,7 +44,7 @@ class DirectorsView extends GetView<DirectorsController> {
                       child: const Center(child: CircularProgressIndicator()))
                   : Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                      child: ListView.builder(
+                      child: ListView.separated(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (BuildContext context, index) {
@@ -59,6 +59,11 @@ class DirectorsView extends GetView<DirectorsController> {
                                 .isEmpty)
                             ? 1
                             : Get.find<DirectorsController>().directors.length,
+                        separatorBuilder: (BuildContext context, int index) {
+                          return SizedBox(
+                            height: 30.h,
+                          );
+                        },
                       ),
                     ),
             ),

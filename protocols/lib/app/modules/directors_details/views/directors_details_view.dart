@@ -21,78 +21,87 @@ class DirectorsDetailsView extends GetView<DirectorsController> {
           padding: const EdgeInsets.only(
             top: 10,
           ),
-          child: ListView(
-            physics: const BouncingScrollPhysics(),
-            children: [
-              SizedBox(
-                height: 40.h,
-              ),
-              Center(
-                child: Text(
-                  Get.find<DirectorsController>().directors[index].firstname +
-                      Get.find<DirectorsController>()
-                          .directors[index]
-                          .middlename +
-                      Get.find<DirectorsController>().directors[index].lastname,
-                  style: TextStyle(
-                      fontSize: 25.sp,
-                      letterSpacing: .9,
-                      fontFamily: 'Montserrat Black'),
+          child: Obx(() {
+            return ListView(
+              physics: const BouncingScrollPhysics(),
+              children: [
+                SizedBox(
+                  height: 30.h,
                 ),
-              ),
-              SizedBox(height: 25.h),
-              // CircleAvatar(
-              //   backgroundColor: Colors.grey,
-              //   radius: MediaQuery.of(context).size.width / 8,
-              //   child: CircleAvatar(
-              //     backgroundColor: Colors.white,
-              //     radius: MediaQuery.of(context).size.width / 8.15,
-              //     backgroundImage: MemoryImage(
-              //       const Base64Decoder().convert(
-              //           Get.find<DirectorsController>().directors[index].image),
-              //     ),
-              //   ),
-              // ),
-              EmpDrsInvDetailsCardView(
-                title: 'Personal Details',
-                contents: [
-                  dobDate(),
-                  EmpDrsInvTableContent(
-                    content:
-                        Get.find<DirectorsController>().directors[index].mobile,
-                    title: 'Mob No.',
+                Center(
+                  child: titleText(),
+                ),
+                SizedBox(height: 25.h),
+                CircleAvatar(
+                  backgroundColor: Colors.grey,
+                  radius: MediaQuery.of(context).size.width / 7,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: MediaQuery.of(context).size.width / 7.15,
+                    backgroundImage: NetworkImage(
+                      Get.find<DirectorsController>().directors[index].image,
+                    ),
                   ),
-                  EmpDrsInvTableContent(
-                    content:
-                        Get.find<DirectorsController>().directors[index].email,
-                    title: 'Mail ID',
-                  ),
-                  EmpDrsInvTableContent(
-                    content: Get.find<DirectorsController>()
-                        .directors[index]
-                        .fathersname,
-                    title: 'Fathers name',
-                  ),
-                  EmpDrsInvTableContent(
-                    content: Get.find<DirectorsController>()
-                        .directors[index]
-                        .pannumber,
-                    title: 'PAN No.',
-                  ),
-                  EmpDrsInvTableContent(
-                    content: Get.find<DirectorsController>()
-                        .directors[index]
-                        .address,
-                    title: 'Address',
-                  ),
-                ],
-              ),
-            ],
-          ),
+                ),
+                EmpDrsInvDetailsCardView(
+                  title: 'Personal Details',
+                  contents: [
+                    dobDate(),
+                    EmpDrsInvTableContent(
+                      content: Get.find<DirectorsController>()
+                          .directors[index]
+                          .mobile,
+                      title: 'Mob No.',
+                    ),
+                    EmpDrsInvTableContent(
+                      content: Get.find<DirectorsController>()
+                          .directors[index]
+                          .email,
+                      title: 'Mail ID',
+                    ),
+                    EmpDrsInvTableContent(
+                      content: Get.find<DirectorsController>()
+                          .directors[index]
+                          .fathersname,
+                      title: 'Fathers name',
+                    ),
+                    EmpDrsInvTableContent(
+                      content: Get.find<DirectorsController>()
+                          .directors[index]
+                          .pannumber,
+                      title: 'PAN No.',
+                    ),
+                    EmpDrsInvTableContent(
+                      content: Get.find<DirectorsController>()
+                          .directors[index]
+                          .address,
+                      title: 'Address',
+                    ),
+                  ],
+                ),
+              ],
+            );
+          }),
         )),
         bottomNavigationBar: DirectorDetailsButtonView(
           index: index,
         ));
+  }
+
+  Text titleText() {
+    final middlename =
+        (Get.find<DirectorsController>().directors[index].middlename != '')
+            ? ' ${Get.find<DirectorsController>().directors[index].middlename} '
+            : ' ';
+    final firstname =
+        Get.find<DirectorsController>().directors[index].firstname;
+    final lastname = Get.find<DirectorsController>().directors[index].lastname;
+    return Text(
+      '$firstname$middlename$lastname',
+      textAlign: TextAlign.center,
+      style: TextStyle(
+          fontSize: 25.sp, letterSpacing: .9, fontFamily: 'Montserrat Black'),
+    );
   }
 
   EmpDrsInvTableContent dobDate() {

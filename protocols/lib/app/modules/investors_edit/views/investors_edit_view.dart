@@ -1,10 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
-import 'package:protocols/app/modules/consts/directors_const.dart';
+import 'package:protocols/app/modules/consts/investors_consts.dart';
 import 'package:protocols/app/modules/drawer/views/drawer_view.dart';
 import 'package:protocols/app/modules/investors/controllers/investors_controller.dart';
 import 'package:protocols/app/modules/investors_edit/controllers/investors_edit_controller.dart';
@@ -12,8 +11,8 @@ import 'package:protocols/app/modules/investors_edit/controllers/investors_edit_
 import 'package:protocols/app/modules/investors_edit/views/investors_edit_field_view.dart';
 
 class InvestorsEditView extends GetView<InvestorsEditController> {
-  final InvestorsModel investor;
-  const InvestorsEditView({Key? key, required this.investor}) : super(key: key);
+  final int index;
+  const InvestorsEditView({Key? key, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     initValues();
@@ -44,36 +43,87 @@ class InvestorsEditView extends GetView<InvestorsEditController> {
                 height: MediaQuery.of(context).size.height / 30,
               ),
               Obx(() => (Get.find<InvestorsEditController>()
-                      .imageSample
-                      .value
-                      .isNotEmpty)
-                  ? ImageDisplayDirectorsAdd(
-                      image: FileImage(File(Get.find<InvestorsEditController>()
                           .imageSample
-                          .value)),
-                      pickMedia: InkWell(
-                          child: const Icon(
-                            Icons.face_retouching_natural_rounded,
-                            color: Colors.white,
-                            size: 22,
-                          ),
-                          onTap: () {
-                            Get.find<InvestorsEditController>().pickimage();
-                          }))
-                  : ImageDisplayDirectorsAdd(
-                      image: MemoryImage(
-                        const Base64Decoder().convert(investor.image),
-                      ),
-                      pickMedia: InkWell(
-                          child: const Icon(
-                            Icons.face_retouching_natural_rounded,
-                            color: Colors.white,
-                            size: 22,
-                          ),
-                          onTap: () {
-                            Get.find<InvestorsEditController>().pickimage();
-                          }),
-                    )),
+                          .value
+                          .isNotEmpty)
+                      ? ImageDisplayInvestorsAdd(
+                          image: FileImage(File(
+                              Get.find<InvestorsEditController>()
+                                  .imageSample
+                                  .value)),
+                          pickMedia: InkWell(
+                              child: const Icon(
+                                Icons.face_retouching_natural_rounded,
+                                color: Colors.white,
+                                size: 22,
+                              ),
+                              onTap: () {
+                                Get.find<InvestorsEditController>().pickimage();
+                              }))
+                      :
+                      // : (Get.find<InvestorsEditController>().assetImage.isEmpty)
+                      //     ?
+                      ImageDisplayInvestorsAdd(
+                          image: NetworkImage(Get.find<InvestorsController>()
+                              .investors[index]
+                              .image),
+                          pickMedia: InkWell(
+                              child: const Icon(
+                                Icons.face_retouching_natural_rounded,
+                                color: Colors.white,
+                                size: 22,
+                              ),
+                              onTap: () {
+                                Get.find<InvestorsEditController>().pickimage();
+                              }),
+                        )
+                  // : ImageDisplay(
+                  //     image: MemoryImage(
+                  //       const Base64Decoder()
+                  //           .convert(Get.find<InvestorsEditController>().assetImage),
+                  //     ),
+                  //     pickMedia: InkWell(
+                  //         child: const Icon(
+                  //           Icons.face_retouching_natural_rounded,
+                  //           color: Colors.white,
+                  //           size: 22,
+                  //         ),
+                  //         onTap: () {
+                  //           Get.find<InvestorsEditController>().pickimage();
+                  //         }),
+                  //   ),
+                  ),
+              // Obx(() => (Get.find<InvestorsEditController>()
+              //         .imageSample
+              //         .value
+              //         .isNotEmpty)
+              //     ? ImageDisplayDirectorsEdit(
+              //         image: FileImage(File(Get.find<InvestorsEditController>()
+              //             .imageSample
+              //             .value)),
+              //         pickMedia: InkWell(
+              //             child: const Icon(
+              //               Icons.face_retouching_natural_rounded,
+              //               color: Colors.white,
+              //               size: 22,
+              //             ),
+              //             onTap: () {
+              //               Get.find<InvestorsEditController>().pickimage();
+              //             }))
+              //     : ImageDisplayDirectorsEdit(
+              //         image: MemoryImage(
+              //           const Base64Decoder().convert(Get.find<InvestorsController>().investors[index].image),
+              //         ),
+              //         pickMedia: InkWell(
+              //             child: const Icon(
+              //               Icons.face_retouching_natural_rounded,
+              //               color: Colors.white,
+              //               size: 22,
+              //             ),
+              //             onTap: () {
+              //               Get.find<InvestorsEditController>().pickimage();
+              //             }),
+              //       )),
               SizedBox(
                 height: MediaQuery.of(context).size.height / 30,
               ),
@@ -91,7 +141,7 @@ class InvestorsEditView extends GetView<InvestorsEditController> {
               Form(
                 key: Get.find<InvestorsEditController>().formKey,
                 child: InvestorsEditFieldView(
-                  date: investor.dob,
+                  date: Get.find<InvestorsController>().investors[index].dob,
                 ),
               ),
               const SizedBox(
@@ -101,26 +151,31 @@ class InvestorsEditView extends GetView<InvestorsEditController> {
           ),
         ),
       ),
-      bottomNavigationBar: const InvestorsEditButton(),
+      bottomNavigationBar: InvestorsEditButton(
+        index: index,
+      ),
     );
   }
 
   initValues() {
-    final dob = DateTime.parse(investor.dob);
+    final dob =
+        DateTime.parse(Get.find<InvestorsController>().investors[index].dob);
     Get.find<InvestorsEditDateController>().initDatePersonal(dob);
     Get.find<InvestorsEditController>().addressController.text =
-        investor.address;
+        Get.find<InvestorsController>().investors[index].address;
     Get.find<InvestorsEditController>().fatherNameController.text =
-        investor.fatherName;
+        Get.find<InvestorsController>().investors[index].fathersname;
     Get.find<InvestorsEditController>().firstNameController.text =
-        investor.fName;
+        Get.find<InvestorsController>().investors[index].firstname;
     Get.find<InvestorsEditController>().lastNameController.text =
-        investor.lName!;
+        Get.find<InvestorsController>().investors[index].lastname!;
     Get.find<InvestorsEditController>().mailIdController.text =
-        investor.emailID;
+        Get.find<InvestorsController>().investors[index].email;
     Get.find<InvestorsEditController>().midNameController.text =
-        investor.mName!;
-    Get.find<InvestorsEditController>().mobNoController.text = investor.mobNo;
-    Get.find<InvestorsEditController>().panNoController.text = investor.panNo;
+        Get.find<InvestorsController>().investors[index].middlename!;
+    Get.find<InvestorsEditController>().mobNoController.text =
+        Get.find<InvestorsController>().investors[index].mobile;
+    Get.find<InvestorsEditController>().panNoController.text =
+        Get.find<InvestorsController>().investors[index].pannumber;
   }
 }

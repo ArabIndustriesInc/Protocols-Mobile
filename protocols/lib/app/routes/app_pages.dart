@@ -8,8 +8,6 @@ import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/directors/bindings/directors_binding.dart';
 import '../modules/directors/views/directors_view.dart';
-import '../modules/directors_add/bindings/directors_add_binding.dart';
-import '../modules/directors_add/views/directors_add_view.dart';
 import '../modules/documents/bindings/documents_binding.dart';
 import '../modules/documents/views/documents_view.dart';
 import '../modules/employees/bindings/employees_binding.dart';
@@ -124,11 +122,6 @@ class AppPages {
       binding: DirectorsBinding(),
     ),
     GetPage(
-      name: _Paths.DIRECTORS_ADD,
-      page: () => const DirectorsAddView(),
-      binding: DirectorsAddBinding(),
-    ),
-    GetPage(
       name: _Paths.INVESTORS,
       page: () => const InvestorsView(),
       binding: InvestorsBinding(),
@@ -187,11 +180,6 @@ class AppPages {
       name: _Paths.OTP_VERIFY,
       page: () => const OtpVerifyView(),
       binding: OtpVerifyBinding(),
-    ),
-    GetPage(
-      name: _Paths.PRICING_PLAN,
-      page: () => const PricingPlanView(),
-      binding: PricingPlanBinding(),
     ),
   ];
 }

@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -44,6 +44,42 @@ class DirectorsEditView extends GetView<DirectorsEditController> {
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height / 30,
+              ),
+              Obx(
+                () => (Get.find<DirectorsEditController>()
+                        .imageSample
+                        .value
+                        .isNotEmpty)
+                    ? ImageDisplayDirectorsAdd(
+                        image: FileImage(File(
+                            Get.find<DirectorsEditController>()
+                                .imageSample
+                                .value)),
+                        pickMedia: InkWell(
+                            child: const Icon(
+                              Icons.face_retouching_natural_rounded,
+                              color: Colors.white,
+                              size: 22,
+                            ),
+                            onTap: () {
+                              Get.find<DirectorsEditController>().pickimage();
+                            }))
+                    : ImageDisplayDirectorsAdd(
+                        image: NetworkImage(
+                          Get.find<DirectorsController>()
+                              .directors[index]
+                              .image,
+                        ),
+                        pickMedia: InkWell(
+                            child: const Icon(
+                              Icons.face_retouching_natural_rounded,
+                              color: Colors.white,
+                              size: 22,
+                            ),
+                            onTap: () {
+                              Get.find<DirectorsEditController>().pickimage();
+                            }),
+                      ),
               ),
               // Obx(() => (Get.find<DirectorsEditController>()
               //         .imageSample
@@ -103,7 +139,7 @@ class DirectorsEditView extends GetView<DirectorsEditController> {
           ),
         ),
       ),
-      bottomNavigationBar: const EditDirectorsButton(),
+      bottomNavigationBar: EditDirectorsButton(index: index),
     );
   }
 
@@ -120,7 +156,7 @@ class DirectorsEditView extends GetView<DirectorsEditController> {
     Get.find<DirectorsEditController>().lastNameController.text =
         Get.find<DirectorsController>().directors[index].lastname!;
     Get.find<DirectorsEditController>().mailIdController.text =
-        Get.find<DirectorsController>().directors[index].emailID;
+        Get.find<DirectorsController>().directors[index].email;
     Get.find<DirectorsEditController>().midNameController.text =
         Get.find<DirectorsController>().directors[index].middlename!;
     Get.find<DirectorsEditController>().mobNoController.text =

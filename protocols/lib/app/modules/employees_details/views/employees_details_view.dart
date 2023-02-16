@@ -1,17 +1,17 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
+import 'package:protocols/app/modules/consts/empinvdir_consts.dart';
 import 'package:protocols/app/modules/drawer/views/drawer_view.dart';
 import 'package:protocols/app/modules/employees/controllers/employees_controller.dart';
 import 'package:protocols/app/modules/employees_details/controllers/employees_details_controller.dart';
 import 'package:protocols/app/modules/employees_details/views/employee_details_card_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class EmployeesDetailsView extends GetView<EmployeesDetailsController> {
-  final EmployeeModel employee;
-  const EmployeesDetailsView({Key? key, required this.employee})
-      : super(key: key);
+  final int index;
+  const EmployeesDetailsView({Key? key, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,26 +27,20 @@ class EmployeesDetailsView extends GetView<EmployeesDetailsController> {
             physics: const BouncingScrollPhysics(),
             children: [
               SizedBox(
-                height: 40.h,
+                height: 30.h,
               ),
               Center(
-                child: Text(
-                  "${employee.fName} ${employee.mName} ${employee.lName}",
-                  style: TextStyle(
-                      fontSize: 25.sp,
-                      letterSpacing: .9,
-                      fontFamily: 'Montserrat Black'),
-                ),
+                child: titleText(),
               ),
               SizedBox(height: 15.h),
               CircleAvatar(
-                backgroundColor: Colors.grey,
-                radius: MediaQuery.of(context).size.width / 8,
+                backgroundColor: Colors.transparent,
+                radius: MediaQuery.of(context).size.width / 7,
                 child: CircleAvatar(
                   backgroundColor: Colors.white,
-                  radius: MediaQuery.of(context).size.width / 8.15,
-                  backgroundImage: MemoryImage(
-                    const Base64Decoder().convert(employee.image!),
+                  radius: MediaQuery.of(context).size.width / 7.15,
+                  backgroundImage: NetworkImage(
+                    Get.find<EmployeesController>().employees[index].image,
                   ),
                 ),
               ),
@@ -54,6 +48,8 @@ class EmployeesDetailsView extends GetView<EmployeesDetailsController> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SingleChildScrollView(
+                    controller:
+                        Get.find<EmployeesDetailsController>().pageController,
                     physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -63,28 +59,40 @@ class EmployeesDetailsView extends GetView<EmployeesDetailsController> {
                           title: 'Work Details',
                           contents: [
                             EmpDrsInvTableContent(
-                              content: employee.designation,
+                              content: Get.find<EmployeesController>()
+                                  .employees[index]
+                                  .position,
                               title: 'Designation',
                             ),
                             EmpDrsInvTableContent(
-                              content: employee.empID,
+                              content: Get.find<EmployeesController>()
+                                  .employees[index]
+                                  .employeeid,
                               title: 'Employee ID',
                             ),
-                            joinDate(),
+                            // joinDate(),
                             EmpDrsInvTableContent(
-                              content: employee.location,
+                              content: Get.find<EmployeesController>()
+                                  .employees[index]
+                                  .worklocation,
                               title: 'Work Location',
                             ),
                             EmpDrsInvTableContent(
-                              content: employee.pfAcNo!,
+                              content: Get.find<EmployeesController>()
+                                  .employees[index]
+                                  .pfaccountnumber,
                               title: 'PF Account No',
                             ),
                             EmpDrsInvTableContent(
-                              content: employee.uanNo!,
+                              content: Get.find<EmployeesController>()
+                                  .employees[index]
+                                  .uannumber,
                               title: 'UAN No.',
                             ),
                             EmpDrsInvTableContent(
-                              content: employee.esiNo!,
+                              content: Get.find<EmployeesController>()
+                                  .employees[index]
+                                  .esinumber,
                               title: 'ESI No.',
                             ),
                           ],
@@ -92,25 +100,35 @@ class EmployeesDetailsView extends GetView<EmployeesDetailsController> {
                         EmpDrsInvDetailsCardView(
                           title: 'Personal Details',
                           contents: [
-                            dobDate(),
+                            // dobDate(),
                             EmpDrsInvTableContent(
-                              content: '+91${employee.mobNo}',
+                              content: Get.find<EmployeesController>()
+                                  .employees[index]
+                                  .mobile,
                               title: 'Mob No.',
                             ),
                             EmpDrsInvTableContent(
-                              content: employee.emailID,
+                              content: Get.find<EmployeesController>()
+                                  .employees[index]
+                                  .email,
                               title: 'Mail ID',
                             ),
                             EmpDrsInvTableContent(
-                              content: employee.fatherName,
+                              content: Get.find<EmployeesController>()
+                                  .employees[index]
+                                  .fathersname,
                               title: 'Fathers name',
                             ),
                             EmpDrsInvTableContent(
-                              content: employee.panNo,
+                              content: Get.find<EmployeesController>()
+                                  .employees[index]
+                                  .pannumber,
                               title: 'PAN No.',
                             ),
                             EmpDrsInvTableContent(
-                              content: employee.address,
+                              content: Get.find<EmployeesController>()
+                                  .employees[index]
+                                  .address,
                               title: 'Address',
                             ),
                           ],
@@ -119,27 +137,39 @@ class EmployeesDetailsView extends GetView<EmployeesDetailsController> {
                           title: 'Payment Details',
                           contents: [
                             EmpDrsInvTableContent(
-                              content: employee.payment,
+                              content: Get.find<EmployeesController>()
+                                  .employees[index]
+                                  .paymentMode,
                               title: 'Payment Mode',
                             ),
                             EmpDrsInvTableContent(
-                              content: employee.accHolder,
+                              content: Get.find<EmployeesController>()
+                                  .employees[index]
+                                  .accName,
                               title: 'Account Holder',
                             ),
                             EmpDrsInvTableContent(
-                              content: employee.bankName,
+                              content: Get.find<EmployeesController>()
+                                  .employees[index]
+                                  .bank,
                               title: 'Bank Name',
                             ),
                             EmpDrsInvTableContent(
-                              content: employee.accNo,
+                              content: Get.find<EmployeesController>()
+                                  .employees[index]
+                                  .accNo,
                               title: 'Account No.',
                             ),
                             EmpDrsInvTableContent(
-                              content: employee.accType,
+                              content: Get.find<EmployeesController>()
+                                  .employees[index]
+                                  .type,
                               title: 'Type',
                             ),
                             EmpDrsInvTableContent(
-                              content: employee.ifsc,
+                              content: Get.find<EmployeesController>()
+                                  .employees[index]
+                                  .ifsc,
                               title: 'IFSC',
                             ),
                           ],
@@ -149,17 +179,53 @@ class EmployeesDetailsView extends GetView<EmployeesDetailsController> {
                   ),
                 ],
               ),
-              //
+              SizedBox(
+                height: 15.h,
+              ),
+              Center(
+                child: SmoothPageIndicator(
+                  controller:
+                      Get.find<EmployeesDetailsController>().pageController,
+                  count: 3,
+                  axisDirection: Axis.horizontal,
+                  effect: JumpingDotEffect(
+                    spacing: 10.w,
+                    dotHeight: 8.h,
+                    dotWidth: 8.w,
+                    radius: 20.w,
+                    dotColor: Colors.grey[300]!,
+                    // dotColor: const Color(0xFFD3EBFF),
+                    activeDotColor: const Color(0xFF469AFA),
+                  ),
+                ),
+              )
             ],
           ),
         )),
         bottomNavigationBar: EmployeesDetailsButtonView(
-          employee: employee,
+          index: index,
         ));
   }
 
+  Text titleText() {
+    final middlename =
+        (Get.find<EmployeesController>().employees[index].middlename != '')
+            ? ' ${Get.find<EmployeesController>().employees[index].middlename} '
+            : ' ';
+    final firstname =
+        Get.find<EmployeesController>().employees[index].firstname;
+    final lastname = Get.find<EmployeesController>().employees[index].lastname;
+    return Text(
+      '$firstname$middlename$lastname',
+      textAlign: TextAlign.center,
+      style: TextStyle(
+          fontSize: 25.sp, letterSpacing: .9, fontFamily: 'Montserrat Black'),
+    );
+  }
+
   EmpDrsInvTableContent dobDate() {
-    final dateOg = DateTime.parse(employee.dob);
+    final dateOg =
+        DateTime.parse(Get.find<EmployeesController>().employees[index].dob);
     final year = dateOg.year;
     final monthOg = dateOg.month;
     final dayOg = dateOg.day;
@@ -173,7 +239,8 @@ class EmployeesDetailsView extends GetView<EmployeesDetailsController> {
   }
 
   EmpDrsInvTableContent joinDate() {
-    final dateOg = DateTime.parse(employee.joiningDate);
+    final dateOg = DateTime.parse(
+        Get.find<EmployeesController>().employees[index].joiningdate);
     final year = dateOg.year;
     final monthOg = dateOg.month;
     final dayOg = dateOg.day;

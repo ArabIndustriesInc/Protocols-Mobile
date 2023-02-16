@@ -21,7 +21,6 @@ abstract class Routes {
   static const EMPLOYEES_EDIT = _Paths.EMPLOYEES_EDIT;
   static const DIRECTORS = _Paths.DIRECTORS;
   static const DIRECTORS_DETAILS = _Paths.DIRECTORS_DETAILS;
-  static const DIRECTORS_ADD = _Paths.DIRECTORS_ADD;
   static const INVESTORS = _Paths.INVESTORS;
   static const INVESTORS_DETAILS = _Paths.INVESTORS_DETAILS;
   static const INVESTORS_ADD = _Paths.INVESTORS_ADD;
@@ -43,7 +42,6 @@ abstract class Routes {
   static const SETTINGS = _Paths.SETTINGS;
   static const VOTING_ADD = _Paths.VOTING_ADD;
   static const OTP_VERIFY = _Paths.OTP_VERIFY;
-  static const PRICING_PLAN = _Paths.PRICING_PLAN;
 }
 
 abstract class _Paths {
@@ -64,7 +62,6 @@ abstract class _Paths {
   static const EMPLOYEES_EDIT = '/employees-edit';
   static const DIRECTORS = '/directors';
   static const DIRECTORS_DETAILS = '/directors-details';
-  static const DIRECTORS_ADD = '/directors-add';
   static const INVESTORS = '/investors';
   static const INVESTORS_DETAILS = '/investors-details';
   static const INVESTORS_ADD = '/investors-add';
@@ -86,5 +83,4 @@ abstract class _Paths {
   static const SETTINGS = '/settings';
   static const VOTING_ADD = '/voting-add';
   static const OTP_VERIFY = '/otp-verify';
-  static const PRICING_PLAN = '/pricing-plan';
 }

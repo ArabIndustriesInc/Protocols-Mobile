@@ -37,7 +37,7 @@ mixin InputValidationMixin {
   }
 
   bool isPfNoValid(String pfNo) {
-    return RegExp(r'^[A-Z0-9]$').hasMatch(pfNo);
+    return RegExp(r'^[A-Z0-9]*$').hasMatch(pfNo);
   }
 
   bool isAddressValid(String address) {

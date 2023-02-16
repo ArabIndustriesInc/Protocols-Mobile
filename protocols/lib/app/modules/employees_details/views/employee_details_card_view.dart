@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:protocols/app/modules/employees/controllers/employees_controller.dart';
 import 'package:protocols/app/modules/employees_edit/bindings/employees_edit_binding.dart';
 import 'package:protocols/app/modules/employees_edit/views/employees_edit_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,7 +16,7 @@ class EmpDrsInvDetailsCardView extends GetView {
     return Column(
       children: [
         SizedBox(
-          height: 25.h,
+          height: 10.h,
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 15.0),
@@ -133,16 +132,16 @@ class EmpDrsInvTableContent extends GetView {
 }
 
 class EmployeesDetailsButtonView extends GetView {
-  final EmployeeModel employee;
+  final int index;
   const EmployeesDetailsButtonView({
     super.key,
-    required this.employee,
+    required this.index,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 25.h, vertical: 15.h),
+      padding: EdgeInsets.symmetric(horizontal: 25.h, vertical: 10.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -178,7 +177,7 @@ class EmployeesDetailsButtonView extends GetView {
               onPressed: () {
                 Get.to(
                     () => EmployeesEditView(
-                          employee: employee,
+                          index: index,
                         ),
                     binding: EmployeesEditBinding());
               },

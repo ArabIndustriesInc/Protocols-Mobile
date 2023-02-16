@@ -1,4 +1,4 @@
-import 'package:external_app_launcher/external_app_launcher.dart';
+// import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -66,11 +66,11 @@ class LinksCardView extends GetView {
                 ),
                 TextButton(
                   onPressed: () async {
-                    await LaunchApp.openApp(
-                        androidPackageName: link,
-                        iosUrlScheme: 'googlegmail://',
-                        appStoreLink:
-                            'https://apps.apple.com/us/app/gmail-email-by-google');
+                    // await LaunchApp.openApp(
+                    //     androidPackageName: link,
+                    //     iosUrlScheme: 'googlegmail://',
+                    //     appStoreLink:
+                    //         'https://apps.apple.com/us/app/gmail-email-by-google');
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

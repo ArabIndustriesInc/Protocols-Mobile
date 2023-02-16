@@ -42,6 +42,40 @@ class AppBarCustom {
       )
     ],
   );
+  final appBarPricing = AppBar(
+    elevation: 0,
+    automaticallyImplyLeading: false,
+    backgroundColor: Colors.white,
+    leading: Builder(builder: (context) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 10),
+        child: TextButton(
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+            style: TextButton.styleFrom(
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              shape: const CircleBorder(),
+            ),
+            child: SvgPicture.asset(
+              'assets/icons/drawer.svg',
+              height: 40.w,
+            )),
+      );
+    }),
+    actions: [
+      Center(
+        child: Text(
+          'Our Plans',
+          style: TextStyle(fontSize: 15.sp, color: Colors.black),
+        ),
+      ),
+      SizedBox(
+        width: 35.h,
+      )
+    ],
+  );
 }
 
 class SnackbarMessage {

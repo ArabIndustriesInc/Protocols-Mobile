@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:protocols/app/modules/consts/appbar.dart';
+import 'package:protocols/app/data/models/directors_model.dart';
+import 'package:protocols/app/data/providers/directors_provider.dart';
+import 'package:protocols/app/modules/custom_alert/views/custom_alert_view.dart';
+import 'package:protocols/app/modules/directors/controllers/directors_controller.dart';
+import 'package:protocols/app/modules/directors_edit/controllers/directors_edit_date_controller.dart';
 
 class DirectorsEditController extends GetxController {
   GlobalKey<FormState> formKey = GlobalKey();
@@ -17,6 +21,7 @@ class DirectorsEditController extends GetxController {
   TextEditingController panNoController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   RxString image = ''.obs;
+  var loadingEdit = false.obs;
   RxString imageSample = ''.obs;
   XFile? pickedImage;
   String? img;
@@ -35,7 +40,8 @@ class DirectorsEditController extends GetxController {
 }
 
 class EditDirectorsButton extends GetView {
-  const EditDirectorsButton({super.key});
+  final int index;
+  const EditDirectorsButton({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -74,9 +80,106 @@ class EditDirectorsButton extends GetView {
                     end: Alignment.bottomCenter)),
             child: TextButton(
               onPressed: () {
-                Get.back();
-                SnackbarMessage()
-                    .snackBarMessage('Director edited successfully!', context);
+                if (!Get.find<DirectorsEditController>().loadingEdit.value) {
+                  if (Get.find<DirectorsEditController>()
+                      .formKey
+                      .currentState!
+                      .validate()) {
+                    Get.find<DirectorsEditController>().loadingEdit.value =
+                        true;
+                    final firstName = Get.find<DirectorsEditController>()
+                        .firstNameController
+                        .text
+                        .trim();
+                    final middleName = Get.find<DirectorsEditController>()
+                        .midNameController
+                        .text
+                        .trim();
+                    final lastName = Get.find<DirectorsEditController>()
+                        .lastNameController
+                        .text
+                        .trim();
+                    final mobNo = Get.find<DirectorsEditController>()
+                        .mobNoController
+                        .text
+                        .trim();
+                    final emailId = Get.find<DirectorsEditController>()
+                        .mailIdController
+                        .text
+                        .trim();
+                    final panNo = Get.find<DirectorsEditController>()
+                        .panNoController
+                        .text
+                        .trim();
+                    final fatherName = Get.find<DirectorsEditController>()
+                        .fatherNameController
+                        .text
+                        .trim();
+                    final address = Get.find<DirectorsEditController>()
+                        .addressController
+                        .text
+                        .trim();
+                    if (Get.find<DirectorsEditController>().img == null) {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return CustomAlert(
+                              content: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 30.0),
+                                child: Text(
+                                  'You did not pick an image! Please select an image to continue.',
+                                  style: TextStyle(fontSize: 15.sp),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              color: const Color.fromARGB(255, 222, 15, 0),
+                              title: 'Warning!',
+                              action: InkWell(
+                                highlightColor: Colors.grey[200],
+                                onTap: () {
+                                  Get.find<DirectorsEditController>()
+                                      .pickimage();
+                                  Get.back();
+                                },
+                                child: Text(
+                                  "Select",
+                                  style: TextStyle(
+                                    fontSize: 15.sp,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                              ),
+                            );
+                          });
+                    } else {
+                      final img =
+                          Get.find<DirectorsEditController>().pickedImage;
+                      final director = AddDirectors(
+                        firstname: firstName,
+                        lastname: lastName,
+                        middlename: middleName,
+                        email: emailId,
+                        mobile: mobNo,
+                        dob: Get.find<DirectorsEditDateController>()
+                            .pickedDatePersonal
+                            .toString()
+                            .substring(0, 10),
+                        pannumber: panNo,
+                        fathersname: fatherName,
+                        address: address,
+                        image: File(img!.path),
+                      );
+                      final id =
+                          Get.find<DirectorsController>().directors[index].id;
+                      final filename =
+                          Get.find<DirectorsEditController>().pickedImage!.name;
+                      DirectorsProvider()
+                          .editDirector(director, filename, id, context);
+                    }
+                  }
+                }
               },
               style: ElevatedButton.styleFrom(
                   shadowColor: Colors.transparent,
@@ -85,11 +188,21 @@ class EditDirectorsButton extends GetView {
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10))),
-              child: Icon(
-                Icons.check_rounded,
-                color: Colors.white,
-                size: 30.h,
-              ),
+              child: Obx(() {
+                return (Get.find<DirectorsEditController>().loadingEdit.value)
+                    ? Transform.scale(
+                        scale: 0.6,
+                        child: const CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 1.7,
+                        ),
+                      )
+                    : Icon(
+                        Icons.check_rounded,
+                        color: Colors.white,
+                        size: 30.h,
+                      );
+              }),
             ),
           ),
         ],

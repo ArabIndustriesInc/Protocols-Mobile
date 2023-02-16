@@ -2,10 +2,11 @@
 
 import 'dart:developer';
 import 'dart:io';
-import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:internet_file/internet_file.dart';
+import 'package:internet_file/storage_io.dart';
 import 'package:protocols/app/data/consts/api_consts.dart';
 import 'package:protocols/app/data/models/files_model.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
@@ -41,31 +42,68 @@ class FilesProvider extends GetConnect {
     box.write('storage', appStorage);
   }
 
-  Future<File> downloadFile(String filename, String image) async {
-    final token = box.read('login_token');
-    http.Client client = http.Client();
-    var req = await client
-        .get(Uri.parse(image), headers: {'Authorization': 'Bearer $token'});
-    var bytes = req.bodyBytes;
+  Future<File> downloadFile(
+      String filename, String networkFile, int index) async {
+    // final token = box.read('login_token');
+    // http.Client client = http.Client();
     final dir = Get.find<FolderController>().appStorage.path;
     File file = File('$dir/$filename');
-    await file.writeAsBytes(bytes);
+    final storageIO = InternetFileStorageIO();
+    Get.find<FolderController>().fileIndex.value = index.toString();
+    await InternetFile.get(
+      networkFile,
+      storage: storageIO,
+      storageAdditional: storageIO.additional(
+        filename: filename,
+        location: '$dir/',
+      ),
+      force: true,
+      progress: (receivedLength, contentLength) {
+        final percentage = receivedLength / contentLength * 100;
+        Get.find<FolderController>().percentage.value = percentage;
+        if (percentage == 100) {
+          Get.find<FolderController>().fileIndex.value = '-1';
+          Get.find<FolderController>().percentage.value = 0.0;
+        }
+      },
+    );
     return file;
+    // var response = await Dio().download(
+    //   image,
+    //   file,
+    //   options: Options(
+    //     headers: {'Authorization': 'Bearer $token'},
+    //     contentType: 'application/json; charset=utf-8',
+    //     responseType: ResponseType.bytes,
+    //     followRedirects: false,
+    //     receiveTimeout: 0,
+    //   ),
+    // );
+    // log(response.data);
+    // final raf = file.openSync(mode: FileMode.write);
+    // raf.writeByteSync(response.data);
+    // await raf.close();
+    // if (response.statusCode == 200) {
+    // } else {
+    //   return File('null');
+    // }
   }
 
   addFile(AddFiles file, BuildContext context) async {
     try {
       final token = box.read('login_token');
-      dio.FormData data = dio.FormData.fromMap({
+      var request = http.MultipartRequest(
+          'POST', Uri.parse('${baseUrlApi}folder/adddata/${file.folderid}'));
+      Map<String, String> headers = {'Authorization': 'Bearer $token'};
+      request.headers.addAll(headers);
+      request.fields.addAll({
         'filename': file.filename,
-        'image': await dio.MultipartFile.fromFile(file.image.path,
-            filename: file.filename),
-        'folderid': file.folderid
+        'folderid': file.folderid,
       });
-      var response = await dio.Dio().post(
-          '${baseUrlApi}folder/adddata/${file.folderid}',
-          data: data,
-          options: dio.Options(headers: {'Authorization': 'Bearer $token'}));
+      request.files.add(await http.MultipartFile.fromPath(
+          'image', file.image.path,
+          filename: file.filename));
+      var response = await request.send();
       log(response.toString());
       log(response.statusCode.toString());
       if (response.statusCode == 200) {
@@ -143,7 +181,7 @@ class FilesProvider extends GetConnect {
 
 
 
-// Future<File> saveFile(String file, String image) async {
+// Future<File> saveFile(String fi, String image) async {
   //   final token = box.read('login_token');
   //   final appStorage = Get.find<FolderController>().appStorage;
   //   final newFile = File('${appStorage.path}/$file');

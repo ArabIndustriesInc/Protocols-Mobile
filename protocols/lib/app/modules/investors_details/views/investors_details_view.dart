@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
@@ -9,9 +8,8 @@ import 'package:protocols/app/modules/investors_details/controllers/investors_de
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class InvestorsDetailsView extends GetView<InvestorsDetailsController> {
-  final InvestorsModel investor;
-  const InvestorsDetailsView({Key? key, required this.investor})
-      : super(key: key);
+  final int index;
+  const InvestorsDetailsView({Key? key, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,69 +21,102 @@ class InvestorsDetailsView extends GetView<InvestorsDetailsController> {
           padding: const EdgeInsets.only(
             top: 10,
           ),
-          child: ListView(
-            physics: const BouncingScrollPhysics(),
-            children: [
-              SizedBox(
-                height: 40.h,
-              ),
-              Center(
-                child: Text(
-                  "${investor.fName} ${investor.mName} ${investor.lName}",
-                  style: TextStyle(
-                      fontSize: 25.sp,
-                      letterSpacing: .9,
-                      fontFamily: 'Montserrat Black'),
+          child: Obx(() {
+            return ListView(
+              physics: const BouncingScrollPhysics(),
+              children: [
+                SizedBox(
+                  height: 40.h,
                 ),
-              ),
-              SizedBox(height: 25.h),
-              CircleAvatar(
-                backgroundColor: Colors.grey,
-                radius: MediaQuery.of(context).size.width / 8,
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  radius: MediaQuery.of(context).size.width / 8.15,
-                  backgroundImage: MemoryImage(
-                    const Base64Decoder().convert(investor.image),
+                Center(
+                  child: titleText(),
+                ),
+                SizedBox(height: 25.h),
+                CircleAvatar(
+                  backgroundColor: Colors.grey,
+                  radius: MediaQuery.of(context).size.width / 7,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: MediaQuery.of(context).size.width / 7.15,
+                    backgroundImage: NetworkImage(
+                      Get.find<InvestorsController>().investors[index].image,
+                    ),
                   ),
                 ),
-              ),
-              EmpDrsInvDetailsCardView(
-                title: 'Personal Details',
-                contents: [
-                  dobDate(),
-                  EmpDrsInvTableContent(
-                    content: '+91 ${investor.mobNo}',
-                    title: 'Mob No.',
-                  ),
-                  EmpDrsInvTableContent(
-                    content: investor.emailID,
-                    title: 'Mail ID',
-                  ),
-                  EmpDrsInvTableContent(
-                    content: investor.fatherName,
-                    title: 'Fathers name',
-                  ),
-                  EmpDrsInvTableContent(
-                    content: investor.panNo,
-                    title: 'PAN No.',
-                  ),
-                  EmpDrsInvTableContent(
-                    content: investor.address,
-                    title: 'Address',
-                  ),
-                ],
-              ),
-            ],
-          ),
+                // CircleAvatar(
+                //   backgroundColor: Colors.grey,
+                //   radius: MediaQuery.of(context).size.width / 8,
+                //   child: CircleAvatar(
+                //     backgroundColor: Colors.white,
+                //     radius: MediaQuery.of(context).size.width / 8.15,
+                //     backgroundImage: MemoryImage(
+                //       const Base64Decoder().convert(Get.find<InvestorsController>().investors[index].image),
+                //     ),
+                //   ),
+                // ),
+                EmpDrsInvDetailsCardView(
+                  title: 'Personal Details',
+                  contents: [
+                    dobDate(),
+                    EmpDrsInvTableContent(
+                      content:
+                          '+91 ${Get.find<InvestorsController>().investors[index].mobile}',
+                      title: 'Mob No.',
+                    ),
+                    EmpDrsInvTableContent(
+                      content: Get.find<InvestorsController>()
+                          .investors[index]
+                          .email,
+                      title: 'Mail ID',
+                    ),
+                    EmpDrsInvTableContent(
+                      content: Get.find<InvestorsController>()
+                          .investors[index]
+                          .fathersname,
+                      title: 'Fathers name',
+                    ),
+                    EmpDrsInvTableContent(
+                      content: Get.find<InvestorsController>()
+                          .investors[index]
+                          .pannumber,
+                      title: 'PAN No.',
+                    ),
+                    EmpDrsInvTableContent(
+                      content: Get.find<InvestorsController>()
+                          .investors[index]
+                          .address,
+                      title: 'Address',
+                    ),
+                  ],
+                ),
+              ],
+            );
+          }),
         )),
         bottomNavigationBar: InvestorsDetailsButtonView(
-          investor: investor,
+          index: index,
         ));
   }
 
+  Text titleText() {
+    final middlename =
+        (Get.find<InvestorsController>().investors[index].middlename != '')
+            ? ' ${Get.find<InvestorsController>().investors[index].middlename} '
+            : ' ';
+    final firstname =
+        Get.find<InvestorsController>().investors[index].firstname;
+    final lastname = Get.find<InvestorsController>().investors[index].lastname;
+    return Text(
+      '$firstname$middlename$lastname',
+      textAlign: TextAlign.center,
+      style: TextStyle(
+          fontSize: 25.sp, letterSpacing: .9, fontFamily: 'Montserrat Black'),
+    );
+  }
+
   EmpDrsInvTableContent dobDate() {
-    final dateOg = DateTime.parse(investor.dob);
+    final dateOg =
+        DateTime.parse(Get.find<InvestorsController>().investors[index].dob);
     final year = dateOg.year;
     final monthOg = dateOg.month;
     final dayOg = dateOg.day;

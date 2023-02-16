@@ -8,12 +8,15 @@ import 'package:protocols/app/modules/payment_gateway/views/payment_gateway_view
 import 'package:protocols/app/modules/pricing_plan/controllers/pricing_plan_controller.dart';
 
 class PricingPlanView extends GetView<PricingPlanController> {
-  const PricingPlanView({Key? key}) : super(key: key);
+  final String title;
+  const PricingPlanView({Key? key, required this.title}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        return (title == 'Upgrade the plan for a better experience')
+            ? true
+            : false;
       },
       child: Scaffold(
         appBar: AppBarPrice().pricingAppBar,
@@ -27,7 +30,7 @@ class PricingPlanView extends GetView<PricingPlanController> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 30.w),
                   child: Text(
-                    'Make The Wise Decision For your Startup Solution',
+                    title,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 17.sp,

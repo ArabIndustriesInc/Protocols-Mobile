@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:protocols/app/data/consts/api_consts.dart';
 import 'package:protocols/app/data/providers/registration_provider.dart';
 import 'package:protocols/app/modules/otp-verify/controllers/otp_verify_controller.dart';
+import 'package:protocols/app/modules/pricing_plan/bindings/pricing_plan_binding.dart';
+import 'package:protocols/app/modules/pricing_plan/views/pricing_plan_view.dart';
 import 'package:protocols/app/modules/signup/controllers/text_field_controller.dart';
 import 'package:protocols/app/routes/app_pages.dart';
 
@@ -20,7 +22,10 @@ otpVerify(String otp) async {
       var data = jsonDecode(response.body.toString());
       bool status = data['verified'];
       if (status) {
-        Get.toNamed(Routes.PRICING_PLAN);
+        Get.to(
+            () => PricingPlanView(
+                title: 'Make The Wise Decision For your Startup Solution'),
+            binding: PricingPlanBinding());
       } else {
         Get.find<OtpVerifyController>().verify.value = true;
       }

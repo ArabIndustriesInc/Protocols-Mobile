@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/data/providers/directors_provider.dart';
-import 'package:protocols/app/routes/app_pages.dart';
+import 'package:protocols/app/modules/directors_add/bindings/directors_add_binding.dart';
+import 'package:protocols/app/modules/directors_add/views/directors_add_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DirectorsController extends GetxController {
@@ -14,16 +15,16 @@ class DirectorsController extends GetxController {
   RxList directors = [].obs;
   var loading = true.obs;
   var loadingDelete = false.obs;
-  getAllTodo() async {
-    directors.value = await DirectorsProvider()
+  getAllDirectors() async {
+    directors.value = (await DirectorsProvider()
         .getAllDirectors()
-        .whenComplete(() => loading.value = false);
+        .whenComplete(() => loading.value = false))!;
     update();
   }
 
   @override
   void onInit() async {
-    getAllTodo();
+    getAllDirectors();
     update();
     super.onInit();
   }
@@ -68,7 +69,12 @@ class DirectorsButtonView extends GetView {
               end: Alignment.bottomCenter)),
       child: TextButton(
         onPressed: () {
-          Get.toNamed(Routes.DIRECTORS_ADD);
+          Get.to(
+              () => const DirectorsAddView(
+                    title: 'Add Directors',
+                    action: 'add',
+                  ),
+              binding: DirectorsAddBinding());
         },
         style: ElevatedButton.styleFrom(
             shadowColor: Colors.transparent,

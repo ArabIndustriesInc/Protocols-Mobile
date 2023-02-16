@@ -37,43 +37,38 @@ class EmployeesView extends GetView<EmployeesController> {
               SizedBox(
                 height: MediaQuery.of(context).size.height / 20,
               ),
-              (Get.find<EmployeesController>().employeeList.isEmpty)
-                  ? SizedBox(
-                      height: MediaQuery.of(context).size.height / 1.5,
-                      child: Center(
-                        child: Text(
-                          'No Employees!',
-                          style:
-                              TextStyle(color: Colors.black, fontSize: 18.sp),
+              Obx(
+                () => (Get.find<EmployeesController>().loading.value)
+                    ? SizedBox(
+                        height: MediaQuery.of(context).size.height / 1.5,
+                        child: const Center(child: CircularProgressIndicator()))
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 35.0),
+                        child: ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, index) {
+                            return (Get.find<EmployeesController>()
+                                    .employees
+                                    .isEmpty)
+                                ? const EmptyDashMessage(title: 'No Employees!')
+                                : EmployeeCardView(index: index);
+                          },
+                          itemCount: (Get.find<EmployeesController>()
+                                  .employees
+                                  .isEmpty)
+                              ? 1
+                              : Get.find<EmployeesController>()
+                                  .employees
+                                  .length,
+                          separatorBuilder: (BuildContext context, index) {
+                            return const SizedBox(
+                              height: 30,
+                            );
+                          },
                         ),
                       ),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                      child: GetBuilder<EmployeesController>(
-                          init: EmployeesController(),
-                          builder: (_) {
-                            return ListView.separated(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (BuildContext context, index) {
-                                final employee = Get.find<EmployeesController>()
-                                    .employeeList[index];
-                                return EmployeeCardView(
-                                  employee: employee,
-                                );
-                              },
-                              separatorBuilder: (BuildContext context, index) {
-                                return const SizedBox(
-                                  height: 30,
-                                );
-                              },
-                              itemCount: Get.find<EmployeesController>()
-                                  .employeeList
-                                  .length,
-                            );
-                          }),
-                    ),
+              ),
               const SizedBox(
                 height: 20,
               )

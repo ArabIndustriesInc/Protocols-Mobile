@@ -37,41 +37,36 @@ class InvestorsView extends GetView<InvestorsController> {
             SizedBox(
               height: MediaQuery.of(context).size.height / 20,
             ),
-            (Get.find<InvestorsController>().investorsList.isEmpty)
-                ? SizedBox(
-                    height: MediaQuery.of(context).size.height / 1.5,
-                    child: Center(
-                      child: Text(
-                        'No Investors!',
-                        style: TextStyle(color: Colors.black, fontSize: 18.sp),
+            Obx(
+              () => (Get.find<InvestorsController>().loading.value)
+                  ? SizedBox(
+                      height: MediaQuery.of(context).size.height / 1.5,
+                      child: const Center(child: CircularProgressIndicator()))
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 35.0),
+                      child: ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, index) {
+                          return (Get.find<InvestorsController>()
+                                  .investors
+                                  .isEmpty)
+                              ? const EmptyDashMessage(title: 'No Investors!')
+                              : InvestorsCardView(index: index);
+                        },
+                        itemCount: (Get.find<InvestorsController>()
+                                .investors
+                                .isEmpty)
+                            ? 1
+                            : Get.find<InvestorsController>().investors.length,
+                        separatorBuilder: (BuildContext context, int index) {
+                          return SizedBox(
+                            height: 30.h,
+                          );
+                        },
                       ),
                     ),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                    child: GetBuilder<InvestorsController>(
-                        init: InvestorsController(),
-                        builder: (_) {
-                          return ListView.separated(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (BuildContext context, index) {
-                                final investor = Get.find<InvestorsController>()
-                                    .investorsList[index];
-                                return InvestorsCardView(
-                                  investor: investor,
-                                );
-                              },
-                              separatorBuilder: (BuildContext context, index) {
-                                return const SizedBox(
-                                  height: 30,
-                                );
-                              },
-                              itemCount: Get.find<InvestorsController>()
-                                  .investorsList
-                                  .length);
-                        }),
-                  ),
+            ),
             const SizedBox(
               height: 20,
             )

@@ -1,17 +1,16 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:protocols/app/modules/consts/appbar.dart';
+import 'package:protocols/app/data/providers/investors_provider.dart';
+import 'package:protocols/app/modules/consts/empinvdir_consts.dart';
 import 'package:protocols/app/modules/delete_alert/views/delete_alert_view.dart';
 import 'package:protocols/app/modules/investors/controllers/investors_controller.dart';
 import 'package:protocols/app/modules/investors_details/bindings/investors_details_binding.dart';
 import 'package:protocols/app/modules/investors_details/views/investors_details_view.dart';
 
 class InvestorsCardView extends GetView {
-  final InvestorsModel investor;
-  const InvestorsCardView({Key? key, required this.investor}) : super(key: key);
+  final int index;
+  const InvestorsCardView({Key? key, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,18 +45,34 @@ class InvestorsCardView extends GetView {
                   action: InkWell(
                     highlightColor: Colors.grey[200],
                     onTap: () {
-                      Get.back();
-                      SnackbarMessage().snackBarMessage(
-                          'Investor deleted successfully!', context);
+                      if (!Get.find<InvestorsController>()
+                          .loadingDelete
+                          .value) {
+                        final id =
+                            Get.find<InvestorsController>().investors[index].id;
+                        InvestorsProvider().deleteInvestor(id, context);
+                      }
                     },
-                    child: const Text(
-                      "Confirm",
-                      style: TextStyle(
-                        fontSize: 15.0,
-                        color: Color.fromARGB(255, 227, 0, 0),
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
+                    child: Obx(() {
+                      return (Get.find<InvestorsController>()
+                              .loadingDelete
+                              .value)
+                          ? Transform.scale(
+                              scale: 0.6,
+                              child: const CircularProgressIndicator(
+                                color: Colors.blue,
+                                strokeWidth: 1.7,
+                              ),
+                            )
+                          : const Text(
+                              "Confirm",
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                color: Color(0xffE30000),
+                                fontWeight: FontWeight.normal,
+                              ),
+                            );
+                    }),
                   ),
                 );
               });
@@ -65,7 +80,7 @@ class InvestorsCardView extends GetView {
         onPressed: () {
           Get.to(
             () => InvestorsDetailsView(
-              investor: investor,
+              index: index,
             ),
             binding: InvestorsDetailsBinding(),
           );
@@ -78,20 +93,8 @@ class InvestorsCardView extends GetView {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12.h),
-                    // borderRadius: BorderRadius.only(
-                    //     topLeft: Radius.circular(12.h),
-                    //     topRight: Radius.circular(12.h)),
-                    child: Image(
-                      height: 75.h,
-                      width: 70.w,
-                      fit: BoxFit.cover,
-                      image: MemoryImage(
-                        const Base64Decoder().convert(investor.image),
-                      ),
-                    ),
-                  ),
+                  imageApi(
+                      Get.find<InvestorsController>().investors[index].image),
                   SizedBox(
                     width: 20.w,
                   ),
@@ -100,7 +103,7 @@ class InvestorsCardView extends GetView {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${investor.fName} ${investor.lName}',
+                          '${Get.find<InvestorsController>().investors[index].firstname} ${Get.find<InvestorsController>().investors[index].lastname}',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 18.sp,
@@ -110,14 +113,18 @@ class InvestorsCardView extends GetView {
                           height: 5.h,
                         ),
                         Text(
-                          investor.mobNo,
+                          Get.find<InvestorsController>()
+                              .investors[index]
+                              .mobile,
                           style: TextStyle(
                             fontSize: 13.sp,
                             color: const Color(0xff716A6A),
                           ),
                         ),
                         Text(
-                          investor.emailID,
+                          Get.find<InvestorsController>()
+                              .investors[index]
+                              .email,
                           style: TextStyle(
                             fontSize: 13.sp,
                             color: const Color(0xff716A6A),
@@ -153,5 +160,22 @@ class InvestorsCardView extends GetView {
         ),
       ),
     );
+  }
+
+  Widget imageApi(String img) {
+    // final token = box.read('login_token');
+    return EmpInvDirImageShow(
+        img: img,
+        image: ClipRRect(
+          borderRadius: BorderRadius.circular(12.h),
+          child: Image(
+              height: 80.h,
+              width: 70.w,
+              fit: BoxFit.fill,
+              image: NetworkImage(
+                img,
+                // headers: {"Authorization": "Bearer $token"},
+              )),
+        ));
   }
 }

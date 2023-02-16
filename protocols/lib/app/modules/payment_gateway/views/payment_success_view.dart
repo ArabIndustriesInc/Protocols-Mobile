@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:protocols/app/routes/app_pages.dart';
+import 'package:protocols/app/modules/directors_add/bindings/directors_add_binding.dart';
+import 'package:protocols/app/modules/directors_add/views/directors_add_view.dart';
 
 class PaymentSuccessView extends GetView {
   const PaymentSuccessView({Key? key}) : super(key: key);
@@ -55,7 +56,12 @@ class PaymentSuccessView extends GetView {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Get.toNamed(Routes.HOME);
+                  Get.to(
+                      () => const DirectorsAddView(
+                            title: 'Add Directors',
+                            action: 'add',
+                          ),
+                      binding: DirectorsAddBinding());
                 },
                 style: ElevatedButton.styleFrom(
                     //  backgroundColor: const Color(0xff2B6EFB),

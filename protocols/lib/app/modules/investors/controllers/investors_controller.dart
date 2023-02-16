@@ -1,17 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:protocols/app/data/providers/investors_provider.dart';
 import 'package:protocols/app/routes/app_pages.dart';
 
 class InvestorsController extends GetxController {
-  List<InvestorsModel> investorsList = [];
-  add(InvestorsModel investor) {
+  List<InvestorModel> investorsList = [];
+  add(InvestorModel investor) {
     investorsList.add(investor);
     update();
   }
+
+  RxList investors = [].obs;
+  var loading = true.obs;
+  var loadingDelete = false.obs;
+  getAllInvestors() async {
+    investors.value = (await InvestorsProvider()
+        .getAllInvestors()
+        .whenComplete(() => loading.value = false))!;
+    update();
+  }
+
+  @override
+  void onInit() async {
+    getAllInvestors();
+    update();
+    super.onInit();
+  }
 }
 
-class InvestorsModel {
+class InvestorModel {
   final String fName;
   final String dob;
   final String fatherName;
@@ -22,7 +40,7 @@ class InvestorsModel {
   String? mName;
   String? lName;
   final String image;
-  InvestorsModel(
+  InvestorModel(
     this.mName,
     this.lName, {
     required this.fName,

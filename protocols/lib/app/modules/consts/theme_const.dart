@@ -37,3 +37,4 @@ final textDeco = OutlineInputBorder(
 bool paid = box.read('paid_user') ?? false;
 final initRoute = (!paid) ? AppPages.INITIAL : Routes.HOME;
 // final initRoute = Routes.PRICING_PLAN;
+// const initRoute = Routes.HOME;

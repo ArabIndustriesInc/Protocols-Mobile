@@ -1,7 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:protocols/app/data/consts/api_consts.dart';
 import 'package:protocols/app/data/providers/directors_provider.dart';
 import 'package:protocols/app/modules/consts/empinvdir_consts.dart';
 import 'package:protocols/app/modules/delete_alert/views/delete_alert_view.dart';
@@ -52,6 +50,8 @@ class DirectorsCardView extends GetView {
                           .value) {
                         final id =
                             Get.find<DirectorsController>().directors[index].id;
+                        Get.find<DirectorsController>().loadingDelete.value =
+                            true;
                         DirectorsProvider().deleteDirector(id, context);
                       }
                     },
@@ -175,7 +175,7 @@ class DirectorsCardView extends GetView {
           child: Image(
               height: 80.h,
               width: 70.w,
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
               image: NetworkImage(
                 img,
                 // headers: {"Authorization": "Bearer $token"},

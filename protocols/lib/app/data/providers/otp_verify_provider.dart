@@ -7,7 +7,6 @@ import 'package:protocols/app/modules/otp-verify/controllers/otp_verify_controll
 import 'package:protocols/app/modules/pricing_plan/bindings/pricing_plan_binding.dart';
 import 'package:protocols/app/modules/pricing_plan/views/pricing_plan_view.dart';
 import 'package:protocols/app/modules/signup/controllers/text_field_controller.dart';
-import 'package:protocols/app/routes/app_pages.dart';
 
 otpVerify(String otp) async {
   try {
@@ -23,7 +22,7 @@ otpVerify(String otp) async {
       bool status = data['verified'];
       if (status) {
         Get.to(
-            () => PricingPlanView(
+            () => const PricingPlanView(
                 title: 'Make The Wise Decision For your Startup Solution'),
             binding: PricingPlanBinding());
       } else {

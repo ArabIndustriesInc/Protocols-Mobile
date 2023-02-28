@@ -1,14 +1,18 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as path;
 import 'package:image_picker/image_picker.dart';
 import 'package:protocols/app/data/models/directors_model.dart';
 import 'package:protocols/app/data/providers/directors_provider.dart';
-import 'package:protocols/app/modules/custom_alert/views/custom_alert_view.dart';
 import 'package:protocols/app/modules/directors/controllers/directors_controller.dart';
 import 'package:protocols/app/modules/directors_edit/controllers/directors_edit_date_controller.dart';
+import 'package:protocols/app/modules/home/controllers/home_controller.dart';
 
 class DirectorsEditController extends GetxController {
   GlobalKey<FormState> formKey = GlobalKey();
@@ -25,6 +29,7 @@ class DirectorsEditController extends GetxController {
   RxString imageSample = ''.obs;
   XFile? pickedImage;
   String? img;
+  String? deleteFile;
 
   pickimage() async {
     pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -79,12 +84,13 @@ class EditDirectorsButton extends GetView {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter)),
             child: TextButton(
-              onPressed: () {
+              onPressed: () async {
                 if (!Get.find<DirectorsEditController>().loadingEdit.value) {
                   if (Get.find<DirectorsEditController>()
                       .formKey
                       .currentState!
                       .validate()) {
+                    final documentDirectory = Get.find<HomeController>().dir!;
                     Get.find<DirectorsEditController>().loadingEdit.value =
                         true;
                     final firstName = Get.find<DirectorsEditController>()
@@ -119,65 +125,52 @@ class EditDirectorsButton extends GetView {
                         .addressController
                         .text
                         .trim();
-                    if (Get.find<DirectorsEditController>().img == null) {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return CustomAlert(
-                              content: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30.0),
-                                child: Text(
-                                  'You did not pick an image! Please select an image to continue.',
-                                  style: TextStyle(fontSize: 15.sp),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              color: const Color.fromARGB(255, 222, 15, 0),
-                              title: 'Warning!',
-                              action: InkWell(
-                                highlightColor: Colors.grey[200],
-                                onTap: () {
-                                  Get.find<DirectorsEditController>()
-                                      .pickimage();
-                                  Get.back();
-                                },
-                                child: Text(
-                                  "Select",
-                                  style: TextStyle(
-                                    fontSize: 15.sp,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                              ),
-                            );
-                          });
-                    } else {
-                      final img =
-                          Get.find<DirectorsEditController>().pickedImage;
-                      final director = AddDirectors(
-                        firstname: firstName,
-                        lastname: lastName,
-                        middlename: middleName,
-                        email: emailId,
-                        mobile: mobNo,
-                        dob: Get.find<DirectorsEditDateController>()
-                            .pickedDatePersonal
-                            .toString()
-                            .substring(0, 10),
-                        pannumber: panNo,
-                        fathersname: fatherName,
-                        address: address,
-                        image: File(img!.path),
-                      );
-                      final id =
-                          Get.find<DirectorsController>().directors[index].id;
-                      final filename =
-                          Get.find<DirectorsEditController>().pickedImage!.name;
-                      DirectorsProvider()
-                          .editDirector(director, filename, id, context);
-                    }
+
+                    final String imageName = Get.find<DirectorsController>()
+                        .directors[index]
+                        .image
+                        .split('/')
+                        .last;
+                    final response = await http.get(Uri.parse(
+                        Get.find<DirectorsController>()
+                            .directors[index]
+                            .image));
+
+                    final newfile =
+                        File(path.join(documentDirectory.path, imageName));
+
+                    newfile.writeAsBytesSync(response.bodyBytes);
+                    final file =
+                        (Get.find<DirectorsEditController>().img == null)
+                            ? newfile
+                            : File(Get.find<DirectorsEditController>()
+                                .pickedImage!
+                                .path);
+
+                    final director = AddDirectors(
+                      firstname: firstName,
+                      lastname: lastName,
+                      middlename: middleName,
+                      email: emailId,
+                      mobile: mobNo,
+                      dob: Get.find<DirectorsEditDateController>()
+                          .pickedDatePersonal
+                          .toString()
+                          .substring(0, 10),
+                      pannumber: panNo,
+                      fathersname: fatherName,
+                      address: address,
+                      image: file,
+                    );
+                    final id =
+                        Get.find<DirectorsController>().directors[index].id;
+                    final filename = path.basename(file.path);
+                    Get.find<DirectorsEditController>().deleteFile =
+                        newfile.path;
+                    DirectorsProvider()
+                        .editDirector(director, filename, id, context);
+                    Get.find<DirectorsEditController>().deleteFile =
+                        newfile.path;
                   }
                 }
               },

@@ -134,8 +134,6 @@ class Registerid {
       this.companyname,
       this.role,
       this.iV,
-      this.address,
-      this.dob,
       this.fathersname,
       this.firstname,
       this.image,
@@ -152,8 +150,6 @@ class Registerid {
     companyname = json['companyname'];
     role = json['role'];
     iV = json['__v'];
-    address = json['address'];
-    dob = json['dob'];
     fathersname = json['fathersname'];
     firstname = json['firstname'];
     image = json['image'];
@@ -172,8 +168,6 @@ class Registerid {
     data['companyname'] = companyname;
     data['role'] = role;
     data['__v'] = iV;
-    data['address'] = address;
-    data['dob'] = dob;
     data['fathersname'] = fathersname;
     data['firstname'] = firstname;
     data['image'] = image;

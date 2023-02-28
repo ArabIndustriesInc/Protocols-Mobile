@@ -160,15 +160,8 @@ class Registerid {
     required this.companyname,
     required this.role,
     required this.v,
-    required this.address,
-    required this.dob,
-    required this.fathersname,
     required this.firstname,
-    required this.image,
     required this.lastname,
-    required this.middlename,
-    required this.pannumber,
-    required this.mobile,
   });
 
   String id;
@@ -178,15 +171,8 @@ class Registerid {
   String companyname;
   String role;
   int v;
-  String address;
-  DateTime dob;
-  String fathersname;
   String firstname;
-  String image;
   String lastname;
-  String middlename;
-  String pannumber;
-  String mobile;
 
   factory Registerid.fromJson(Map<String, dynamic> json) => Registerid(
         id: json["_id"],
@@ -196,15 +182,8 @@ class Registerid {
         companyname: json["companyname"],
         role: json["role"],
         v: json["__v"],
-        address: json["address"],
-        dob: DateTime.parse(json["dob"]),
-        fathersname: json["fathersname"],
         firstname: json["firstname"],
-        image: json["image"],
         lastname: json["lastname"],
-        middlename: json["middlename"],
-        pannumber: json["pannumber"],
-        mobile: json["mobile"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -215,16 +194,9 @@ class Registerid {
         "companyname": companyname,
         "role": role,
         "__v": v,
-        "address": address,
-        "dob":
-            "${dob.year.toString().padLeft(4, '0')}-${dob.month.toString().padLeft(2, '0')}-${dob.day.toString().padLeft(2, '0')}",
-        "fathersname": fathersname,
+        // "${dob.year.toString().padLeft(4, '0')}-${dob.month.toString().padLeft(2, '0')}-${dob.day.toString().padLeft(2, '0')}",
         "firstname": firstname,
-        "image": image,
         "lastname": lastname,
-        "middlename": middlename,
-        "pannumber": pannumber,
-        "mobile": mobile,
       };
 }
 

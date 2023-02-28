@@ -6,20 +6,22 @@ import 'package:protocols/app/modules/directors_add/views/directors_add_view.dar
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DirectorsController extends GetxController {
-  List<DirectorModel> directorsList = [];
-  add(DirectorModel directors) {
-    directorsList.add(directors);
-    update();
-  }
-
+  final BuildContext context;
   RxList directors = [].obs;
   var loading = true.obs;
   var loadingDelete = false.obs;
+
+  DirectorsController(this.context);
   getAllDirectors() async {
-    directors.value = (await DirectorsProvider()
-        .getAllDirectors()
-        .whenComplete(() => loading.value = false))!;
+    await DirectorsProvider().getAllDirectors(context);
     update();
+  }
+
+  @override
+  void onClose() {
+    DirectorsProvider.isFinishedDirectors = true;
+    DirectorsProvider().onClose();
+    super.onClose();
   }
 
   @override
@@ -28,31 +30,6 @@ class DirectorsController extends GetxController {
     update();
     super.onInit();
   }
-}
-
-class DirectorModel {
-  final String fName;
-  final String dob;
-  final String fatherName;
-  final String address;
-  final String emailID;
-  final String mobNo;
-  final String panNo;
-  String? mName;
-  String? lName;
-  final String image;
-  DirectorModel(
-    this.mName,
-    this.lName, {
-    required this.fName,
-    required this.image,
-    required this.fatherName,
-    required this.address,
-    required this.emailID,
-    required this.dob,
-    required this.mobNo,
-    required this.panNo,
-  });
 }
 
 class DirectorsButtonView extends GetView {

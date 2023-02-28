@@ -11,6 +11,7 @@ import 'package:protocols/app/modules/accounts/controllers/accounts_controller.d
 import 'package:protocols/app/modules/consts/appbar.dart';
 
 class AccountsModelProvider extends GetConnect {
+  static var isFinishedAccounts = false;
   @override
   void onInit() {
     httpClient.defaultDecoder = (map) {
@@ -22,14 +23,28 @@ class AccountsModelProvider extends GetConnect {
     httpClient.baseUrl = '${baseUrlApi}bank/';
   }
 
-  Future<List<Accounts>> getAllAccounts() async {
-    final token = box.read('login_token');
-    final response = await get('${baseUrlApi}bank/show',
-        headers: {'Authorization': 'Bearer $token'});
-    Get.find<AccountsController>().loading.value = false;
-    log(response.statusCode.toString());
-    AccountsModel accounts = accountsFromJson(response.bodyString!);
-    return accounts.data;
+  getAllAccounts(BuildContext context) async {
+    isFinishedAccounts = false;
+    try {
+      final token = box.read('login_token');
+      final response = await get('${baseUrlApi}bank/show',
+          headers: {'Authorization': 'Bearer $token'});
+      if (response.statusCode == 200) {
+        isClosedFunctionLoading(false);
+        AccountsModel accounts = accountsFromJson(response.bodyString!);
+        isClosedList(accounts.data);
+      } else {
+        isClosedFunctionLoading(false);
+        isClosedList([]);
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
+      }
+    } catch (e) {
+      isClosedFunctionLoading(false);
+      isClosedList([]);
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went Wrong. Try again later', context));
+    }
   }
 
   Future<String> getBranch(String ifsc) async {
@@ -45,6 +60,7 @@ class AccountsModelProvider extends GetConnect {
   }
 
   postAccount(AddAccounts accounts, BuildContext context) async {
+    isFinishedAccounts = false;
     try {
       final token = box.read('login_token');
       final response =
@@ -59,13 +75,10 @@ class AccountsModelProvider extends GetConnect {
       });
 
       if (response.statusCode == 200) {
-        getAllAccounts();
-        Get.find<AccountsController>().getAllAccounts();
-        Get.back(
-          result: Get.find<AccountsController>().getAllAccounts(),
-        );
-        SnackbarMessage()
-            .snackBarMessage('New account added successfully!', context);
+        getAllAccounts(context);
+        Get.back();
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('New account added successfully!', context));
       } else {
         log('failed');
         log(response.statusCode.toString());
@@ -75,6 +88,29 @@ class AccountsModelProvider extends GetConnect {
     }
   }
 
-  Future<Response> deleteAccountsModel(int id) async =>
-      await delete('accounts/$id');
+  @override
+  void onClose() {
+    isFinishedAccounts = true;
+    super.onClose();
+  }
+
+  isClosedList(List<Accounts> accountsList) {
+    if (isFinishedAccounts == false) {
+      Get.find<AccountsController>().accounts = accountsList;
+      Get.find<AccountsController>().update();
+    }
+  }
+
+  isClosedMessage(dynamic message) {
+    if (isFinishedAccounts == false) {
+      message;
+    }
+  }
+
+  isClosedFunctionLoading(bool value) {
+    if (isFinishedAccounts == false) {
+      Get.find<AccountsController>().loading.value = value;
+      // log('isFinishedAccounts:${isFinishedAccounts.toString()}');
+    }
+  }
 }

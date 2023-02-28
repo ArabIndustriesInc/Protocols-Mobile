@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:developer';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,8 +9,10 @@ import 'package:protocols/app/data/models/directors_model.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/directors/controllers/directors_controller.dart';
 import 'package:protocols/app/modules/directors_add/controllers/directors_add_controller.dart';
+import 'package:protocols/app/modules/directors_edit/controllers/directors_edit_controller.dart';
 
 class DirectorsProvider extends GetConnect {
+  static var isFinishedDirectors = false;
   @override
   void onInit() {
     httpClient.defaultDecoder = (map) {
@@ -22,18 +24,34 @@ class DirectorsProvider extends GetConnect {
     httpClient.baseUrl = '${baseUrlApi}director/';
   }
 
-  Future<List<Directors>?> getAllDirectors() async {
-    final token = box.read('login_token');
-    final response = await get('${baseUrlApi}director/show',
-        headers: {'Authorization': 'Bearer $token'});
-    Get.find<DirectorsController>().loading.value = false;
-    log(response.bodyString.toString());
-    DirectorsModel directors = directorsModelFromJson(response.bodyString!);
-    return directors.data;
+  getAllDirectors(BuildContext context) async {
+    isFinishedDirectors = false;
+    try {
+      final token = box.read('login_token');
+      final response = await get('${baseUrlApi}director/show',
+          headers: {'Authorization': 'Bearer $token'});
+
+      if (response.statusCode == 200) {
+        isClosedFunctionLoading('loading');
+        DirectorsModel directors = directorsModelFromJson(response.bodyString!);
+        isClosedList(directors.data!);
+      } else {
+        isClosedFunctionLoading('loading');
+        isClosedList([]);
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
+      }
+    } catch (e) {
+      isClosedFunctionLoading('loading');
+      isClosedList([]);
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went Wrong. Try again later', context));
+    }
   }
 
   addDirector(
       AddDirectors director, String filename, BuildContext context) async {
+    isFinishedDirectors = false;
     try {
       final token = box.read('login_token');
       var request =
@@ -55,46 +73,26 @@ class DirectorsProvider extends GetConnect {
           'image', director.image.path,
           filename: filename));
       var response = await request.send();
-      // dio.FormData data = dio.FormData.fromMap({
-      //   'firstname': director.firstname,
-      //   'lastname': director.lastname,
-      //   'middlename': director.middlename,
-      //   'email': director.email,
-      //   'mobile': director.mobile,
-      //   'dob': director.dob,
-      //   'pannumber': director.pannumber,
-      //   'address': director.address,
-      //   'fathersname': director.fathersname,
-      //   'image': await dio.MultipartFile.fromFile(director.image.path,
-      //       filename: filename)
-      // });
-      // var response = await dio.Dio().post('${baseUrlApi}director/add',
-      //     data: data,
-      //     options: dio.Options(headers: {'Authorization': 'Bearer $token'}));
       if (response.statusCode == 200) {
-        getAllDirectors();
-        Get.find<DirectorsController>().getAllDirectors();
-        Get.back(
-          result: Get.find<DirectorsController>().getAllDirectors(),
-        );
-        SnackbarMessage()
-            .snackBarMessage('New Director added successfully!', context);
+        getAllDirectors(context);
+        Get.back();
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('New Director added successfully!', context));
       } else {
-        Get.find<DirectorsAddController>().loadingAdd.value = false;
-        log('failed');
-        SnackbarMessage()
-            .snackBarMessage('Oops! Something went wrong, Try again', context);
-        log(response.statusCode.toString());
-        log(response.toString());
+        isClosedFunctionLoading('loadingAdd');
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
       }
     } catch (e) {
-      log(e.toString());
-      Get.find<DirectorsAddController>().loadingAdd.value = false;
+      isClosedFunctionLoading('loadingAdd');
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went wrong, Try again later', context));
     }
   }
 
   editDirector(AddDirectors director, String filename, String id,
       BuildContext context) async {
+    isFinishedDirectors = false;
     try {
       final token = box.read('login_token');
 
@@ -116,44 +114,27 @@ class DirectorsProvider extends GetConnect {
       request.files.add(await http.MultipartFile.fromPath(
           'image', director.image.path,
           filename: filename));
-      var response = await request.send();
-      // dio.FormData data = dio.FormData.fromMap({
-      //   'firstname': director.firstname,
-      //   'lastname': director.lastname,
-      //   'middlename': director.middlename,
-      //   'email': director.email,
-      //   'mobile': director.mobile,
-      //   'dob': director.dob,
-      //   'pannumber': director.pannumber,
-      //   'address': director.address,
-      //   'fathersname': director.fathersname,
-      //   'image': await dio.MultipartFile.fromFile(director.image.path,
-      //       filename: filename)
-      // });
-      // var response = await dio.Dio().post(
-      //     '${baseUrlApi}director/editdirector/$id',
-      //     data: data,
-      //     options: dio.Options(headers: {'Authorization': 'Bearer $token'}));
-
+      var response = await request.send().whenComplete(() => deleteImgFile());
       if (response.statusCode == 200) {
-        getAllDirectors();
-        Get.find<DirectorsController>().getAllDirectors();
-        Get.back(
-          result: Get.find<DirectorsController>().getAllDirectors(),
-        );
-        SnackbarMessage()
-            .snackBarMessage('Director edited successfully!', context);
+        getAllDirectors(context);
+        Get.back();
+        Get.back();
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Director edited successfully!', context));
       } else {
-        log('failed');
-        log(response.statusCode.toString());
+        isClosedFunctionLoading('loadingEdit');
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
       }
     } catch (e) {
-      log(e.toString());
+      isClosedFunctionLoading('loadingEdit');
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went wrong, Try again later', context));
     }
   }
 
   deleteDirector(String id, BuildContext context) async {
-    Get.find<DirectorsController>().loadingDelete.value = true;
+    isFinishedDirectors = false;
     try {
       final token = box.read('login_token');
       final response = await http.post(
@@ -161,20 +142,62 @@ class DirectorsProvider extends GetConnect {
           headers: {'Authorization': 'Bearer $token'});
 
       if (response.statusCode == 200) {
-        getAllDirectors();
+        isClosedFunctionLoading('loadingDelete');
+        getAllDirectors(context);
         Get.back();
-        Get.find<DirectorsController>().getAllDirectors();
-        SnackbarMessage()
-            .snackBarMessage('Director deleted successfully!', context);
-        Get.find<DirectorsController>().loadingDelete.value = false;
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Director deleted successfully!', context));
+        isClosedFunctionLoading('loadingDelete');
       } else {
-        log(response.statusCode.toString());
-        log(response.body);
-        SnackbarMessage()
-            .snackBarMessage('Oops! Action failed. Please try again', context);
+        isClosedFunctionLoading('loadingDelete');
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
       }
     } catch (e) {
-      SnackbarMessage().snackBarMessage('Oops! $e. Please try again', context);
+      isClosedFunctionLoading('loadingDelete');
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went Wrong. Try again later', context));
+    }
+  }
+
+  deleteImgFile() {
+    if (isFinishedDirectors == false) {
+      File(Get.find<DirectorsEditController>().deleteFile!).delete();
+    }
+  }
+
+  @override
+  void onClose() {
+    isFinishedDirectors = true;
+    super.onClose();
+  }
+
+  isClosedList(List<Directors> directors) {
+    if (isFinishedDirectors == false) {
+      Get.find<DirectorsController>().directors.value = directors;
+      Get.find<DirectorsController>().update();
+    }
+  }
+
+  isClosedMessage(dynamic message) {
+    if (isFinishedDirectors == false) {
+      message;
+    }
+  }
+
+  isClosedFunctionLoading(String name) {
+    if (isFinishedDirectors == false) {
+      switch (name) {
+        case 'loading':
+          Get.find<DirectorsController>().loading.value = false;
+          break;
+        case 'loadingAdd':
+          Get.find<DirectorsAddController>().loadingAdd.value = false;
+          break;
+        case 'loadingDelete':
+          Get.find<DirectorsController>().loadingDelete.value = false;
+          break;
+      }
     }
   }
 }

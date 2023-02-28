@@ -13,6 +13,8 @@ import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/docs_folder/controllers/folder_controller.dart';
 
 class FilesProvider extends GetConnect {
+  static var isFinishedFolder = false;
+  static var isFinishedFolderDownloading = false;
   @override
   void onInit() {
     httpClient.defaultDecoder = (map) {
@@ -22,31 +24,45 @@ class FilesProvider extends GetConnect {
     httpClient.baseUrl = '${baseUrlApi}folder/';
   }
 
-  Future<Files?> getFiles(int id) async {
-    final response = await get('files/$id');
-    return response.body;
-  }
+  getAllFiles(String id, BuildContext context) async {
+    isFinishedFolder = false;
+    try {
+      final token = box.read('login_token');
+      final response = await get('${baseUrlApi}folder/showfolder/$id',
+          headers: {'Authorization': 'Bearer $token'});
 
-  Future<List<Files>> getAllFiles(String id) async {
-    final token = box.read('login_token');
-    final response = await get('${baseUrlApi}folder/showfolder/$id',
-        headers: {'Authorization': 'Bearer $token'});
-    Get.find<FolderController>().loading.value = false;
-    FilesModel folder = filesModelFromJson(response.bodyString!);
-    getStorage();
-    return folder.data;
+      if (response.statusCode == 200) {
+        isClosedFunctionLoading('loading');
+        FilesModel files = filesModelFromJson(response.bodyString!);
+        getStorage();
+        isClosedList(files.data);
+      } else {
+        isClosedFunctionLoading('loading');
+        isClosedList([]);
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
+      }
+    } catch (e) {
+      isClosedFunctionLoading('loading');
+      isClosedList([]);
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went Wrong. Try again later', context));
+    }
   }
 
   getStorage() async {
-    final appStorage = await Get.find<FolderController>().getStorage();
-    box.write('storage', appStorage);
+    if (isFinishedFolder == false) {
+      final appStorage = await Get.find<FolderController>().getStorage();
+      box.write('storage', appStorage);
+    }
   }
 
   Future<File> downloadFile(
       String filename, String networkFile, int index) async {
+    isFinishedFolderDownloading = true;
     // final token = box.read('login_token');
     // http.Client client = http.Client();
-    final dir = Get.find<FolderController>().appStorage.path;
+    final dir = Get.find<FolderController>().appStorage!.path;
     File file = File('$dir/$filename');
     final storageIO = InternetFileStorageIO();
     Get.find<FolderController>().fileIndex.value = index.toString();
@@ -67,6 +83,7 @@ class FilesProvider extends GetConnect {
         }
       },
     );
+    isFinishedFolderDownloading = false;
     return file;
     // var response = await Dio().download(
     //   image,
@@ -90,6 +107,7 @@ class FilesProvider extends GetConnect {
   }
 
   addFile(AddFiles file, BuildContext context) async {
+    isFinishedFolder = false;
     try {
       final token = box.read('login_token');
       var request = http.MultipartRequest(
@@ -108,14 +126,14 @@ class FilesProvider extends GetConnect {
       log(response.statusCode.toString());
       if (response.statusCode == 200) {
         Get.find<FolderController>().loadingAdd.value = false;
-        getAllFiles(file.folderid);
+        getAllFiles(file.folderid, context);
         Get.find<FolderController>().getAllFiles();
         SnackbarMessage()
             .snackBarMessage('New File added successfully!', context);
       } else {
         Get.find<FolderController>().loadingAdd.value = false;
         SnackbarMessage()
-            .snackBarMessage('Oops! Action failed. Please try again', context);
+            .snackBarMessage('Oops! Action failed, Please try again', context);
       }
     } catch (e) {
       Get.find<FolderController>().loadingAdd.value = false;
@@ -126,6 +144,7 @@ class FilesProvider extends GetConnect {
   }
 
   deleteFile(String fileid, String id, BuildContext context) async {
+    isFinishedFolder = false;
     Get.find<FolderController>().loadingDelete.value = true;
     try {
       final token = box.read('login_token');
@@ -134,7 +153,7 @@ class FilesProvider extends GetConnect {
           headers: {'Authorization': 'Bearer $token'});
 
       if (response.statusCode == 200) {
-        getAllFiles(id);
+        getAllFiles(id, context);
         Get.back();
         Get.find<FolderController>().getAllFiles();
         SnackbarMessage()
@@ -144,10 +163,52 @@ class FilesProvider extends GetConnect {
         log(response.statusCode.toString());
         log(response.body);
         SnackbarMessage()
-            .snackBarMessage('Oops! Action failed. Please try again', context);
+            .snackBarMessage('Oops! Action failed, Please try again', context);
       }
     } catch (e) {
-      SnackbarMessage().snackBarMessage('Oops! $e. Please try again', context);
+      SnackbarMessage().snackBarMessage(
+          'Oops! Something went Wrong. Try again later', context);
+    }
+  }
+
+  @override
+  void onClose() {
+    isFinishedFolder = true;
+    super.onClose();
+  }
+
+  // errorReturn(String message) {
+  //   if (isFinishedFolder == false) {
+  //     Get.find<FolderController>().visibleOff(message);
+  //   }
+  // }
+
+  isClosedList(List<Files> files) {
+    if (isFinishedFolder == false) {
+      Get.find<FolderController>().files.value = files;
+      Get.find<FolderController>().update();
+    }
+  }
+
+  isClosedMessage(dynamic message) {
+    if (isFinishedFolder == false) {
+      message;
+    }
+  }
+
+  isClosedFunctionLoading(String name) {
+    if (isFinishedFolder == false) {
+      switch (name) {
+        case 'loading':
+          Get.find<FolderController>().loading.value = false;
+          break;
+        case 'loadingAdd':
+          Get.find<FolderController>().loadingAdd.value = false;
+          break;
+        case 'loadingDelete':
+          Get.find<FolderController>().loadingDelete.value = false;
+          break;
+      }
     }
   }
 }

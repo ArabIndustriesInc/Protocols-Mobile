@@ -39,23 +39,26 @@ class Voting {
     required this.title,
     required this.description,
     required this.selectdate,
-    required this.userid,
+    required this.registerid,
+    required this.companyid,
     required this.v,
   });
 
   String id;
   String title;
   String description;
-  DateTime selectdate;
-  String userid;
+  String selectdate;
+  String registerid;
+  String companyid;
   int v;
 
   factory Voting.fromJson(Map<String, dynamic> json) => Voting(
         id: json["_id"],
         title: json["title"],
         description: json["description"],
-        selectdate: DateTime.parse(json["selectdate"]),
-        userid: json["userid"],
+        selectdate: json["selectdate"],
+        registerid: json["registerid"],
+        companyid: json["companyid"],
         v: json["__v"],
       );
 
@@ -63,9 +66,9 @@ class Voting {
         "_id": id,
         "title": title,
         "description": description,
-        "selectdate":
-            "${selectdate.year.toString().padLeft(4, '0')}-${selectdate.month.toString().padLeft(2, '0')}-${selectdate.day.toString().padLeft(2, '0')}",
-        "userid": userid,
+        "selectdate": selectdate,
+        "registerid": registerid,
+        "companyid": companyid,
         "__v": v,
       };
 }

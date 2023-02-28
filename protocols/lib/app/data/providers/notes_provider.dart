@@ -1,6 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,8 +6,11 @@ import 'package:protocols/app/data/consts/api_consts.dart';
 import 'package:protocols/app/data/models/notes_model.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/notes/controllers/notes_controller.dart';
+import 'package:protocols/app/modules/notes_add/controllers/notes_add_controller.dart';
+import 'package:protocols/app/modules/notes_edit/controllers/notes_edit_controller.dart';
 
 class NotesProvider extends GetConnect {
+  static var isFinishedNotes = false;
   @override
   void onInit() {
     httpClient.defaultDecoder = (map) {
@@ -19,23 +20,34 @@ class NotesProvider extends GetConnect {
     httpClient.baseUrl = '${baseUrlApi}notes/';
   }
 
-  Future<Notes?> getNotes(int id) async {
-    final response = await get('notes/$id');
-    return response.body;
-  }
+  getAllNotes(BuildContext context) async {
+    isFinishedNotes = false;
 
-  Future<List<Notes>> getAllNotes() async {
-    final token = box.read('login_token');
-    final response = await get('${baseUrlApi}notes/show',
-        headers: {'Authorization': 'Bearer $token'});
-    Get.find<NotesController>().loading.value = false;
-    log(response.statusCode.toString());
-    log(response.bodyString!.toString());
-    NotesModel notes = notesFromJson(response.bodyString!);
-    return notes.data;
+    try {
+      final token = box.read('login_token');
+      final response = await get('${baseUrlApi}notes/show',
+          headers: {'Authorization': 'Bearer $token'});
+
+      if (response.statusCode == 200) {
+        isClosedFunctionLoading('loading');
+        NotesModel notes = notesFromJson(response.bodyString!);
+        isClosedList(notes.data);
+      } else {
+        isClosedFunctionLoading('loading');
+        isClosedList([]);
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
+      }
+    } catch (e) {
+      isClosedFunctionLoading('loading');
+      isClosedList([]);
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went Wrong. Try again later', context));
+    }
   }
 
   addNote(AddNotes note, BuildContext context) async {
+    isFinishedNotes = false;
     try {
       final token = box.read('login_token');
       final response =
@@ -47,23 +59,25 @@ class NotesProvider extends GetConnect {
       });
 
       if (response.statusCode == 200) {
-        getAllNotes();
-        Get.find<NotesController>().getAllNotes();
-        Get.back(
-          result: Get.find<NotesController>().getAllNotes(),
-        );
-        SnackbarMessage()
-            .snackBarMessage('New Notes added successfully!', context);
+        isClosedFunctionLoading('loadingAdd');
+        getAllNotes(context);
+        Get.back();
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('New Notes added successfully!', context));
       } else {
-        log('failed');
-        log(response.statusCode.toString());
+        isClosedFunctionLoading('loadingAdd');
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
       }
     } catch (e) {
-      log(e.toString());
+      isClosedFunctionLoading('loadingAdd');
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went Wrong. Try again later', context));
     }
   }
 
   editNote(AddNotes note, BuildContext context, String id) async {
+    isFinishedNotes = false;
     try {
       final token = box.read('login_token');
       final response =
@@ -75,22 +89,26 @@ class NotesProvider extends GetConnect {
       });
 
       if (response.statusCode == 200) {
-        getAllNotes();
-        Get.find<NotesController>().getAllNotes();
+        isClosedFunctionLoading('loadingEdit');
+        getAllNotes(context);
         Get.back();
-        SnackbarMessage()
-            .snackBarMessage('Notes edited successfully!', context);
+        Get.back();
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Notes edited successfully!', context));
       } else {
-        log('failed');
-        log(response.body);
-        log(response.statusCode.toString());
+        isClosedFunctionLoading('loadingEdit');
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
       }
     } catch (e) {
-      log(e.toString());
+      isClosedFunctionLoading('loadingEdit');
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went Wrong. Try again later', context));
     }
   }
 
   deleteNote(BuildContext context, String id) async {
+    isFinishedNotes = false;
     try {
       final token = box.read('login_token');
       final response = await http.post(
@@ -98,19 +116,58 @@ class NotesProvider extends GetConnect {
           headers: {'Authorization': 'Bearer $token'});
 
       if (response.statusCode == 200) {
-        Get.find<NotesController>().loadingDelete.value = false;
-        getAllNotes();
-        Get.find<NotesController>().getAllNotes();
+        isClosedFunctionLoading('loadingDelete');
+        getAllNotes(context);
         Get.back();
-        SnackbarMessage()
-            .snackBarMessage('Notes deleted successfully!', context);
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Notes deleted successfully!', context));
       } else {
-        log('failed');
-        log(response.body);
-        log(response.statusCode.toString());
+        isClosedFunctionLoading('loadingDelete');
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
       }
     } catch (e) {
-      log(e.toString());
+      isClosedFunctionLoading('loadingDelete');
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went Wrong. Try again later', context));
+    }
+  }
+
+  @override
+  void onClose() {
+    isFinishedNotes = true;
+    super.onClose();
+  }
+
+  isClosedList(List<Notes> notes) {
+    if (isFinishedNotes == false) {
+      Get.find<NotesController>().notes = notes;
+      Get.find<NotesController>().update();
+    }
+  }
+
+  isClosedMessage(dynamic message) {
+    if (isFinishedNotes == false) {
+      message;
+    }
+  }
+
+  isClosedFunctionLoading(String name) {
+    if (isFinishedNotes == false) {
+      switch (name) {
+        case 'loading':
+          Get.find<NotesController>().loading.value = false;
+          break;
+        case 'loadingAdd':
+          Get.find<NotesAddController>().loadingAdd.value = false;
+          break;
+        case 'loadingEdit':
+          Get.find<NotesEditController>().loadingEdit.value = false;
+          break;
+        case 'loadingDelete':
+          Get.find<NotesController>().loadingDelete.value = false;
+          break;
+      }
     }
   }
 }

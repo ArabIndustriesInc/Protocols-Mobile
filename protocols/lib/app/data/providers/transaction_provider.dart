@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -8,8 +7,11 @@ import 'package:protocols/app/data/consts/api_consts.dart';
 import 'package:protocols/app/data/models/transaction_model.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/transactions/controllers/transactions_controller.dart';
+import 'package:protocols/app/modules/transactions_add/controllers/transactions_add_controller.dart';
+import 'package:protocols/app/modules/transactions_edit/controllers/transactions_edit_controller.dart';
 
-class TransactionsModelProvider extends GetConnect {
+class TransactionsProvider extends GetConnect {
+  static var isFinishedTransactions = false;
   @override
   void onInit() {
     httpClient.defaultDecoder = (map) {
@@ -21,25 +23,34 @@ class TransactionsModelProvider extends GetConnect {
     httpClient.baseUrl = '${baseUrlApi}bank';
   }
 
-  Future<TransactionsModel?> getTransactionsModel(int id) async {
-    final response = await get('transaction/$id');
-    return response.body;
+  getAllTransactions(BuildContext context) async {
+    isFinishedTransactions = false;
+    try {
+      final token = box.read('login_token');
+      final response = await get('${baseUrlApi}bank/showtransaction',
+          headers: {'Authorization': 'Bearer $token'});
+
+      if (response.statusCode == 200) {
+        isClosedFunctionLoading('loading');
+        TransactionsModel transactions =
+            transactionsFromJson(response.bodyString!);
+        isClosedList(transactions.data);
+      } else {
+        isClosedFunctionLoading('loading');
+        isClosedList([]);
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
+      }
+    } catch (e) {
+      isClosedFunctionLoading('loading');
+      isClosedList([]);
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went Wrong. Try again later', context));
+    }
   }
 
-  Future<List<Transactions>> getAllTransactions() async {
-    final token = box.read('login_token');
-    final response = await get('${baseUrlApi}bank/showtransaction',
-        headers: {'Authorization': 'Bearer $token'});
-    Get.find<TransactionsController>().loading.value = false;
-    TransactionsModel transactions = transactionsFromJson(response.bodyString!);
-    return transactions.data;
-  }
-
-  // Future<TransactionsModel?> getAllTransactions() async {
-  //   final response = await get('${baseUrlApi}bank/showtransaction');
-  //   return response.body;
-  // }
   addTransaction(AddTransactions transaction, BuildContext context) async {
+    isFinishedTransactions = false;
     try {
       final token = box.read('login_token');
       final response =
@@ -55,25 +66,25 @@ class TransactionsModelProvider extends GetConnect {
       });
 
       if (response.statusCode == 200) {
-        getAllTransactions();
-        Get.find<TransactionsController>().getAllTransactions();
-        Get.back(
-          result: Get.find<TransactionsController>().getAllTransactions(),
-        );
-        SnackbarMessage()
-            .snackBarMessage('New Transaction added successfully!', context);
+        getAllTransactions(context);
+        Get.back();
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('New Transaction added successfully!', context));
       } else {
-        SnackbarMessage()
-            .snackBarMessage('Oops! Action failed. Please try again', context);
+        isClosedFunctionLoading('loadingAdd');
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
       }
     } catch (e) {
-      SnackbarMessage().snackBarMessage(
-          'Oops! Something went Wrong. Please try again', context);
+      isClosedFunctionLoading('loadingAdd');
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went Wrong. Please try again', context));
     }
   }
 
   editTransaction(
       AddTransactions transaction, BuildContext context, String id) async {
+    isFinishedTransactions = false;
     try {
       final token = box.read('login_token');
       final response = await http
@@ -89,26 +100,24 @@ class TransactionsModelProvider extends GetConnect {
       });
 
       if (response.statusCode == 200) {
-        getAllTransactions();
-        Get.back(
-          result: Get.find<TransactionsController>().getAllTransactions(),
-        );
-        Get.find<TransactionsController>().getAllTransactions();
-
-        SnackbarMessage()
-            .snackBarMessage('Transaction edited successfully!', context);
+        getAllTransactions(context);
+        Get.back();
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Transaction edited successfully!', context));
       } else {
-        log(response.statusCode.toString());
-        log(response.body);
-        SnackbarMessage()
-            .snackBarMessage('Oops! Action failed. Please try again', context);
+        isClosedFunctionLoading('loadingEdit');
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
       }
     } catch (e) {
-      SnackbarMessage().snackBarMessage('Oops! $e. Please try again', context);
+      isClosedFunctionLoading('loadingEdit');
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went wrong, Try again later', context));
     }
   }
 
   deleteTransactionsModel(String id, BuildContext context) async {
+    isFinishedTransactions = false;
     Get.find<TransactionsController>().loadingDelete.value = true;
     try {
       final token = box.read('login_token');
@@ -117,20 +126,58 @@ class TransactionsModelProvider extends GetConnect {
           headers: {'Authorization': 'Bearer $token'});
 
       if (response.statusCode == 200) {
-        getAllTransactions();
+        getAllTransactions(context);
         Get.back();
-        Get.find<TransactionsController>().getAllTransactions();
-        SnackbarMessage()
-            .snackBarMessage('Transaction deleted successfully!', context);
-        Get.find<TransactionsController>().loadingDelete.value = false;
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Transaction deleted successfully!', context));
+        isClosedFunctionLoading('loadingDelete');
       } else {
-        log(response.statusCode.toString());
-        log(response.body);
-        SnackbarMessage()
-            .snackBarMessage('Oops! Action failed. Please try again', context);
+        isClosedFunctionLoading('loadingDelete');
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
       }
     } catch (e) {
-      SnackbarMessage().snackBarMessage('Oops! $e. Please try again', context);
+      isClosedFunctionLoading('loadingDelete');
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went Wrong. Try again later', context));
+    }
+  }
+
+  @override
+  void onClose() {
+    isFinishedTransactions = true;
+    super.onClose();
+  }
+
+  isClosedList(List<Transactions> transactions) {
+    if (isFinishedTransactions == false) {
+      Get.find<TransactionsController>().transactions = transactions;
+      Get.find<TransactionsController>().update();
+    }
+  }
+
+  isClosedMessage(dynamic message) {
+    if (isFinishedTransactions == false) {
+      message;
+    }
+  }
+
+  isClosedFunctionLoading(String name) {
+    if (isFinishedTransactions == false) {
+      switch (name) {
+        case 'loading':
+          Get.find<TransactionsController>().loading.value = false;
+          break;
+        case 'loadingAdd':
+          Get.find<TransactionsAddController>().loadingAdd.value = false;
+          break;
+        case 'loadingEdit':
+          Get.find<TransactionsEditController>().loadingEdit.value = false;
+          break;
+        case 'loadingDelete':
+          Get.find<TransactionsController>().loadingDelete.value = false;
+          break;
+      }
     }
   }
 }

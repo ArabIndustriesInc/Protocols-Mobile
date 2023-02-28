@@ -1,5 +1,23 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:protocols/app/routes/app_pages.dart';
+import 'package:protocols/app/modules/accounts/bindings/accounts_binding.dart';
+import 'package:protocols/app/modules/accounts/views/accounts_view.dart';
+import 'package:protocols/app/modules/directors/bindings/directors_binding.dart';
+import 'package:protocols/app/modules/directors/views/directors_view.dart';
+import 'package:protocols/app/modules/documents/bindings/documents_binding.dart';
+import 'package:protocols/app/modules/documents/views/documents_view.dart';
+import 'package:protocols/app/modules/employees/bindings/employees_binding.dart';
+import 'package:protocols/app/modules/employees/views/employees_view.dart';
+import 'package:protocols/app/modules/investors/bindings/investors_binding.dart';
+import 'package:protocols/app/modules/investors/views/investors_view.dart';
+import 'package:protocols/app/modules/notes/bindings/notes_binding.dart';
+import 'package:protocols/app/modules/notes/views/notes_view.dart';
+import 'package:protocols/app/modules/todo/bindings/todo_binding.dart';
+import 'package:protocols/app/modules/todo/views/todo_view.dart';
+import 'package:protocols/app/modules/transactions/bindings/transactions_binding.dart';
+import 'package:protocols/app/modules/transactions/views/transactions_view.dart';
+import 'package:protocols/app/modules/voting/bindings/voting_binding.dart';
+import 'package:protocols/app/modules/voting/views/voting_view.dart';
 
 class DashboardController extends GetxController {
   List dashboardIcon = [
@@ -25,25 +43,26 @@ class DashboardController extends GetxController {
     'Notes',
   ];
 
-  onClicked(String page) {
+  onClicked(String page, BuildContext context) {
     if (page == 'Documents') {
-      Get.toNamed(Routes.DOCUMENTS);
+      Get.to(() => const DocumentsView(), binding: DocumentsBinding(context));
     } else if (page == 'Accounts') {
-      Get.toNamed(Routes.ACCOUNTS);
+      Get.to(() => const AccountsView(), binding: AccountsBinding(context));
     } else if (page == 'Transactions') {
-      Get.toNamed(Routes.TRANSACTIONS);
+      Get.to(() => const TransactionsView(),
+          binding: TransactionsBinding(context));
     } else if (page == 'Employees') {
-      Get.toNamed(Routes.EMPLOYEES);
+      Get.to(() => const EmployeesView(), binding: EmployeesBinding(context));
     } else if (page == 'Directors') {
-      Get.toNamed(Routes.DIRECTORS);
+      Get.to(() => const DirectorsView(), binding: DirectorsBinding(context));
     } else if (page == 'Investors') {
-      Get.toNamed(Routes.INVESTORS);
+      Get.to(() => const InvestorsView(), binding: InvestorsBinding(context));
     } else if (page == 'Notes') {
-      Get.toNamed(Routes.NOTES);
+      Get.to(() => const NotesView(), binding: NotesBinding(context));
     } else if (page == 'Voting') {
-      Get.toNamed(Routes.VOTING);
+      Get.to(() => const VotingView(), binding: VotingBinding(context));
     } else if (page == 'Todo List') {
-      Get.toNamed(Routes.TODO);
+      Get.to(() => const TodoView(), binding: TodoBinding(context));
     }
   }
 }

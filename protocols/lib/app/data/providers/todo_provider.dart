@@ -1,6 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -9,8 +7,10 @@ import 'package:protocols/app/data/models/todo_model.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/todo/controllers/todo_controller.dart';
 import 'package:protocols/app/modules/todo_add/controllers/todo_add_controller.dart';
+import 'package:protocols/app/modules/todo_edit/controllers/todo_edit_controller.dart';
 
 class TodoProvider extends GetConnect {
+  static var isFinishedTodo = false;
   @override
   void onInit() {
     httpClient.defaultDecoder = (map) {
@@ -20,17 +20,33 @@ class TodoProvider extends GetConnect {
     httpClient.baseUrl = '${baseUrlApi}todo/';
   }
 
-  Future<List<Todo>> getAllTodo() async {
-    final token = box.read('login_token');
-    final response = await get('${baseUrlApi}todo/showtodo',
-        headers: {'Authorization': 'Bearer $token'});
-    Get.find<TodoController>().loading.value = false;
-    // log(response.statusCode.toString());
-    TodoModel todo = todoModelFromJson(response.bodyString!);
-    return todo.data;
+  getAllTodo(BuildContext context) async {
+    isFinishedTodo = false;
+    try {
+      final token = box.read('login_token');
+      final response = await get('${baseUrlApi}todo/showtodo',
+          headers: {'Authorization': 'Bearer $token'});
+
+      if (response.statusCode == 200) {
+        isClosedFunctionLoading('loading');
+        TodoModel todo = todoModelFromJson(response.bodyString!);
+        isClosedList(todo.data);
+      } else {
+        isClosedFunctionLoading('loading');
+        isClosedList([]);
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
+      }
+    } catch (e) {
+      isClosedFunctionLoading('loading');
+      isClosedList([]);
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went Wrong. Try again later', context));
+    }
   }
 
   addTodo(AddTodo todo, BuildContext context) async {
+    isFinishedTodo = false;
     try {
       final token = box.read('login_token');
       final response =
@@ -43,29 +59,24 @@ class TodoProvider extends GetConnect {
       });
 
       if (response.statusCode == 200) {
-        getAllTodo();
-        Get.find<TodoController>().getAllTodo();
-        Get.back(
-          result: Get.find<TodoController>().getAllTodo(),
-        );
-        SnackbarMessage()
-            .snackBarMessage('New Task added successfully!', context);
+        getAllTodo(context);
+        Get.back();
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('New Task added successfully!', context));
       } else {
-        Get.find<TodoAddController>().loadingAdd.value = false;
-        log('failed');
-        log(response.statusCode.toString());
-        SnackbarMessage()
-            .snackBarMessage('Oops! Action Failed. Please try again', context);
+        isClosedFunctionLoading('loadingAdd');
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
       }
     } catch (e) {
-      Get.find<TodoAddController>().loadingAdd.value = false;
-      log(e.toString());
-      SnackbarMessage().snackBarMessage(
-          'Oops! Something went wrong. Try again later', context);
+      isClosedFunctionLoading('loadingAdd');
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went wrong. Try again later', context));
     }
   }
 
   editTodo(AddTodo todo, String id, BuildContext context) async {
+    isFinishedTodo = false;
     try {
       final token = box.read('login_token');
       final response =
@@ -78,29 +89,25 @@ class TodoProvider extends GetConnect {
       });
 
       if (response.statusCode == 200) {
-        log(response.body);
-        getAllTodo();
-        Get.find<TodoController>().getAllTodo();
-        Get.back(
-          result: Get.find<TodoController>().getAllTodo(),
-        );
-        SnackbarMessage().snackBarMessage('Task edited successfully!', context);
+        getAllTodo(context);
+        Get.back();
+        Get.back();
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Task edited successfully!', context));
       } else {
-        Get.find<TodoAddController>().loadingAdd.value = false;
-        log('failed');
-        log(response.statusCode.toString());
-        SnackbarMessage()
-            .snackBarMessage('Oops! Action Failed. Please try again', context);
+        isClosedFunctionLoading('loadingEdit');
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
       }
     } catch (e) {
-      Get.find<TodoAddController>().loadingAdd.value = false;
-      log(e.toString());
-      SnackbarMessage().snackBarMessage(
-          'Oops! Something went wrong. Try again later', context);
+      isClosedFunctionLoading('loadingEdit');
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went wrong. Try again later', context));
     }
   }
 
   deleteTodo(String id, BuildContext context) async {
+    isFinishedTodo = false;
     Get.find<TodoController>().loadingDelete.value = true;
     try {
       final token = box.read('login_token');
@@ -109,26 +116,57 @@ class TodoProvider extends GetConnect {
           headers: {'Authorization': 'Bearer $token'});
 
       if (response.statusCode == 200) {
-        log(response.body);
-        getAllTodo();
-        Get.find<TodoController>().getAllTodo();
-        Get.back(
-          result: Get.find<TodoController>().getAllTodo(),
-        );
-        SnackbarMessage()
-            .snackBarMessage('Task deleted successfully!', context);
+        getAllTodo(context);
+        Get.back();
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Task deleted successfully!', context));
       } else {
-        Get.find<TodoController>().loadingDelete.value = true;
-        log('failed');
-        log(response.statusCode.toString());
-        SnackbarMessage()
-            .snackBarMessage('Oops! Action Failed. Please try again', context);
+        isClosedFunctionLoading('loadingDelete');
+        isClosedMessage(SnackbarMessage())
+            .snackBarMessage('Oops! Action failed, Please try again', context);
       }
     } catch (e) {
-      Get.find<TodoController>().loadingDelete.value = true;
-      log(e.toString());
-      SnackbarMessage().snackBarMessage(
-          'Oops! Something went wrong. Try again later', context);
+      isClosedFunctionLoading('loadingDelete');
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went wrong. Try again later', context));
+    }
+  }
+
+  @override
+  void onClose() {
+    isFinishedTodo = true;
+    super.onClose();
+  }
+
+  isClosedList(List<Todo> todo) {
+    if (isFinishedTodo == false) {
+      Get.find<TodoController>().todoDetails.value = todo;
+      Get.find<TodoController>().update();
+    }
+  }
+
+  isClosedMessage(dynamic message) {
+    if (isFinishedTodo == false) {
+      message;
+    }
+  }
+
+  isClosedFunctionLoading(String name) {
+    if (isFinishedTodo == false) {
+      switch (name) {
+        case 'loading':
+          Get.find<TodoController>().loading.value = false;
+          break;
+        case 'loadingAdd':
+          Get.find<TodoAddController>().loadingAdd.value = false;
+          break;
+        case 'loadingEdit':
+          Get.find<TodoEditController>().loadingEdit.value = false;
+          break;
+        case 'loadingDelete':
+          Get.find<TodoController>().loadingDelete.value = false;
+          break;
+      }
     }
   }
 }

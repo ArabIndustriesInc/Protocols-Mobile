@@ -44,7 +44,7 @@ class DashboardCardView extends GetView<DashboardController> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20))),
           onPressed: () {
-            Get.find<DashboardController>().onClicked(title);
+            Get.find<DashboardController>().onClicked(title, context);
           },
           child: Padding(
             padding: EdgeInsets.symmetric(

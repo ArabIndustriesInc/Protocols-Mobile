@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -9,9 +8,11 @@ import 'package:protocols/app/data/consts/api_consts.dart';
 import 'package:protocols/app/data/models/voting_model.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/voting/controllers/voting_controller.dart';
+import 'package:protocols/app/modules/voting_add/controllers/voting_add_controller.dart';
 import 'package:protocols/app/modules/voting_details/controllers/voting_details_controller.dart';
 
 class VotingProvider extends GetConnect {
+  static var isFinishedVoting = false;
   @override
   void onInit() {
     httpClient.defaultDecoder = (map) {
@@ -21,21 +22,33 @@ class VotingProvider extends GetConnect {
     httpClient.baseUrl = '${baseUrlApi}vote/showvote';
   }
 
-  Future<Voting?> getVoting(int id) async {
-    final response = await get('voting/$id');
-    return response.body;
-  }
+  getAllVotes(BuildContext context) async {
+    isFinishedVoting = false;
+    try {
+      final token = box.read('login_token');
+      final response = await get('${baseUrlApi}vote/showvote',
+          headers: {'Authorization': 'Bearer $token'});
 
-  Future<List<Voting>> getAllVotes() async {
-    final token = box.read('login_token');
-    final response = await get('${baseUrlApi}vote/showvote',
-        headers: {'Authorization': 'Bearer $token'});
-    Get.find<VotingController>().loading.value = false;
-    VotingModel transactions = votingFromJson(response.bodyString!);
-    return transactions.data;
+      if (response.statusCode == 200) {
+        isClosedFunctionLoading('loading');
+        VotingModel voting = votingFromJson(response.bodyString!);
+        isClosedList(voting.data);
+      } else {
+        isClosedFunctionLoading('loading');
+        isClosedList([]);
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
+      }
+    } catch (e) {
+      isClosedFunctionLoading('loading');
+      isClosedList([]);
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went Wrong. Try again later', context));
+    }
   }
 
   addVote(AddVoting vote, BuildContext context) async {
+    isFinishedVoting = false;
     try {
       final token = box.read('login_token');
       final response =
@@ -47,25 +60,26 @@ class VotingProvider extends GetConnect {
         'Authorization': 'Bearer $token'
       });
       // var data = jsonDecode(response.body.toString());
-      log(response.body);
       if (response.statusCode == 200) {
-        getAllVotes();
-        Get.find<VotingController>().getAllVotes();
-        Get.back(result: Get.find<VotingController>().getAllVotes());
-        SnackbarMessage()
-            .snackBarMessage('New vote added successfully!', context);
+        getAllVotes(context);
+        isClosedFunctionLoading('loadingAdd');
+        Get.back();
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('New vote added successfully!', context));
       } else {
-        SnackbarMessage()
-            .snackBarMessage('Oops! Action failed! Try again later.', context);
+        isClosedFunctionLoading('loadingAdd');
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Try again later.', context));
       }
     } catch (e) {
-      Get.find<VotingDetailsController>().loadingVoteStatus.value = false;
-      SnackbarMessage().snackBarMessage(
-          'Oops! Something went Wrong. Please try again', context);
+      isClosedFunctionLoading('loadingAdd');
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went Wrong. Please try again', context));
     }
   }
 
   addVoteStatus(VotingStatus voteStatus, BuildContext context) async {
+    isFinishedVoting = false;
     try {
       final token = box.read('login_token');
       final response =
@@ -76,53 +90,52 @@ class VotingProvider extends GetConnect {
         'Authorization': 'Bearer $token'
       });
       // var data = jsonDecode(response.body.toString());
-      log(response.body);
       if (response.statusCode == 200) {
         showVoteStatus(voteStatus.voteId, context);
-        Get.find<VotingDetailsController>().loadingVoteStatus.value = false;
-        SnackbarMessage()
-            .snackBarMessage('Voted casted successfully!', context);
+        isClosedFunctionLoading('loadingVoteStatus');
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Voted casted successfully!', context));
       } else if (response.statusCode == 400) {
         showVoteStatus(voteStatus.voteId, context);
-        Get.find<VotingDetailsController>().loadingVoteStatus.value = false;
-        SnackbarMessage()
-            .snackBarMessage('Oops! you have already voted once.', context);
+        isClosedFunctionLoading('loadingVoteStatus');
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! you have already voted once.', context));
       } else {
-        Get.find<VotingDetailsController>().loadingVoteStatus.value = false;
-        SnackbarMessage()
-            .snackBarMessage('Oops! Action failed. Please try again', context);
+        isClosedFunctionLoading('loadingVoteStatus');
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
       }
     } catch (e) {
-      Get.find<VotingDetailsController>().loadingVoteStatus.value = false;
-      SnackbarMessage().snackBarMessage(
-          'Oops! Something went Wrong. Please try again', context);
+      isClosedFunctionLoading('loadingVoteStatus');
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went Wrong. Please try again', context));
     }
   }
 
   showVoteStatus(String voteId, BuildContext context) async {
+    isFinishedVoting = false;
     try {
       final token = box.read('login_token');
       final response = await http.get(
           Uri.parse('${baseUrlApi}vote/showvote/$voteId'),
           headers: {'Authorization': 'Bearer $token'});
-      log(response.body);
-      log(response.statusCode.toString());
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
         final countYes = data['datayes'];
         final countNo = data['datano'];
-        Get.find<VotingDetailsController>().percent(countYes, countNo);
+        percentCount(countYes, countNo);
       } else {
-        SnackbarMessage()
-            .snackBarMessage('Oops! Action failed. Please try again', context);
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
       }
     } catch (e) {
-      log(e.toString());
-      SnackbarMessage().snackBarMessage('Oops! $e. Please try again', context);
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Somethng went wrong. Try again later', context));
     }
   }
 
   deleteVote(String voteId, BuildContext context) async {
+    isFinishedVoting = false;
     Get.find<VotingController>().loadingDelete.value = true;
     try {
       final token = box.read('login_token');
@@ -130,19 +143,64 @@ class VotingProvider extends GetConnect {
           Uri.parse('${baseUrlApi}vote/delete/$voteId'),
           headers: {'Authorization': 'Bearer $token'});
       if (response.statusCode == 200) {
-        getAllVotes();
-        Get.find<VotingController>().getAllVotes();
-        Get.back(result: Get.find<VotingController>().getAllVotes());
-        SnackbarMessage()
-            .snackBarMessage('Vote deleted successfully!', context);
-        Get.find<VotingController>().loadingDelete.value = false;
+        getAllVotes(context);
+        Get.back();
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Vote deleted successfully!', context));
+        isClosedFunctionLoading('loadingDelete');
       } else {
-        SnackbarMessage()
-            .snackBarMessage('Oops! Action failed. Please try again', context);
+        isClosedFunctionLoading('loadingDelete');
+        isClosedMessage(SnackbarMessage()
+            .snackBarMessage('Oops! Action failed, Please try again', context));
       }
     } catch (e) {
-      log(e.toString());
-      SnackbarMessage().snackBarMessage('Oops! $e. Please try again', context);
+      isClosedFunctionLoading('loadingDelete');
+      isClosedMessage(SnackbarMessage().snackBarMessage(
+          'Oops! Something went Wrong. Try again later', context));
+    }
+  }
+
+  @override
+  void onClose() {
+    isFinishedVoting = true;
+    super.onClose();
+  }
+
+  isClosedList(List<Voting> votes) {
+    if (isFinishedVoting == false) {
+      Get.find<VotingController>().votes = votes;
+      Get.find<VotingController>().update();
+    }
+  }
+
+  isClosedMessage(dynamic message) {
+    if (isFinishedVoting == false) {
+      message;
+    }
+  }
+
+  percentCount(countYes, countNo) {
+    if (isFinishedVoting == false) {
+      Get.find<VotingDetailsController>().percent(countYes, countNo);
+    }
+  }
+
+  isClosedFunctionLoading(String name) {
+    if (isFinishedVoting == false) {
+      switch (name) {
+        case 'loading':
+          Get.find<VotingController>().loading.value = false;
+          break;
+        case 'loadingAdd':
+          Get.find<VotingAddController>().loadingAdd.value = false;
+          break;
+        case 'loadingVoteStatus':
+          Get.find<VotingDetailsController>().loadingVoteStatus.value = false;
+          break;
+        case 'loadingDelete':
+          Get.find<VotingController>().loadingDelete.value = false;
+          break;
+      }
     }
   }
 }

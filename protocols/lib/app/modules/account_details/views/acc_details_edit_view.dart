@@ -18,7 +18,7 @@ class AccDetailsEditView extends GetView<AccountDetailsController> {
   Widget build(BuildContext context) {
     initValue();
     return Scaffold(
-      appBar: AppBarCustom().appBar,
+      appBar: AppBarCustom().appBar(context),
       drawer: DrawerView(),
       backgroundColor: Colors.white,
       body: SafeArea(

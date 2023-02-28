@@ -20,13 +20,6 @@ class TransactionsEditController extends GetxController {
     transTypeValue.value = newValue!;
     update();
   }
-
-  @override
-  void onClose() {
-    TransactionsProvider.isFinishedTransactions = true;
-    TransactionsProvider().onClose();
-    super.onClose();
-  }
 }
 
 class TransactionsEditButton extends StatelessWidget {

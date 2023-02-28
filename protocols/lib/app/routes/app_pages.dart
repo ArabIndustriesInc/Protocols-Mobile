@@ -26,6 +26,8 @@ import '../modules/todo_add/bindings/todo_add_binding.dart';
 import '../modules/todo_add/views/todo_add_view.dart';
 import '../modules/transactions_add/bindings/transactions_add_binding.dart';
 import '../modules/transactions_add/views/transactions_add_view.dart';
+import '../modules/upgrade-plan/bindings/upgrade_plan_binding.dart';
+import '../modules/upgrade-plan/views/upgrade_plan_view.dart';
 import '../modules/voting_add/bindings/voting_add_binding.dart';
 import '../modules/voting_add/views/voting_add_view.dart';
 import '../modules/welcome/bindings/welcome_binding.dart';
@@ -115,6 +117,11 @@ class AppPages {
       name: _Paths.OTP_VERIFY,
       page: () => const OtpVerifyView(),
       binding: OtpVerifyBinding(),
+    ),
+    GetPage(
+      name: _Paths.UPGRADE_PLAN,
+      page: () => const UpgradePlanView(),
+      binding: UpgradePlanBinding(),
     ),
   ];
 }

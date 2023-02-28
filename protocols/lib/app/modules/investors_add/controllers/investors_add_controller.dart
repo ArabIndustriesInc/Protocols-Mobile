@@ -44,13 +44,6 @@ class InvestorsAddController extends GetxController {
       update();
     }
   }
-
-  @override
-  void onClose() {
-    InvestorsProvider.isFinishedInvestors = true;
-    InvestorsProvider().onClose();
-    super.onClose();
-  }
 }
 
 class AddInvestorsButton extends GetView {

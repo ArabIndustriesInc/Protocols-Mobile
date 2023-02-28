@@ -14,13 +14,6 @@ class TodoEditController extends GetxController {
   TextEditingController taskController = TextEditingController();
   var loadingEdit = false.obs;
 
-  @override
-  void onClose() {
-    TodoProvider.isFinishedTodo = true;
-    TodoProvider().onClose();
-    super.onClose();
-  }
-
   // List<Widget> subTasks = [];
   // int count = 0;
   // int controllerIndex = 0;

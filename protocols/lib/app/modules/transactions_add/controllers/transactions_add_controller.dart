@@ -16,12 +16,6 @@ class TransactionsAddController extends GetxController {
     'Income',
     'Expense',
   ];
-  @override
-  void onClose() {
-    TransactionsProvider.isFinishedTransactions = true;
-    TransactionsProvider().onClose();
-    super.onClose();
-  }
 
   updatePriortiy(String? newValue) {
     transTypeValue.value = newValue!;

@@ -1,12 +1,19 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PricingPlanController extends GetxController {
-  WebViewController webViewController = WebViewController();
+  WebViewController webViewController = WebViewController()
+    ..setJavaScriptMode(JavaScriptMode.unrestricted)
+    ..setBackgroundColor(const Color(0x00FFFFFF))
+    ..setNavigationDelegate(
+      NavigationDelegate(
+        onProgress: (int progress) {},
+        onPageStarted: (String url) {},
+        onPageFinished: (String url) {},
+      ),
+    );
   final List<Data> list = Data.generate();
   var listScrollController = ScrollController();
   var scrollDirection = ScrollDirection.idle.obs;
@@ -20,21 +27,32 @@ class PricingPlanController extends GetxController {
     //     const Utf8Encoder().convert(stripeCheckoutPage),
     //   )}'),
     // );
-    webViewController.loadHtmlString(stripeCheckoutPage);
+    webViewController.loadRequest(
+      Uri.parse('https://lukamel-b.github.io/sample/'),
+    );
+    webViewController.setJavaScriptMode(JavaScriptMode.unrestricted);
+    webViewController.setBackgroundColor(const Color(0x00FFFFFF));
     super.onInit();
   }
 
   final String stripeCheckoutPage = '''
-  <!DOCTYPE html>
-  <html>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
   <body>
-<script async src="https://js.stripe.com/v3/pricing-table.js"></script>
-<stripe-pricing-table pricing-table-id="prctbl_1MfKD8B6CWPxK0IB9WSly17r"
-publishable-key="pk_live_51JqYykB6CWPxK0IB5I2GXjdObdjF3UVjJMOqURritxYjKeD76KRq2nsRrnMFv0zfBl5aRtLwPcsfOFUDrnwbck4t00SKdX4Gk3">
-</stripe-pricing-table>
-</body>
-</body>
-  </html>
+    <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
+    <stripe-pricing-table
+      pricing-table-id="prctbl_1MfKD8B6CWPxK0IB9WSly17r"
+      publishable-key="pk_live_51JqYykB6CWPxK0IB5I2GXjdObdjF3UVjJMOqURritxYjKeD76KRq2nsRrnMFv0zfBl5aRtLwPcsfOFUDrnwbck4t00SKdX4Gk3"
+    >
+    </stripe-pricing-table>
+  </body>
+</html>
 ''';
 
   bool scrollNotification(ScrollNotification notification) {

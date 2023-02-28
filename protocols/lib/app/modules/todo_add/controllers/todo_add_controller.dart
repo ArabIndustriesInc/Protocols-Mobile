@@ -10,13 +10,6 @@ class TodoAddController extends GetxController {
   TextEditingController titleController = TextEditingController();
   TextEditingController taskController = TextEditingController();
   var loadingAdd = false.obs;
-
-  @override
-  void onClose() {
-    TodoProvider.isFinishedTodo = true;
-    TodoProvider().onClose();
-    super.onClose();
-  }
 }
 
 class ToDoAddButton extends GetView {

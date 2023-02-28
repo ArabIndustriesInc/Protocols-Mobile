@@ -13,13 +13,6 @@ class VotingDetailsController extends GetxController {
     update();
   }
 
-  @override
-  void onClose() {
-    VotingProvider.isFinishedVoting = true;
-    VotingProvider().onClose();
-    super.onClose();
-  }
-
   showStatus(String voteId, BuildContext context) {
     VotingProvider().showVoteStatus(voteId, context);
   }

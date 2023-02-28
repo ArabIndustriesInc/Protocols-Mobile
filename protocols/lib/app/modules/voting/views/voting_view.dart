@@ -11,7 +11,7 @@ class VotingView extends GetView<VotingController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarCustom().appBar,
+      appBar: AppBarCustom().appBar(context),
       drawer: DrawerView(),
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -43,33 +43,28 @@ class VotingView extends GetView<VotingController> {
                       child: const Center(child: CircularProgressIndicator()))
                   : Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                      child: GetBuilder<VotingController>(
-                          init: VotingController(),
-                          builder: (_) {
-                            return ListView.separated(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (BuildContext context, index) {
-                                return (Get.find<VotingController>()
-                                        .votes
-                                        .isEmpty)
-                                    ? const EmptyDashMessage(title: 'No Votes!')
-                                    : VotingCardView(
-                                        index: index,
-                                      );
-                              },
-                              separatorBuilder: (BuildContext context, index) {
-                                return const SizedBox(
-                                  height: 35,
-                                );
-                              },
-                              itemCount: (Get.find<VotingController>()
-                                      .votes
-                                      .isEmpty)
+                      child: GetBuilder<VotingController>(builder: (_) {
+                        return ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, index) {
+                            return (Get.find<VotingController>().votes.isEmpty)
+                                ? const EmptyDashMessage(title: 'No Votes!')
+                                : VotingCardView(
+                                    index: index,
+                                  );
+                          },
+                          separatorBuilder: (BuildContext context, index) {
+                            return const SizedBox(
+                              height: 35,
+                            );
+                          },
+                          itemCount:
+                              (Get.find<VotingController>().votes.isEmpty)
                                   ? 1
                                   : Get.find<VotingController>().votes.length,
-                            );
-                          }),
+                        );
+                      }),
                     ),
             ),
             const SizedBox(

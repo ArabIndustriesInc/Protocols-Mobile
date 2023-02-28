@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/modules/consts/employees_add_work_details_consts.dart';
+import 'package:protocols/app/modules/consts/employees_consts.dart';
 import 'package:protocols/app/modules/consts/employees_edit_work_details_consts.dart';
 import 'package:protocols/app/modules/consts/form_validation_mixin.dart';
 import 'package:protocols/app/modules/employees_edit/controllers/employees_edit_controller.dart';
@@ -68,7 +70,7 @@ class EmployeesEditFieldPersonalDetailsView
             capType: TextCapitalization.words,
             validate: isAddressValid,
             contrlr: Get.find<EmployeesEditController>().addressController,
-            required: 'Address',
+            required: 'Editress',
             type: TextInputType.streetAddress,
             deco: TextDecoEmp().addressDeco,
           ),
@@ -107,13 +109,43 @@ class EmployeeEditFieldPaymentDetailsView
             deco: TextDecoEmp().accHldNameDeco,
             required: 'Account Holder Name',
           ),
-          EmpDrsInvTextField(
-            capType: TextCapitalization.words,
-            contrlr: Get.find<EmployeesEditController>().bankNameController,
-            type: TextInputType.name,
-            validate: isNameValid,
-            deco: TextDecoEmp().bankNameDeco,
-            required: 'Bank Name',
+          TypeAheadField(
+            animationStart: 0,
+            animationDuration: Duration.zero,
+            textFieldConfiguration: TextFieldConfiguration(
+              controller:
+                  Get.find<EmployeesEditController>().bankNameController,
+              keyboardType: TextInputType.name,
+              cursorColor: Colors.grey[600],
+              decoration: TextDecoEmp().bankNameDeco,
+            ),
+            suggestionsBoxDecoration: EmployeeSuggetions().suggNameDeco,
+            suggestionsCallback: (pattern) {
+              List<String> matches = <String>[];
+              matches.addAll(EmployeeSuggetions().suggestons);
+
+              matches.retainWhere((s) {
+                return s.toLowerCase().contains(pattern.toLowerCase());
+              });
+              return matches;
+            },
+            itemBuilder: (context, sone) {
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 15.w),
+                child: Text(
+                  sone.toString(),
+                  style: TextStyle(
+                    fontSize: 15.sp,
+                    fontFamily: 'Montserrat SemiBold',
+                    color: Colors.black54,
+                  ),
+                ),
+              );
+            },
+            onSuggestionSelected: (String suggestion) {
+              Get.find<EmployeesEditController>().bankNameController.text =
+                  suggestion;
+            },
           ),
           EmpDrsInvTextField(
             capType: TextCapitalization.words,

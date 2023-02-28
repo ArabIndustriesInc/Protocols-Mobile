@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:protocols/app/modules/dashboard/views/dashboard_view.dart';
 import 'package:protocols/app/modules/links/views/links_view.dart';
 
@@ -20,5 +22,19 @@ class HomeController extends GetxController {
     // log('new index: ${newIndex.toString()}');
     // log('page value: ${page.value.toString()}');
     update();
+  }
+
+  Directory? dir;
+  Directory? appStorage;
+  getDir() async {
+    dir = await getTemporaryDirectory();
+    appStorage = await getApplicationDocumentsDirectory();
+    // log(dir!.path);
+  }
+
+  @override
+  void onInit() {
+    getDir();
+    super.onInit();
   }
 }

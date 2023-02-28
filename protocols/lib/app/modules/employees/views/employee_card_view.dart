@@ -1,8 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:protocols/app/data/consts/api_consts.dart';
-import 'package:protocols/app/modules/consts/appbar.dart';
+import 'package:protocols/app/data/providers/employees_provider.dart';
 import 'package:protocols/app/modules/consts/empinvdir_consts.dart';
 import 'package:protocols/app/modules/delete_alert/views/delete_alert_view.dart';
 import 'package:protocols/app/modules/employees/controllers/employees_controller.dart';
@@ -39,18 +37,36 @@ class EmployeeCardView extends GetView<EmployeesController> {
                   action: InkWell(
                     highlightColor: Colors.grey[200],
                     onTap: () {
-                      Get.back();
-                      SnackbarMessage().snackBarMessage(
-                          'Employee deleted successfully!', context);
+                      if (!Get.find<EmployeesController>()
+                          .loadingDelete
+                          .value) {
+                        Get.find<EmployeesController>().loadingDelete.value =
+                            true;
+                        final id =
+                            Get.find<EmployeesController>().employees[index].id;
+                        EmployeesProvider().deleteEmployee(id, context);
+                      }
                     },
-                    child: const Text(
-                      "Confirm",
-                      style: TextStyle(
-                        fontSize: 15.0,
-                        color: Color.fromARGB(255, 227, 0, 0),
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
+                    child: Obx(() {
+                      return (Get.find<EmployeesController>()
+                              .loadingDelete
+                              .value)
+                          ? Transform.scale(
+                              scale: 0.6,
+                              child: const CircularProgressIndicator(
+                                color: Colors.blue,
+                                strokeWidth: 1.7,
+                              ),
+                            )
+                          : const Text(
+                              "Confirm",
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                color: Color(0xffE30000),
+                                fontWeight: FontWeight.normal,
+                              ),
+                            );
+                    }),
                   ),
                 );
               });
@@ -88,6 +104,9 @@ class EmployeeCardView extends GetView<EmployeesController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        SizedBox(
+                          height: 10.h,
+                        ),
                         Text(
                           '${Get.find<EmployeesController>().employees[index].firstname} ${Get.find<EmployeesController>().employees[index].lastname}',
                           style: TextStyle(
@@ -95,13 +114,28 @@ class EmployeeCardView extends GetView<EmployeesController> {
                             fontSize: 18.sp,
                           ),
                         ),
+                        SizedBox(
+                          height: 6.h,
+                        ),
                         Text(
                           'ID: ${Get.find<EmployeesController>().employees[index].employeeid}',
                           style: TextStyle(
                             fontSize: 14.sp,
+                            fontFamily: 'Montserrat Medium',
                             color: const Color(0xff716A6A),
                           ),
                         ),
+                        // SizedBox(
+                        //   height: 3.h,
+                        // ),
+                        // Text(
+                        //   'Ph: ${Get.find<EmployeesController>().employees[index].mobile}',
+                        //   style: TextStyle(
+                        //     fontSize: 14.sp,
+                        //     fontFamily: 'Montserrat Medium',
+                        //     color: const Color(0xff716A6A),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
@@ -144,7 +178,7 @@ Widget imageApi(String img) {
         child: Image(
             height: 80.h,
             width: 70.w,
-            fit: BoxFit.fill,
+            fit: BoxFit.cover,
             image: NetworkImage(
               img,
               // headers: {"Authorization": "Bearer $token"},

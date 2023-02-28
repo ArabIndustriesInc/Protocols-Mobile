@@ -13,11 +13,12 @@ import 'package:protocols/app/modules/docs_folder/functions/folder_functions.dar
 
 class FolderController extends GetxController {
   final String folderId;
+  final BuildContext context;
   var loading = true.obs;
   var loadingDelete = false.obs;
   var loadingAdd = false.obs;
-  late Directory appStorage;
-  FolderController({required this.folderId});
+  Directory? appStorage;
+  FolderController({required this.folderId, required this.context});
   RxList files = [].obs;
   var fileIndex = '-1'.obs;
   var percentage = 0.0.obs;
@@ -47,8 +48,8 @@ class FolderController extends GetxController {
   }
 
   Future<String> getStorage() async {
-    appStorage = await getApplicationDocumentsDirectory();
-    return appStorage.path;
+    appStorage = await getTemporaryDirectory();
+    return appStorage!.path;
   }
 
   openFile(
@@ -56,7 +57,7 @@ class FolderController extends GetxController {
     final file = await FilesProvider().downloadFile(fileName, image, index);
     if (file == File('null')) {
       SnackbarMessage().snackBarMessage(
-          'Oops! Something went wrong! try again later', context);
+          'Oops! Something went wrong, try again later', context);
     } else {
       OpenFilex.open(file.path);
     }
@@ -75,15 +76,14 @@ class FolderController extends GetxController {
   }
 
   getAllFiles() async {
-    files.value = await FilesProvider().getAllFiles(folderId);
+    await FilesProvider().getAllFiles(folderId, context);
     update();
   }
 
   // @override
   // void onClose() {
-  //   final dir = Directory(appStorage.path);
+  //   final dir = Directory(appStorage!.path);
   //   dir.deleteSync(recursive: true);
-  //   appStorage.delete();
   //   super.onClose();
   // }
 

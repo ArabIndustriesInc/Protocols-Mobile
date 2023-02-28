@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class PricingPlanController extends GetxController {
+  WebViewController webViewController = WebViewController();
   final List<Data> list = Data.generate();
   var listScrollController = ScrollController();
   var scrollDirection = ScrollDirection.idle.obs;
@@ -11,8 +15,27 @@ class PricingPlanController extends GetxController {
     listScrollController.addListener(() {
       scrollDirection.value = listScrollController.position.userScrollDirection;
     });
+    // webViewController.loadRequest(
+    //   Uri.parse('data:text/html;base64,${base64Encode(
+    //     const Utf8Encoder().convert(stripeCheckoutPage),
+    //   )}'),
+    // );
+    webViewController.loadHtmlString(stripeCheckoutPage);
     super.onInit();
   }
+
+  final String stripeCheckoutPage = '''
+  <!DOCTYPE html>
+  <html>
+  <body>
+<script async src="https://js.stripe.com/v3/pricing-table.js"></script>
+<stripe-pricing-table pricing-table-id="prctbl_1MfKD8B6CWPxK0IB9WSly17r"
+publishable-key="pk_live_51JqYykB6CWPxK0IB5I2GXjdObdjF3UVjJMOqURritxYjKeD76KRq2nsRrnMFv0zfBl5aRtLwPcsfOFUDrnwbck4t00SKdX4Gk3">
+</stripe-pricing-table>
+</body>
+</body>
+  </html>
+''';
 
   bool scrollNotification(ScrollNotification notification) {
     if (notification is ScrollEndNotification) {

@@ -4,11 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:protocols/app/data/models/employees_model.dart';
-import 'package:protocols/app/modules/consts/appbar.dart';
-import 'package:protocols/app/modules/custom_alert/views/custom_alert_view.dart';
-import 'package:protocols/app/modules/employees/controllers/employees_controller.dart';
-import 'package:protocols/app/modules/employees_add/controllers/employee_add_date_controller.dart';
 import 'package:protocols/app/modules/employees_add/functions/employee_add_function.dart';
 
 class EmployeesAddController extends GetxController {

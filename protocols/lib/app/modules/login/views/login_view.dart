@@ -91,7 +91,7 @@ class LoginView extends GetView<LoginController> {
                                 .passwordController
                                 .text
                                 .trim();
-                            login(email, password, context);
+                            LoginProvider().login(email, password, context);
                           }
                         }
                       },

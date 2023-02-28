@@ -99,7 +99,7 @@ class TransactionsCardView extends GetView {
                                         Get.find<TransactionsController>()
                                             .transactions[index]
                                             .id;
-                                    TransactionsModelProvider()
+                                    TransactionsProvider()
                                         .deleteTransactionsModel(id, context);
                                   }
                                 },

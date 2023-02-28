@@ -68,6 +68,7 @@ class DrawerView extends GetView {
                           Get.back();
                           Get.offAllNamed(Routes.WELCOME);
                           box.write('login_token', '');
+                          box.write('paid_user', 'false');
                           SnackbarMessage().snackBarMessage(
                               'Logged out successfully!', context);
                         },

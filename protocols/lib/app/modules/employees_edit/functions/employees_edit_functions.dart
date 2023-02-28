@@ -38,8 +38,16 @@ class EmployeesInitValues {
         Get.find<EmployeesController>().employees[index].lastname;
     Get.find<EmployeesEditController>().mailIdController.text =
         Get.find<EmployeesController>().employees[index].email;
-    Get.find<EmployeesEditController>().midNameController.text =
-        Get.find<EmployeesController>().employees[index].middlename!;
+    Get.find<EmployeesEditController>()
+        .midNameController
+        .text = (Get.find<EmployeesController>().employees[index].middlename ==
+                'Nil' ||
+            Get.find<EmployeesController>().employees[index].middlename ==
+                ' ' ||
+            Get.find<EmployeesController>().employees[index].middlename == '' ||
+            Get.find<EmployeesController>().employees[index].middlename == '.')
+        ? ''
+        : Get.find<EmployeesController>().employees[index].middlename!;
     Get.find<EmployeesEditController>().designationController.text =
         Get.find<EmployeesController>().employees[index].position;
     Get.find<EmployeesEditController>().mobNoController.text =

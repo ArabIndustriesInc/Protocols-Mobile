@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,9 +9,9 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:protocols/app/data/models/investors_model.dart';
 import 'package:protocols/app/data/providers/investors_provider.dart';
+import 'package:protocols/app/modules/home/controllers/home_controller.dart';
 import 'package:protocols/app/modules/investors/controllers/investors_controller.dart';
 import 'package:protocols/app/modules/investors_edit/controllers/investors_edit_date_controller.dart';
 
@@ -29,7 +30,7 @@ class InvestorsEditController extends GetxController {
   RxString imageSample = ''.obs;
   XFile? pickedImage;
   String? img;
-  Directory? dir;
+  String? deleteFile;
 
   pickimage() async {
     pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -41,6 +42,13 @@ class InvestorsEditController extends GetxController {
       img = base64Encode(imgBytes);
       update();
     }
+  }
+
+  @override
+  void onClose() {
+    InvestorsProvider.isFinishedInvestors = true;
+    InvestorsProvider().onClose();
+    super.onClose();
   }
 }
 
@@ -88,6 +96,7 @@ class InvestorsEditButton extends GetView {
                       .formKey
                       .currentState!
                       .validate()) {
+                    final documentDirectory = Get.find<HomeController>().dir;
                     Get.find<InvestorsEditController>().loadingEdit.value =
                         true;
                     final firstName = Get.find<InvestorsEditController>()
@@ -133,19 +142,18 @@ class InvestorsEditButton extends GetView {
                             .investors[index]
                             .image));
 
-                    final documentDirectory =
-                        await getApplicationDocumentsDirectory();
-
                     final newfile =
-                        File(path.join(documentDirectory.path, imageName));
+                        File(path.join(documentDirectory!.path, imageName));
 
                     newfile.writeAsBytesSync(response.bodyBytes);
                     final file =
-                        (Get.find<InvestorsEditController>().img == null)
+                        (Get.find<InvestorsEditController>().pickedImage ==
+                                null)
                             ? newfile
                             : File(Get.find<InvestorsEditController>()
                                 .pickedImage!
                                 .path);
+                    log(file.path);
 
                     final investor = AddInvestors(
                       firstname: firstName,
@@ -165,8 +173,8 @@ class InvestorsEditButton extends GetView {
                     final id =
                         Get.find<InvestorsController>().investors[index].id;
                     final filename = path.basename(file.path);
-                    Get.find<InvestorsEditController>().dir =
-                        Directory(documentDirectory.path);
+                    Get.find<InvestorsEditController>().deleteFile =
+                        newfile.path;
                     await InvestorsProvider()
                         .editInvestor(investor, filename, id, context);
                   }

@@ -6,13 +6,23 @@ import 'package:protocols/app/data/providers/transaction_provider.dart';
 import 'package:protocols/app/routes/app_pages.dart';
 
 class TransactionsController extends GetxController {
+  final BuildContext context;
   final List<String> menuItems = ['Edit', 'Delete'];
   List<Transactions> transactions = [];
   var loading = true.obs;
   var loadingDelete = false.obs;
+
+  TransactionsController(this.context);
   getAllTransactions() async {
-    transactions = await TransactionsModelProvider().getAllTransactions();
+    await TransactionsProvider().getAllTransactions(context);
     update();
+  }
+
+  @override
+  void onClose() {
+    TransactionsProvider.isFinishedTransactions = true;
+    TransactionsProvider().onClose();
+    super.onClose();
   }
 
   @override

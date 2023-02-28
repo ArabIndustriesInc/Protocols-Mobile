@@ -1,8 +1,10 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/modules/consts/form_validation_mixin.dart';
 import 'package:protocols/app/modules/login/controllers/login_field_controller.dart';
+import 'package:protocols/app/modules/login/views/forgot_password_view.dart';
 
 class LoginFieldView extends GetView<LoginFieldController>
     with InputValidationMixin {
@@ -55,6 +57,37 @@ class LoginFieldView extends GetView<LoginFieldController>
                   decoration: Get.find<LoginFieldController>().loginPassDeco,
                   cursorColor: Colors.grey[600],
                 ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text.rich(
+                      TextSpan(
+                        text: '',
+                        children: <InlineSpan>[
+                          TextSpan(
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Get.to(() => const ForgotPasswordView());
+                              },
+                            text: 'Forgot Password?',
+                            style: TextStyle(
+                                fontSize: 11.sp,
+                                fontFamily: 'Montserrat Bold',
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF1468C7)),
+                          )
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      width: 6.w,
+                    )
+                  ],
+                )
               ],
             ),
           ),

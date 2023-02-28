@@ -23,7 +23,7 @@ class FileCardView extends GetView<DocumentsController> {
             () => FolderView(
                 folderName:
                     Get.find<DocumentsController>().folders[index].foldername),
-            binding: FolderBinding(folderId: folderId),
+            binding: FolderBinding(folderId: folderId, context: context),
           );
         },
         onLongPress: () {

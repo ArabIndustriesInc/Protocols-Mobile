@@ -21,7 +21,7 @@ class FolderFilecardView extends GetView<FolderController> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 5.0, left: 20, right: 20),
+      padding: const EdgeInsets.only(top: 5.0, left: 5, right: 5),
       child: ListTile(
         onTap: () {
           Get.find<FolderController>().openFile(name, image, context, index);

@@ -15,7 +15,7 @@ class TodoEditView extends GetView<TodoEditController> {
   Widget build(BuildContext context) {
     initValue();
     return Scaffold(
-      appBar: AppBarCustom().appBar,
+      appBar: AppBarCustom().appBar(context),
       drawer: DrawerView(),
       backgroundColor: Colors.white,
       body: ListView(

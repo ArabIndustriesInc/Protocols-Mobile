@@ -11,7 +11,7 @@ class TransactionsView extends GetView<TransactionsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBarCustom().appBar,
+        appBar: AppBarCustom().appBar(context),
         drawer: DrawerView(),
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -45,44 +45,41 @@ class TransactionsView extends GetView<TransactionsController> {
                             height: MediaQuery.of(context).size.height / 1.5,
                             child: const Center(
                                 child: CircularProgressIndicator()))
-                        : GetBuilder<TransactionsController>(
-                            init: TransactionsController(),
-                            builder: (_) {
-                              return (Get.find<TransactionsController>()
-                                      .transactions
-                                      .isEmpty)
-                                  ? const EmptyDashMessage(
-                                      title: 'No Transactions!')
-                                  : ListView.separated(
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      itemBuilder:
-                                          (BuildContext context, index) {
-                                        return TransactionsCardView(
-                                          index: index,
-                                        );
-                                      },
-                                      separatorBuilder: (context, index) {
-                                        return Padding(
-                                          padding: EdgeInsets.only(
-                                            right: 30.h,
-                                          ),
-                                          child: Divider(
-                                            color: Colors.black26,
-                                            height: 25.h,
-                                          ),
-                                        );
-                                      },
-                                      itemCount: (Get.find<
-                                                  TransactionsController>()
-                                              .transactions
-                                              .isEmpty)
-                                          ? 1
-                                          : Get.find<TransactionsController>()
-                                              .transactions
-                                              .length);
-                            }),
+                        : GetBuilder<TransactionsController>(builder: (_) {
+                            return (Get.find<TransactionsController>()
+                                    .transactions
+                                    .isEmpty)
+                                ? const EmptyDashMessage(
+                                    title: 'No Transactions!')
+                                : ListView.separated(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemBuilder: (BuildContext context, index) {
+                                      return TransactionsCardView(
+                                        index: index,
+                                      );
+                                    },
+                                    separatorBuilder: (context, index) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                          right: 30.h,
+                                        ),
+                                        child: Divider(
+                                          color: Colors.black26,
+                                          height: 25.h,
+                                        ),
+                                      );
+                                    },
+                                    itemCount:
+                                        (Get.find<TransactionsController>()
+                                                .transactions
+                                                .isEmpty)
+                                            ? 1
+                                            : Get.find<TransactionsController>()
+                                                .transactions
+                                                .length);
+                          }),
                   )),
               const SizedBox(
                 height: 20,

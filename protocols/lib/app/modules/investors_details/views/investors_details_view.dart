@@ -13,7 +13,7 @@ class InvestorsDetailsView extends GetView<InvestorsDetailsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBarCustom().appBar,
+        appBar: AppBarCustom().appBar(context),
         drawer: DrawerView(),
         backgroundColor: Colors.white,
         body: SafeArea(

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/modules/payment_gateway/controllers/payment_gateway_controller.dart';
 import 'package:protocols/app/modules/payment_gateway/views/payment_success_view.dart';
+import 'package:protocols/app/modules/payment_gateway/widgets/payment_gateway_widgets.dart';
 
 class PaymentGatewayView extends GetView<PaymentGatewayController> {
   final String plan;
@@ -10,7 +11,7 @@ class PaymentGatewayView extends GetView<PaymentGatewayController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PaymentGatewayController().paymentAppBar,
+      appBar: PaymentWidgtes().paymentAppBar,
       backgroundColor: Colors.white,
       body: SafeArea(
         child: ListView(
@@ -31,20 +32,23 @@ class PaymentGatewayView extends GetView<PaymentGatewayController> {
             SizedBox(
               height: 30.h,
             ),
-            billHeadMethod('Billing Details'),
+            PaymentWidgtes().billHeadMethod('Billing Details'),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              decoration: boxDeco,
+              decoration: PaymentWidgtes().boxDeco,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  billingText('Order Summary'),
+                  PaymentWidgtes().billingText('Order Summary'),
                   SizedBox(
                     height: 20.h,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [billingText('Order'), ogPrice(plan)],
+                    children: [
+                      PaymentWidgtes().billingText('Order'),
+                      PaymentWidgtes().ogPrice(plan)
+                    ],
                   ),
                   SizedBox(
                     height: 10.h,
@@ -52,8 +56,8 @@ class PaymentGatewayView extends GetView<PaymentGatewayController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      billingText('Tax'),
-                      taxPrice(plan),
+                      PaymentWidgtes().billingText('Tax'),
+                      PaymentWidgtes().taxPrice(plan),
                     ],
                   ),
                   SizedBox(
@@ -70,7 +74,7 @@ class PaymentGatewayView extends GetView<PaymentGatewayController> {
                           fontFamily: 'Montserrat Bold',
                         ),
                       ),
-                      totalPrice(plan),
+                      PaymentWidgtes().totalPrice(plan),
                     ],
                   ),
                 ],
@@ -79,11 +83,11 @@ class PaymentGatewayView extends GetView<PaymentGatewayController> {
             SizedBox(
               height: 30.h,
             ),
-            billHeadMethod('Payment Details'),
+            PaymentWidgtes().billHeadMethod('Payment Details'),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              decoration: boxDeco,
-              child: cardForm,
+              decoration: PaymentWidgtes().boxDeco,
+              child: PaymentWidgtes().cardForm,
             ),
             SizedBox(
               height: 30.h,
@@ -97,7 +101,7 @@ class PaymentGatewayView extends GetView<PaymentGatewayController> {
           onPressed: () {
             Get.to(() => const PaymentSuccessView());
           },
-          style: style,
+          style: PaymentWidgtes().style,
           child: const Text(
             'Pay',
             style: TextStyle(

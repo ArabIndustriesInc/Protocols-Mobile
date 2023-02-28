@@ -16,6 +16,13 @@ class TransactionsAddController extends GetxController {
     'Income',
     'Expense',
   ];
+  @override
+  void onClose() {
+    TransactionsProvider.isFinishedTransactions = true;
+    TransactionsProvider().onClose();
+    super.onClose();
+  }
+
   updatePriortiy(String? newValue) {
     transTypeValue.value = newValue!;
     update();
@@ -111,8 +118,7 @@ class TransactionsAddButton extends StatelessWidget {
                       type: type,
                     );
 
-                    TransactionsModelProvider()
-                        .addTransaction(transaction, context);
+                    TransactionsProvider().addTransaction(transaction, context);
                   }
                 }
               },

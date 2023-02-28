@@ -171,7 +171,7 @@ class InvestorsCardView extends GetView {
           child: Image(
               height: 80.h,
               width: 70.w,
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
               image: NetworkImage(
                 img,
                 // headers: {"Authorization": "Bearer $token"},

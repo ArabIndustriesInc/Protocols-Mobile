@@ -87,21 +87,23 @@ class FolderViewButton extends GetView {
               end: Alignment.bottomCenter)),
       child: TextButton(
         onPressed: () async {
-          FilePickerResult? result = await FilePicker.platform.pickFiles(
-              allowMultiple: false
-              //      type: FileType.custom,
-              //  allowedExtensions: ['jpg', 'pdf', 'doc','jpeg','png','mpg','mov',''],
-              );
-          if (result == null) {
-            return;
-          } else {
-            if (!Get.find<FolderController>().loadingAdd.value) {
-              Get.find<FolderController>().loadingAdd.value = true;
-              final filename = result.files.first.name;
-              final image = File(result.files.first.path!);
-              final file = AddFiles(
-                  image: image, folderid: folderid, filename: filename);
-              FilesProvider().addFile(file, context);
+          if (!Get.find<FolderController>().loadingAdd.value) {
+            FilePickerResult? result = await FilePicker.platform.pickFiles(
+                allowMultiple: false
+                //      type: FileType.custom,
+                //  allowedExtensions: ['jpg', 'pdf', 'doc','jpeg','png','mpg','mov',''],
+                );
+            if (result == null) {
+              return;
+            } else {
+              if (!Get.find<FolderController>().loadingAdd.value) {
+                Get.find<FolderController>().loadingAdd.value = true;
+                final filename = result.files.first.name;
+                final image = File(result.files.first.path!);
+                final file = AddFiles(
+                    image: image, folderid: folderid, filename: filename);
+                FilesProvider().addFile(file, context);
+              }
             }
           }
         },

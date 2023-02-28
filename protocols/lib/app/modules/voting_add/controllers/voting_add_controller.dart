@@ -9,6 +9,12 @@ class VotingAddController extends GetxController {
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
   var loadingAdd = false.obs;
+  @override
+  void onClose() {
+    VotingProvider.isFinishedVoting = true;
+    VotingProvider().onClose();
+    super.onClose();
+  }
 }
 
 class VotesAddButton extends GetView {

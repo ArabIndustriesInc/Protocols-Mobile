@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,7 +17,7 @@ class EmployeesEditView extends GetView<EmployeesEditController> {
   Widget build(BuildContext context) {
     EmployeesInitValues(index: index).initValues();
     return Scaffold(
-      appBar: AppBarCustom().appBar,
+      appBar: AppBarCustom().appBar(context),
       drawer: DrawerView(),
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -148,7 +147,9 @@ class EmployeesEditView extends GetView<EmployeesEditController> {
           ),
         ),
       ),
-      bottomNavigationBar: const EditEmployeeButton(),
+      bottomNavigationBar: EditEmployeeButton(
+        index: index,
+      ),
     );
   }
 }

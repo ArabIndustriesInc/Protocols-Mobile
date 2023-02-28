@@ -12,7 +12,7 @@ class NotesAddView extends GetView<NotesAddController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarCustom().appBar,
+      appBar: AppBarCustom().appBar(context),
       drawer: DrawerView(),
       backgroundColor: Colors.white,
       body: Padding(

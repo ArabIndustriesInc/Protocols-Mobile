@@ -9,10 +9,11 @@ import 'package:protocols/app/modules/drawer/views/drawer_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DocumentsView extends GetView<DocumentsController> {
+  const DocumentsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarCustom().appBar,
+      appBar: AppBarCustom().appBar(context),
       drawer: DrawerView(),
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -44,7 +45,7 @@ class DocumentsView extends GetView<DocumentsController> {
                       height: MediaQuery.of(context).size.height / 1.5,
                       child: const Center(child: CircularProgressIndicator()))
                   : GetBuilder<DocumentsController>(
-                      init: DocumentsController(),
+                      init: DocumentsController(context),
                       builder: (_) {
                         return ListView.separated(
                             physics: const NeverScrollableScrollPhysics(),

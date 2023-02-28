@@ -136,7 +136,7 @@ class EmployeesEditFieldView extends GetView<EmployeesEditDateController>
           ),
           EmpDrsInvTextField(
             capType: TextCapitalization.words,
-            contrlr: Get.find<EmployeesEditController>().esiNoController,
+            contrlr: Get.find<EmployeesEditController>().workLocController,
             validate: isAddressValid,
             type: TextInputType.streetAddress,
             deco: TextDecoEmp().workLocDeco,

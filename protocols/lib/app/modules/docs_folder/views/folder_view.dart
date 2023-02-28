@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:protocols/app/data/providers/files_provider.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/docs_folder/controllers/folder_controller.dart';
 import 'package:protocols/app/modules/docs_folder/functions/folder_functions.dart';
@@ -12,44 +13,53 @@ class FolderView extends GetView<FolderController> {
   const FolderView({Key? key, required this.folderName}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarCustom().appBar,
-      drawer: DrawerView(),
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 20.0),
-          child: ListView(
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 23,
-              ),
-              Center(
-                child: Text(
-                  folderName,
-                  style: TextStyle(
-                      fontSize: 25.sp,
-                      letterSpacing: .9,
-                      fontFamily: 'Montserrat Black'),
+    return WillPopScope(
+      onWillPop: () async {
+        if (FilesProvider.isFinishedFolderDownloading == true) {
+          return false;
+        } else {
+          return true;
+        }
+      },
+      child: Scaffold(
+        appBar: AppBarCustom().appBar(context),
+        drawer: DrawerView(),
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 10, bottom: 20.0),
+            child: ListView(
+              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 23,
                 ),
-              ),
-              SizedBox(
-                height: 30.h,
-              ),
-              const FoldStructureView()
-            ],
+                Center(
+                  child: Text(
+                    folderName,
+                    style: TextStyle(
+                        fontSize: 25.sp,
+                        letterSpacing: .9,
+                        fontFamily: 'Montserrat Black'),
+                  ),
+                ),
+                SizedBox(
+                  height: 30.h,
+                ),
+                const FoldStructureView()
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: Padding(
-        padding: EdgeInsets.only(
-          right: 10.w,
-        ),
-        child: FolderViewButton(
-          folderid: Get.find<FolderController>().folderId,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: Padding(
+          padding: EdgeInsets.only(
+            right: 10.w,
+          ),
+          child: FolderViewButton(
+            folderid: Get.find<FolderController>().folderId,
+          ),
         ),
       ),
     );

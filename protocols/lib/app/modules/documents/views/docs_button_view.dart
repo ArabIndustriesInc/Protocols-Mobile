@@ -38,7 +38,8 @@ class DocsButtonView extends GetView<DocumentsController> {
                               return null;
                             }
                           }),
-                          decoration: DocumentsController().textfieldDeco,
+                          decoration:
+                              DocumentsController(context).textfieldDeco,
                         ),
                       )),
                   title: 'Create Folder',

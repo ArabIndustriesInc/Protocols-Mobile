@@ -6,19 +6,27 @@ import 'package:protocols/app/routes/app_pages.dart';
 
 class InvestorsController extends GetxController {
   List<InvestorModel> investorsList = [];
+
+  InvestorsController(this.context);
   add(InvestorModel investor) {
     investorsList.add(investor);
     update();
   }
 
+  final BuildContext context;
   RxList investors = [].obs;
   var loading = true.obs;
   var loadingDelete = false.obs;
   getAllInvestors() async {
-    investors.value = (await InvestorsProvider()
-        .getAllInvestors()
-        .whenComplete(() => loading.value = false))!;
+    await InvestorsProvider().getAllInvestors(context);
     update();
+  }
+
+  @override
+  void onClose() {
+    InvestorsProvider.isFinishedInvestors = true;
+    InvestorsProvider().onClose();
+    super.onClose();
   }
 
   @override

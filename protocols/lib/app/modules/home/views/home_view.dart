@@ -10,9 +10,10 @@ class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    homeContext = context;
     return Scaffold(
       drawer: DrawerView(),
-      appBar: AppBarCustom().appBar,
+      appBar: AppBarCustom().appBar(context),
       backgroundColor: Colors.white,
       // body: Container());
       body: SafeArea(

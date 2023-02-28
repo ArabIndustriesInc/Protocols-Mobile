@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:protocols/app/modules/consts/appbar.dart';
+import 'package:protocols/app/modules/employees_edit/functions/employees_edit_upload_function.dart';
 
 class EmployeesEditController extends GetxController {
   GlobalKey<FormState> formKey = GlobalKey();
@@ -32,6 +32,8 @@ class EmployeesEditController extends GetxController {
   RxString image = ''.obs;
   RxString imageSample = ''.obs;
   XFile? pickedImage;
+  String? deleteFile;
+  var loadingEdit = false.obs;
 
   pickImageEdit() async {
     pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -46,7 +48,8 @@ class EmployeesEditController extends GetxController {
 }
 
 class EditEmployeeButton extends GetView {
-  const EditEmployeeButton({Key? key}) : super(key: key);
+  final int index;
+  const EditEmployeeButton({Key? key, required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +86,10 @@ class EditEmployeeButton extends GetView {
                     end: Alignment.bottomCenter)),
             child: TextButton(
               onPressed: () {
-                Get.back();
-                SnackbarMessage()
-                    .snackBarMessage('Employee edited successfully!', context);
+                if (!Get.find<EmployeesEditController>().loadingEdit.value) {
+                  EmployeesServerUpload(index: index, context: context)
+                      .editFunction();
+                }
               },
               style: ElevatedButton.styleFrom(
                   shadowColor: Colors.transparent,
@@ -94,11 +98,21 @@ class EditEmployeeButton extends GetView {
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10))),
-              child: Icon(
-                Icons.check_rounded,
-                color: Colors.white,
-                size: 30.h,
-              ),
+              child: Obx(() {
+                return (Get.find<EmployeesEditController>().loadingEdit.value)
+                    ? Transform.scale(
+                        scale: 0.6,
+                        child: const CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 1.7,
+                        ),
+                      )
+                    : Icon(
+                        Icons.check_rounded,
+                        color: Colors.white,
+                        size: 30.h,
+                      );
+              }),
             ),
           ),
         ],

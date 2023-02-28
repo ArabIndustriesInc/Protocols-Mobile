@@ -5,20 +5,22 @@ import 'package:protocols/app/routes/app_pages.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EmployeesController extends GetxController {
-  List<EmployeeModel> employeeList = [];
-  add(EmployeeModel employee) {
-    employeeList.add(employee);
-    update();
-  }
-
+  final BuildContext context;
   RxList employees = [].obs;
   var loading = true.obs;
   var loadingDelete = false.obs;
+
+  EmployeesController(this.context);
   getAllEmployees() async {
-    employees.value = (await EmployeesProvider()
-        .getAllEmployees()
-        .whenComplete(() => loading.value = false));
+    await EmployeesProvider().getAllEmployees(context);
     update();
+  }
+
+  @override
+  void onClose() {
+    EmployeesProvider.isFinishedEmployees = true;
+    EmployeesProvider().onClose();
+    super.onClose();
   }
 
   @override
@@ -27,57 +29,6 @@ class EmployeesController extends GetxController {
     update();
     super.onInit();
   }
-}
-
-class EmployeeModel {
-  final String fName;
-  final String designation;
-  final String empID;
-  final String joiningDate;
-  final String location;
-  final String dob;
-  final String fatherName;
-  final String address;
-  final String emailID;
-  final String mobNo;
-  final String panNo;
-  final String payment;
-  final String accHolder;
-  final String bankName;
-  final String accNo;
-  final String accType;
-  final String ifsc;
-  String? mName;
-  String? lName;
-  String? pfAcNo;
-  String? uanNo;
-  String? esiNo;
-  String? image;
-  EmployeeModel(
-    this.image,
-    this.pfAcNo,
-    this.mName,
-    this.lName,
-    this.uanNo,
-    this.esiNo, {
-    required this.fName,
-    required this.designation,
-    required this.empID,
-    required this.fatherName,
-    required this.address,
-    required this.emailID,
-    required this.joiningDate,
-    required this.location,
-    required this.dob,
-    required this.mobNo,
-    required this.panNo,
-    required this.payment,
-    required this.accHolder,
-    required this.bankName,
-    required this.accNo,
-    required this.accType,
-    required this.ifsc,
-  });
 }
 
 class EmployeesButtonView extends GetView {

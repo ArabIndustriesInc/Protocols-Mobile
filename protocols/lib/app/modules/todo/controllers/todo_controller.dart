@@ -6,15 +6,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TodoController extends GetxController {
   final List<String> menuItems = ['Edit', 'Delete'];
-
+  final BuildContext context;
   RxList todoDetails = [].obs;
   var loading = true.obs;
   var loadingDelete = false.obs;
+
+  TodoController(this.context);
   getAllTodo() async {
-    todoDetails.value = await TodoProvider()
-        .getAllTodo()
-        .whenComplete(() => loading.value = false);
+    await TodoProvider().getAllTodo(context);
     update();
+  }
+
+  @override
+  void onClose() {
+    TodoProvider.isFinishedTodo = true;
+    TodoProvider().onClose();
+    super.onClose();
   }
 
   @override

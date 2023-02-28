@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/modules/consts/employees_add_work_details_consts.dart';
+import 'package:protocols/app/modules/consts/employees_consts.dart';
 import 'package:protocols/app/modules/consts/employees_edit_work_details_consts.dart';
 import 'package:protocols/app/modules/consts/form_validation_mixin.dart';
 import 'package:protocols/app/modules/employees_add/controllers/employee_add_date_controller.dart';
@@ -113,10 +114,10 @@ class EmployeeAddFieldPaymentDetailsView extends GetView
               cursorColor: Colors.grey[600],
               decoration: TextDecoEmp().bankNameDeco,
             ),
-            suggestionsBoxDecoration: EmployeeAddDateController().suggNameDeco,
+            suggestionsBoxDecoration: EmployeeSuggetions().suggNameDeco,
             suggestionsCallback: (pattern) {
               List<String> matches = <String>[];
-              matches.addAll(Get.find<EmployeeAddDateController>().suggestons);
+              matches.addAll(EmployeeSuggetions().suggestons);
 
               matches.retainWhere((s) {
                 return s.toLowerCase().contains(pattern.toLowerCase());

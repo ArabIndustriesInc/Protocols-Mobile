@@ -17,7 +17,7 @@ class InvestorsEditView extends GetView<InvestorsEditController> {
   Widget build(BuildContext context) {
     initValues();
     return Scaffold(
-      appBar: AppBarCustom().appBar,
+      appBar: AppBarCustom().appBar(context),
       drawer: DrawerView(),
       backgroundColor: Colors.white,
       body: SafeArea(

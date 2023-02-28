@@ -12,7 +12,7 @@ class NotesView extends GetView<NotesController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarCustom().appBar,
+      appBar: AppBarCustom().appBar(context),
       drawer: DrawerView(),
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -45,34 +45,27 @@ class NotesView extends GetView<NotesController> {
                       child: const Center(child: CircularProgressIndicator()))
                   : Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                      child: GetBuilder<NotesController>(
-                          init: NotesController(),
-                          builder: (_) {
-                            return ListView.separated(
-                                physics: const NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, index) {
-                                  return (Get.find<NotesController>()
-                                          .notes
-                                          .isEmpty)
-                                      ? const EmptyDashMessage(
-                                          title: 'No Notes!')
-                                      : NotesCardView(
-                                          index: index,
-                                        );
-                                },
-                                separatorBuilder:
-                                    (BuildContext context, index) {
-                                  return const SizedBox(
-                                    height: 30,
-                                  );
-                                },
-                                itemCount: (Get.find<NotesController>()
-                                        .notes
-                                        .isEmpty)
+                      child: GetBuilder<NotesController>(builder: (_) {
+                        return ListView.separated(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, index) {
+                              return (Get.find<NotesController>().notes.isEmpty)
+                                  ? const EmptyDashMessage(title: 'No Notes!')
+                                  : NotesCardView(
+                                      index: index,
+                                    );
+                            },
+                            separatorBuilder: (BuildContext context, index) {
+                              return const SizedBox(
+                                height: 30,
+                              );
+                            },
+                            itemCount:
+                                (Get.find<NotesController>().notes.isEmpty)
                                     ? 1
                                     : Get.find<NotesController>().notes.length);
-                          }),
+                      }),
                     ),
             ),
             const SizedBox(

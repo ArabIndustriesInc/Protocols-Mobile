@@ -10,7 +10,7 @@ class TransactionsEditController extends GetxController {
   TextEditingController transNameController = TextEditingController();
   TextEditingController descController = TextEditingController();
   TextEditingController amountController = TextEditingController();
-  var laodingEdit = false.obs;
+  var loadingEdit = false.obs;
   RxString transTypeValue = 'Income'.obs;
   var transType = [
     'Income',
@@ -19,6 +19,13 @@ class TransactionsEditController extends GetxController {
   updatePriortiy(String? newValue) {
     transTypeValue.value = newValue!;
     update();
+  }
+
+  @override
+  void onClose() {
+    TransactionsProvider.isFinishedTransactions = true;
+    TransactionsProvider().onClose();
+    super.onClose();
   }
 }
 
@@ -66,12 +73,12 @@ class TransactionsEditButton extends StatelessWidget {
                     end: Alignment.bottomCenter)),
             child: TextButton(
               onPressed: () {
-                if (!Get.find<TransactionsEditController>().laodingEdit.value) {
+                if (!Get.find<TransactionsEditController>().loadingEdit.value) {
                   if (Get.find<TransactionsEditController>()
                       .formKey
                       .currentState!
                       .validate()) {
-                    Get.find<TransactionsEditController>().laodingEdit.value =
+                    Get.find<TransactionsEditController>().loadingEdit.value =
                         true;
                     final transactionName =
                         Get.find<TransactionsEditController>()
@@ -114,7 +121,7 @@ class TransactionsEditButton extends StatelessWidget {
                       selectdate: date,
                       type: type,
                     );
-                    TransactionsModelProvider().editTransaction(
+                    TransactionsProvider().editTransaction(
                       transaction,
                       context,
                       id,
@@ -131,7 +138,7 @@ class TransactionsEditButton extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10))),
               child: Obx(() {
                 return (Get.find<TransactionsEditController>()
-                        .laodingEdit
+                        .loadingEdit
                         .value)
                     ? Transform.scale(
                         scale: 0.6,

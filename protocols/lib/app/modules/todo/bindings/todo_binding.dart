@@ -1,12 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../controllers/todo_controller.dart';
+import 'package:protocols/app/modules/todo/controllers/todo_controller.dart';
 
 class TodoBinding extends Bindings {
+  final BuildContext context;
+
+  TodoBinding(this.context);
   @override
   void dependencies() {
     Get.lazyPut<TodoController>(
-      () => TodoController(),
+      () => TodoController(context),
     );
   }
 }

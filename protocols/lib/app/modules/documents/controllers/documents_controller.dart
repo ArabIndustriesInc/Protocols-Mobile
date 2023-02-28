@@ -4,6 +4,7 @@ import 'package:protocols/app/data/models/folder_model.dart';
 import 'package:protocols/app/data/providers/folder_provider.dart';
 
 class DocumentsController extends GetxController {
+  final BuildContext context;
   List<Folders> folders = [];
   var loading = true.obs;
   var loadingAdd = false.obs;
@@ -11,10 +12,10 @@ class DocumentsController extends GetxController {
   RxBool errorIsVisible = false.obs;
   RxString errorMesage = 'Oops wrong Email or Password! Try again'.obs;
 
+  DocumentsController(this.context);
+
   getAllFolders() async {
-    folders = await FolderProvider()
-        .getAllFolders()
-        .whenComplete(() => loading.value = false);
+    await FolderProvider().getAllFolders(context);
     update();
   }
 
@@ -22,6 +23,13 @@ class DocumentsController extends GetxController {
     errorMesage.value = message;
     errorIsVisible.value = true;
     update();
+  }
+
+  @override
+  void onClose() {
+    controller.clear();
+    errorIsVisible.value = false;
+    super.onClose();
   }
 
   @override

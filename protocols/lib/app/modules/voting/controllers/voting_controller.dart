@@ -7,11 +7,21 @@ import 'package:protocols/app/routes/app_pages.dart';
 
 class VotingController extends GetxController {
   List<Voting> votes = [];
+  final BuildContext context;
   var loading = true.obs;
   var loadingDelete = false.obs;
+
+  VotingController(this.context);
   getAllVotes() async {
-    votes = await VotingProvider().getAllVotes();
+    await VotingProvider().getAllVotes(context);
     update();
+  }
+
+  @override
+  void onClose() {
+    VotingProvider.isFinishedVoting = true;
+    VotingProvider().onClose();
+    super.onClose();
   }
 
   @override

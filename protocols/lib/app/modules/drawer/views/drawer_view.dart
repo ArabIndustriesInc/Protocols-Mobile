@@ -4,9 +4,10 @@ import 'package:get/get.dart';
 import 'package:protocols/app/data/consts/api_consts.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/delete_alert/views/delete_alert_view.dart';
+import 'package:protocols/app/modules/directors_add/bindings/directors_add_binding.dart';
+import 'package:protocols/app/modules/directors_add/controllers/directors_add_controller.dart';
+import 'package:protocols/app/modules/directors_add/views/directors_add_view.dart';
 import 'package:protocols/app/modules/drawer/views/contents_view.dart';
-import 'package:protocols/app/modules/pricing_plan/bindings/pricing_plan_binding.dart';
-import 'package:protocols/app/modules/pricing_plan/views/payment_web_view_view.dart';
 import 'package:protocols/app/routes/app_pages.dart';
 
 class DrawerView extends GetView {
@@ -34,10 +35,16 @@ class DrawerView extends GetView {
           ),
 
           DashbaordNavButtons(
-            title: 'About',
-            onTap: () {
-              //  Scaffold.of(context).closeDrawer();
-              // Get.offAllNamed(Routes.HOME);
+            title: 'Profile',
+            onTap: () async {
+              Scaffold.of(context).closeDrawer();
+              Get.to(() => const DirectorsAddView(title: 'Profile'),
+                  binding: DirectorsAddBinding());
+              // Future.delayed(Duration(seconds: 1));
+              // if (context.toString() == 'DirectorsAddView(dirty)') {
+              //   Get.find<DirectorsAddController>().mailIdController.text =
+              //       box.read('email');
+              // }
             },
           ),
           DashbaordNavButtons(
@@ -68,7 +75,7 @@ class DrawerView extends GetView {
                           Get.back();
                           Get.offAllNamed(Routes.WELCOME);
                           box.write('login_token', '');
-                          box.write('paid_user', 'false');
+                          box.write('paid_user', false);
                           SnackbarMessage().snackBarMessage(
                               'Logged out successfully!', context);
                         },

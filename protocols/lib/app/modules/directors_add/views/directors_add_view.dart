@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,11 +11,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DirectorsAddView extends GetView<DirectorsAddController> {
   final String title;
-  final String action;
-  const DirectorsAddView({Key? key, required this.title, required this.action})
-      : super(key: key);
+  const DirectorsAddView({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    log(context.toString());
     return Scaffold(
       appBar: AppBarCustom().appBar(context),
       drawer: DrawerView(),
@@ -112,13 +115,26 @@ class DirectorsAddView extends GetView<DirectorsAddController> {
                 child: const DirectorsAddFieldView(),
               ),
               const SizedBox(
-                height: 10,
+                height: 5,
+              ),
+              Obx(() => (Get.find<DirectorsAddController>().isWarning.value)
+                  ? Text(
+                      Get.find<DirectorsAddController>().warning.value,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: const Color(0xFFD40A0A),
+                      ),
+                    )
+                  : const SizedBox()),
+              SizedBox(
+                height: 20.h,
               ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: AddDirectorsButton(action: action),
+      bottomNavigationBar: AddDirectorsButton(action: title),
     );
   }
 }

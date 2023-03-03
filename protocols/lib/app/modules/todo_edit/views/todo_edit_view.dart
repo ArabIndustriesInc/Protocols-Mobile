@@ -13,7 +13,9 @@ class TodoEditView extends GetView<TodoEditController> {
   const TodoEditView({Key? key, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    initValue();
+    if (Get.find<TodoEditController>().initTimes.value <= 1) {
+      initValue();
+    }
     return Scaffold(
       appBar: AppBarCustom().appBar(context),
       drawer: DrawerView(),
@@ -163,6 +165,7 @@ class TodoEditView extends GetView<TodoEditController> {
   }
 
   void initValue() {
+    Get.find<TodoEditController>().initTimes.value++;
     final date = DateTime.parse(Get.find<TodoController>()
         .todoDetails[index]
         .todoid

@@ -343,6 +343,7 @@ class EmpDrsInvTextField extends GetView {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: (required == 'Mail ID') ? false : true,
       controller: contrlr,
       validator: ((value) {
         if (value!.isEmpty) {
@@ -353,6 +354,8 @@ class EmpDrsInvTextField extends GetView {
           return null;
         }
       }),
+      style: TextStyle(
+          color: (required == 'Mail ID') ? Colors.grey[500] : Colors.black),
       textCapitalization: capType,
       keyboardType: type,
       decoration: deco,

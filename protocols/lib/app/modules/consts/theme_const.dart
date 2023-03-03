@@ -36,6 +36,7 @@ final textDeco = OutlineInputBorder(
 );
 bool paid = box.read('paid_user') ?? false;
 final token = box.read('login_token');
-final initRoute = (paid || token != null) ? Routes.HOME : AppPages.INITIAL;
+final initRoute =
+    (paid == true && token != '') ? Routes.HOME : AppPages.INITIAL;
 // final initRoute = Routes.PRICING_PLAN;
 // const initRoute = Routes.HOME;

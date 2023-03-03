@@ -13,7 +13,9 @@ class TransactionsEditView extends GetView<TransactionsEditController> {
   const TransactionsEditView({Key? key, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    initValue(context);
+    if (Get.find<TransactionsEditController>().initTimes.value <= 1) {
+      initValue(context);
+    }
     return Scaffold(
       appBar: AppBarCustom().appBar(context),
       drawer: DrawerView(),
@@ -61,6 +63,7 @@ class TransactionsEditView extends GetView<TransactionsEditController> {
   }
 
   initValue(BuildContext context) {
+    Get.find<TransactionsEditController>().initTimes.value++;
     Get.find<TransactionsEditController>().transTypeValue.value =
         (Get.find<TransactionsController>().transactions[index].type == '-')
             ? 'Expense'

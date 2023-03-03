@@ -1,12 +1,13 @@
 // To parse this JSON data, do
 //
-//     final investorsModel = investorsModelFromJson(jsonString);
+//     final investorsModel = votingModelFromJson(jsonString);
 
 import 'dart:convert';
 import 'dart:io';
 
-InvestorsModel investorsModelFromJson(String str) =>
-    InvestorsModel.fromJson(json.decode(str));
+InvestorsModel investorsModelFromJson(String str) {
+  return InvestorsModel.fromJson(json.decode(str));
+}
 
 String investorsModelToJson(InvestorsModel data) => json.encode(data.toJson());
 
@@ -48,9 +49,13 @@ class Investors {
     required this.fathersname,
     required this.address,
     required this.image,
-    required this.registerid,
+    this.registerid,
     required this.role,
+    required this.companyid,
     required this.v,
+    this.password,
+    this.verified,
+    this.companyname,
   });
 
   String id;
@@ -64,9 +69,13 @@ class Investors {
   String fathersname;
   String address;
   String image;
-  String registerid;
+  Investors? registerid;
   String role;
+  String companyid;
   int v;
+  String? password;
+  bool? verified;
+  String? companyname;
 
   factory Investors.fromJson(Map<String, dynamic> json) => Investors(
         id: json["_id"],
@@ -80,9 +89,15 @@ class Investors {
         fathersname: json["fathersname"],
         address: json["address"],
         image: json["image"],
-        registerid: json["registerid"],
+        registerid: json["registerid"] == null
+            ? null
+            : Investors.fromJson(json["registerid"]),
         role: json["role"],
+        companyid: json["companyid"],
         v: json["__v"],
+        password: json["password"],
+        verified: json["verified"],
+        companyname: json["companyname"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -97,9 +112,13 @@ class Investors {
         "fathersname": fathersname,
         "address": address,
         "image": image,
-        "registerid": registerid,
+        "registerid": registerid?.toJson(),
         "role": role,
+        "companyid": companyid,
         "__v": v,
+        "password": password,
+        "verified": verified,
+        "companyname": companyname,
       };
 }
 

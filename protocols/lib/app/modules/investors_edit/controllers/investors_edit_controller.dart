@@ -31,7 +31,7 @@ class InvestorsEditController extends GetxController {
   XFile? pickedImage;
   String? img;
   String? deleteFile;
-
+  var initTimes = 0.obs;
   pickimage() async {
     pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedImage == null) {

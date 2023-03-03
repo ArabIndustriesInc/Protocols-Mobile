@@ -8,6 +8,7 @@ class EmployeesInitValues {
 
   EmployeesInitValues({required this.index});
   initValues() {
+    Get.find<EmployeesEditController>().initTimes.value++;
     final jd = DateTime.parse(
         Get.find<EmployeesController>().employees[index].joiningdate);
     Get.find<EmployeesEditDateController>().initDateWork(jd);

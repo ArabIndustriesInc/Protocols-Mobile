@@ -45,7 +45,7 @@ class VotingDetailsCardView extends GetView<VotingDetailsController> {
                 return DeleteAlertView(
                   subtitle:
                       'Are you sure about your choice? Caution! This action can\'t be reversed!',
-                  title: 'Warining',
+                  title: 'Warning',
                   action: InkWell(
                     highlightColor: Colors.grey[200],
                     onTap: onPressed,
@@ -64,7 +64,7 @@ class VotingDetailsCardView extends GetView<VotingDetailsController> {
                               "Confirm",
                               style: TextStyle(
                                 fontSize: 15.h,
-                                color: Colors.black,
+                                color: const Color(0xFFBD2015),
                                 fontWeight: FontWeight.normal,
                               ),
                             );

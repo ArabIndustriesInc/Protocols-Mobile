@@ -9,6 +9,7 @@ import 'package:protocols/app/modules/todo/controllers/todo_controller.dart';
 import 'package:protocols/app/modules/todo_edit/controllers/todo_edit_date_controller.dart';
 
 class TodoEditController extends GetxController {
+  var initTimes = 0.obs;
   GlobalKey<FormState> formKey = GlobalKey();
   TextEditingController titleController = TextEditingController();
   TextEditingController taskController = TextEditingController();

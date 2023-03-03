@@ -15,7 +15,9 @@ class InvestorsEditView extends GetView<InvestorsEditController> {
   const InvestorsEditView({Key? key, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    initValues();
+    if (Get.find<InvestorsEditController>().initTimes.value <= 1) {
+      initValues();
+    }
     return Scaffold(
       appBar: AppBarCustom().appBar(context),
       drawer: DrawerView(),
@@ -158,6 +160,7 @@ class InvestorsEditView extends GetView<InvestorsEditController> {
   }
 
   initValues() {
+    Get.find<InvestorsEditController>().initTimes.value++;
     final dob =
         DateTime.parse(Get.find<InvestorsController>().investors[index].dob);
     Get.find<InvestorsEditDateController>().initDatePersonal(dob);

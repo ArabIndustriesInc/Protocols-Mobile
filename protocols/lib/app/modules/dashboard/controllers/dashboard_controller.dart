@@ -20,7 +20,7 @@ import 'package:protocols/app/modules/voting/bindings/voting_binding.dart';
 import 'package:protocols/app/modules/voting/views/voting_view.dart';
 
 class DashboardController extends GetxController {
-  List dashboardIcon = [
+  List dashboardIconDirectors = [
     'assets/icons/documents.png',
     'assets/icons/accounts.png',
     'assets/icons/employees.png',
@@ -31,7 +31,7 @@ class DashboardController extends GetxController {
     'assets/icons/investors.png',
     'assets/icons/notes.svg',
   ];
-  List dashboardTitle = [
+  List dashboardTitleDirectors = [
     'Documents',
     'Accounts',
     'Employees',
@@ -40,6 +40,16 @@ class DashboardController extends GetxController {
     'Voting',
     'Transactions',
     'Investors',
+    'Notes',
+  ];
+  List dashboardIconInvestors = [
+    'assets/icons/to-do.png',
+    'assets/icons/voting.png',
+    'assets/icons/notes.svg',
+  ];
+  List dashboardTitleInvestors = [
+    'Todo List',
+    'Voting',
     'Notes',
   ];
 

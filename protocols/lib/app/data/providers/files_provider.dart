@@ -60,6 +60,7 @@ class FilesProvider extends GetConnect {
   Future<File> downloadFile(
       String filename, String networkFile, int index) async {
     isFinishedFolderDownloading = true;
+    log('1$isFinishedFolderDownloading');
     // final token = box.read('login_token');
     // http.Client client = http.Client();
     final dir = Get.find<FolderController>().appStorage!.path;
@@ -84,6 +85,7 @@ class FilesProvider extends GetConnect {
       },
     );
     isFinishedFolderDownloading = false;
+    log('2$isFinishedFolderDownloading');
     return file;
     // var response = await Dio().download(
     //   image,
@@ -121,7 +123,8 @@ class FilesProvider extends GetConnect {
       request.files.add(await http.MultipartFile.fromPath(
           'image', file.image.path,
           filename: file.filename));
-      var response = await request.send();
+      http.Response response =
+          await http.Response.fromStream(await request.send());
       log(response.toString());
       log(response.statusCode.toString());
       if (response.statusCode == 200) {
@@ -166,6 +169,7 @@ class FilesProvider extends GetConnect {
             .snackBarMessage('Oops! Action failed, Please try again', context);
       }
     } catch (e) {
+      log(e.toString());
       SnackbarMessage().snackBarMessage(
           'Oops! Something went Wrong. Try again later', context);
     }

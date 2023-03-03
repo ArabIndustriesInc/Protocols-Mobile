@@ -13,7 +13,9 @@ class NotesEditView extends GetView<NotesEditController> {
   const NotesEditView({Key? key, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    initValue();
+    if (Get.find<NotesEditController>().initTimes.value <= 1) {
+      initValue();
+    }
     return Scaffold(
       appBar: AppBarCustom().appBar(context),
       drawer: DrawerView(),
@@ -155,6 +157,7 @@ class NotesEditView extends GetView<NotesEditController> {
   }
 
   initValue() {
+    Get.find<NotesEditController>().initTimes.value++;
     // for (var i = 0; i < Get.find<NotesController>().notes[index].noteid
     //       .sections.length; i++) {
     //   Get.find<NotesEditController>().add();

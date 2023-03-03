@@ -2,15 +2,19 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:protocols/app/data/consts/api_consts.dart';
+import 'package:protocols/app/modules/dashboard/views/dashboard_investors_view.dart';
 import 'package:protocols/app/modules/dashboard/views/dashboard_view.dart';
 import 'package:protocols/app/modules/links/views/links_view.dart';
+
+final role = box.read('company_role');
 
 class HomeController extends GetxController {
   final pages = [
     Column(
       children: [
         Flexible(
-          child: DashboardView(),
+          child: (role == 0) ? DashboardView() : DashboardInvestorsView(),
         ),
       ],
     ),

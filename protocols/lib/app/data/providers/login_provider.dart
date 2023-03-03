@@ -7,7 +7,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:protocols/app/data/consts/api_consts.dart';
+import 'package:protocols/app/data/providers/directors_provider.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
+import 'package:protocols/app/modules/directors_add/bindings/directors_add_binding.dart';
+import 'package:protocols/app/modules/directors_add/views/directors_add_view.dart';
 import 'package:protocols/app/modules/login/controllers/login_controller.dart';
 import 'package:protocols/app/modules/login/controllers/login_field_controller.dart';
 import 'package:protocols/app/modules/pricing_plan/bindings/pricing_plan_binding.dart';
@@ -22,10 +25,23 @@ class LoginProvider {
       var data = jsonDecode(response.body.toString());
       if (response.statusCode == 200) {
         if (data["paid"] == true) {
+          box.write('email', email);
+          box.write('company_role', data["role"]);
           box.write('login_token', data['token']);
+          await DirectorsProvider().getDirectorsForProfile();
           box.write('paid_user', data['paid']);
-          Get.offAllNamed(Routes.HOME);
           SnackbarMessage().snackBarMessage('Logged in successfully!', context);
+          final isProfileSet = box.read('isProfileSet');
+          if (isProfileSet == false) {
+            Get.offAll(
+              () => const DirectorsAddView(
+                title: 'Profile',
+              ),
+              binding: DirectorsAddBinding(),
+            );
+          } else {
+            Get.offAllNamed(Routes.HOME);
+          }
         } else {
           box.write('paid_user', data['paid']);
           box.write('login_token', data['token']);

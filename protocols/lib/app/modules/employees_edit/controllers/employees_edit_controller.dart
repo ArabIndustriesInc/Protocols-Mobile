@@ -21,7 +21,6 @@ class EmployeesEditController extends GetxController {
   TextEditingController mailIdController = TextEditingController();
   TextEditingController panNoController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-
   TextEditingController accHolderNameController = TextEditingController();
   TextEditingController bankNameController = TextEditingController();
   TextEditingController payModeController = TextEditingController();
@@ -45,6 +44,8 @@ class EmployeesEditController extends GetxController {
       picked = 'done';
     }
   }
+
+  var initTimes = 0.obs;
 }
 
 class EditEmployeeButton extends GetView {

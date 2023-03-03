@@ -145,7 +145,20 @@ class EmployeesAddView extends GetView<EmployeesAddController> {
                 ),
               ),
               const SizedBox(
-                height: 10,
+                height: 5,
+              ),
+              Obx(() => (Get.find<EmployeesAddController>().isWarning.value)
+                  ? Text(
+                      Get.find<EmployeesAddController>().warning.value,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: const Color(0xFFD40A0A),
+                      ),
+                    )
+                  : const SizedBox()),
+              SizedBox(
+                height: 20.h,
               ),
             ],
           ),

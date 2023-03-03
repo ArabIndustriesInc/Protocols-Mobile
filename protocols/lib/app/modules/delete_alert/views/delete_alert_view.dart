@@ -29,7 +29,11 @@ class DeleteAlertView extends GetView<DeleteAlertController> {
           SizedBox(height: 30.h),
           Text(
             title,
-            style: TextStyle(fontSize: 22.h, fontFamily: 'Montserrat Bold'),
+            style: TextStyle(
+              fontSize: 22.h,
+              fontFamily: 'Montserrat Bold',
+              color: (title == 'Warning') ? Colors.red : Colors.black,
+            ),
           ),
           SizedBox(height: 25.h),
           Padding(

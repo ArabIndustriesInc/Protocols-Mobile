@@ -15,7 +15,9 @@ class EmployeesEditView extends GetView<EmployeesEditController> {
   const EmployeesEditView({Key? key, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    EmployeesInitValues(index: index).initValues();
+    if (Get.find<EmployeesEditController>().initTimes.value <= 1) {
+      EmployeesInitValues(index: index).initValues();
+    }
     return Scaffold(
       appBar: AppBarCustom().appBar(context),
       drawer: DrawerView(),

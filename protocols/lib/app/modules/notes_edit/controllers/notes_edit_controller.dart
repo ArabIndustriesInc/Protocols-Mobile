@@ -18,6 +18,7 @@ class NotesEditController extends GetxController {
     update();
   }
 
+  var initTimes = 0.obs;
   updateCount() {
     count++;
     update();

@@ -27,6 +27,7 @@ class TransactionsEditDateController extends GetxController {
     DateTime dateTime =
         DateTime.parse('${todayDay.toString().substring(0, 10)} $timeDate');
     final time = DateFormat.jm().format(dateTime);
+    pickedTime = TimeOfDay.fromDateTime(dateTime);
     selectedTime.value = time;
     update();
   }
@@ -56,7 +57,7 @@ class TransactionsEditDateController extends GetxController {
     todayMonth.value = DateFormat.MMM().format(date);
     todayYear = DateFormat.y().format(date);
     yrShort.value = todayYear.substring(2, 4);
-
+    pickedDate = DateTime.parse(dateTime);
     update();
   }
 

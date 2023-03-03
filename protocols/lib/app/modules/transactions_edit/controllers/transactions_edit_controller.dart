@@ -6,6 +6,7 @@ import 'package:protocols/app/data/providers/transaction_provider.dart';
 import 'package:protocols/app/modules/transactions_edit/controllers/transactions_edit_date_controller.dart';
 
 class TransactionsEditController extends GetxController {
+  var initTimes = 0.obs;
   GlobalKey<FormState> formKey = GlobalKey();
   TextEditingController transNameController = TextEditingController();
   TextEditingController descController = TextEditingController();

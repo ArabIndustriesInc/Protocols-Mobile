@@ -1,14 +1,14 @@
-// ignore_for_file: use_key_in_widget_constructors
-
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/modules/dashboard/controllers/dashboard_controller.dart';
 import 'package:protocols/app/modules/dashboard/views/dashboard_card_view.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class DashboardView extends GetView<DashboardController> {
+class DashboardInvestorsView extends GetView {
+  DashboardInvestorsView({Key? key}) : super(key: key);
   final DashboardController _dashboardController =
       Get.put(DashboardController());
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -30,11 +30,11 @@ class DashboardView extends GetView<DashboardController> {
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, index) {
             return DashboardCardView(
-              icon: _dashboardController.dashboardIconDirectors[index],
-              title: _dashboardController.dashboardTitleDirectors[index],
+              icon: _dashboardController.dashboardIconInvestors[index],
+              title: _dashboardController.dashboardTitleInvestors[index],
             );
           },
-          itemCount: _dashboardController.dashboardTitleDirectors.length,
+          itemCount: _dashboardController.dashboardTitleInvestors.length,
         ),
       ],
     );

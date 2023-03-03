@@ -142,6 +142,14 @@ class NotesProvider extends GetConnect {
   isClosedList(List<Notes> notes) {
     if (isFinishedNotes == false) {
       Get.find<NotesController>().notes = notes;
+    }
+    if (isFinishedNotes == false) {
+      Get.find<NotesController>().notesDetails.clear();
+    }
+    if (isFinishedNotes == false) {
+      Get.find<NotesController>().notesDetails.addAll(notes);
+    }
+    if (isFinishedNotes == false) {
       Get.find<NotesController>().update();
     }
   }

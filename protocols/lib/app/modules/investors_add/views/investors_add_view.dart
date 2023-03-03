@@ -120,7 +120,10 @@ class InvestorsAddView extends GetView<InvestorsAddController> {
                         color: const Color(0xFFD40A0A),
                       ),
                     )
-                  : const SizedBox())
+                  : const SizedBox()),
+              SizedBox(
+                height: 20.h,
+              ),
             ],
           ),
         ),

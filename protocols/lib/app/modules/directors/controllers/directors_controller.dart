@@ -48,8 +48,7 @@ class DirectorsButtonView extends GetView {
         onPressed: () {
           Get.to(
               () => const DirectorsAddView(
-                    title: 'Add Directors',
-                    action: 'add',
+                    title: 'Add Director',
                   ),
               binding: DirectorsAddBinding());
         },

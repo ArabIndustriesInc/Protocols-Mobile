@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/data/providers/files_provider.dart';
@@ -5,8 +7,8 @@ import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/docs_folder/controllers/folder_controller.dart';
 import 'package:protocols/app/modules/docs_folder/functions/folder_functions.dart';
 import 'package:protocols/app/modules/docs_folder/views/fold_structure_view.dart';
-import 'package:protocols/app/modules/drawer/views/drawer_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:protocols/app/modules/drawer/views/drawer_view.dart';
 
 class FolderView extends GetView<FolderController> {
   final String folderName;
@@ -16,8 +18,12 @@ class FolderView extends GetView<FolderController> {
     return WillPopScope(
       onWillPop: () async {
         if (FilesProvider.isFinishedFolderDownloading == true) {
+          log('loading... return false');
           return false;
         } else {
+          log('loading complete return true 1');
+          Get.back();
+          log('loading complete return true 2');
           return true;
         }
       },

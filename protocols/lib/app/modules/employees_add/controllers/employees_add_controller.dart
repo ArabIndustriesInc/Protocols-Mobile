@@ -34,6 +34,14 @@ class EmployeesAddController extends GetxController {
   XFile? pickedImage;
   String? img;
   var loadingAdd = false.obs;
+  RxString warning = 'Oops!Someting went wrong!'.obs;
+  var isWarning = false.obs;
+
+  warningMessage(String msg) {
+    warning.value = msg;
+    isWarning.value = true;
+    update();
+  }
 
   pickimage() async {
     pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);

@@ -88,7 +88,7 @@ class InvestorsCardView extends GetView {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 15.w),
+              padding: EdgeInsets.only(left: 15.w, right: 15.w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,

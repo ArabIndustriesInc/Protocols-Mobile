@@ -61,7 +61,7 @@ class PaymentSuccessView extends GetView {
                   Get.offAllNamed(Routes.LOGIN);
                   // Get.to(
                   //     () => const DirectorsAddView(
-                  //           title: 'Add Directors',
+                  //           title: 'Add Director',
                   //           action: 'add',
                   //         ),
                   //     binding: DirectorsAddBinding());

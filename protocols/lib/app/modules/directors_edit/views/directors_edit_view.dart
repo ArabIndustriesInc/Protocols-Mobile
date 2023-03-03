@@ -16,7 +16,9 @@ class DirectorsEditView extends GetView<DirectorsEditController> {
   const DirectorsEditView({Key? key, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    initValues();
+    if (Get.find<DirectorsEditController>().initTimes <= 1) {
+      initValues();
+    }
     return Scaffold(
       appBar: AppBarCustom().appBar(context),
       drawer: DrawerView(),
@@ -144,6 +146,7 @@ class DirectorsEditView extends GetView<DirectorsEditController> {
   }
 
   initValues() {
+    Get.find<DirectorsEditController>().initTimes.value++;
     final dob =
         DateTime.parse(Get.find<DirectorsController>().directors[index].dob);
     Get.find<DirectorsEditDateController>().initDatePersonal(dob);

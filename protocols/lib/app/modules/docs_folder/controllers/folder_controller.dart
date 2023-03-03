@@ -52,6 +52,15 @@ class FolderController extends GetxController {
     return appStorage!.path;
   }
 
+  Future<bool> onWillPop() async {
+    if (FilesProvider.isFinishedFolderDownloading == true) {
+      return false;
+    } else {
+      Get.back();
+      return true;
+    }
+  }
+
   openFile(
       String fileName, String image, BuildContext context, int index) async {
     final file = await FilesProvider().downloadFile(fileName, image, index);

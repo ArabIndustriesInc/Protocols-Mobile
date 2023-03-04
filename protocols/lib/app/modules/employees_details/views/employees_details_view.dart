@@ -215,6 +215,8 @@ class EmployeesDetailsView extends GetView<EmployeesDetailsController> {
                 'Nil' ||
             Get.find<EmployeesController>().employees[index].middlename ==
                 ' ' ||
+            Get.find<EmployeesController>().employees[index].middlename ==
+                'undefined' ||
             Get.find<EmployeesController>().employees[index].middlename == '' ||
             Get.find<EmployeesController>().employees[index].middlename == '.')
         ? ' '

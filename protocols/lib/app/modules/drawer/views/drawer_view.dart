@@ -4,10 +4,9 @@ import 'package:get/get.dart';
 import 'package:protocols/app/data/consts/api_consts.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/delete_alert/views/delete_alert_view.dart';
-import 'package:protocols/app/modules/directors_add/bindings/directors_add_binding.dart';
-import 'package:protocols/app/modules/directors_add/controllers/directors_add_controller.dart';
-import 'package:protocols/app/modules/directors_add/views/directors_add_view.dart';
 import 'package:protocols/app/modules/drawer/views/contents_view.dart';
+import 'package:protocols/app/modules/settings/bindings/settings_binding.dart';
+import 'package:protocols/app/modules/settings/views/settings_view.dart';
 import 'package:protocols/app/routes/app_pages.dart';
 
 class DrawerView extends GetView {
@@ -38,8 +37,8 @@ class DrawerView extends GetView {
             title: 'Profile',
             onTap: () async {
               Scaffold.of(context).closeDrawer();
-              Get.to(() => const DirectorsAddView(title: 'Profile'),
-                  binding: DirectorsAddBinding());
+              Get.to(() => const SettingsView(),
+                  binding: SettingsBinding(homeContext!));
               // Future.delayed(Duration(seconds: 1));
               // if (context.toString() == 'DirectorsAddView(dirty)') {
               //   Get.find<DirectorsAddController>().mailIdController.text =

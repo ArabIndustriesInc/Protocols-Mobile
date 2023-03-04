@@ -16,7 +16,7 @@ class TodoAddDateController extends GetxController {
     pickedDateToDo = (await showDatePicker(
             context: context,
             initialDate:
-                (pickedDateToDo != DateTime.now()) ? pickedDateToDo : todayDay,
+                (pickedDateToDo != todayDay) ? pickedDateToDo : todayDay,
             firstDate: todayDay,
             lastDate: DateTime(2080),
             builder: (context, child) {

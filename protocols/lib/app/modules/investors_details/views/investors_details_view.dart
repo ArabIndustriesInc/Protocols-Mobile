@@ -99,10 +99,18 @@ class InvestorsDetailsView extends GetView<InvestorsDetailsController> {
   }
 
   Text titleText() {
-    final middlename =
-        (Get.find<InvestorsController>().investors[index].middlename != '')
-            ? ' ${Get.find<InvestorsController>().investors[index].middlename} '
-            : ' ';
+    final middlename = (Get.find<InvestorsController>()
+                    .investors[index]
+                    .middlename ==
+                'Nil' ||
+            Get.find<InvestorsController>().investors[index].middlename ==
+                ' ' ||
+            Get.find<InvestorsController>().investors[index].middlename ==
+                'undefined' ||
+            Get.find<InvestorsController>().investors[index].middlename == '' ||
+            Get.find<InvestorsController>().investors[index].middlename == '.')
+        ? ' '
+        : ' ${Get.find<InvestorsController>().investors[index].middlename} ';
     final firstname =
         Get.find<InvestorsController>().investors[index].firstname;
     final lastname = Get.find<InvestorsController>().investors[index].lastname;

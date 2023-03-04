@@ -89,10 +89,18 @@ class DirectorsDetailsView extends GetView<DirectorsController> {
   }
 
   Text titleText() {
-    final middlename =
-        (Get.find<DirectorsController>().directors[index].middlename != '')
-            ? ' ${Get.find<DirectorsController>().directors[index].middlename} '
-            : ' ';
+    final middlename = (Get.find<DirectorsController>()
+                    .directors[index]
+                    .middlename ==
+                'Nil' ||
+            Get.find<DirectorsController>().directors[index].middlename ==
+                ' ' ||
+            Get.find<DirectorsController>().directors[index].middlename ==
+                'undefined' ||
+            Get.find<DirectorsController>().directors[index].middlename == '' ||
+            Get.find<DirectorsController>().directors[index].middlename == '.')
+        ? ' '
+        : ' ${Get.find<DirectorsController>().directors[index].middlename} ';
     final firstname =
         Get.find<DirectorsController>().directors[index].firstname;
     final lastname = Get.find<DirectorsController>().directors[index].lastname;

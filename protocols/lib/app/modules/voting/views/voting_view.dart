@@ -74,12 +74,14 @@ class VotingView extends GetView<VotingController> {
         ),
       )),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: Padding(
-        padding: EdgeInsets.only(
-          right: 10.w,
-        ),
-        child: const VotingButtonView(),
-      ),
+      floatingActionButton: (Get.find<VotingController>().role.value == '0')
+          ? Padding(
+              padding: EdgeInsets.only(
+                right: 10.w,
+              ),
+              child: const VotingButtonView(),
+            )
+          : const SizedBox(),
     );
   }
 }

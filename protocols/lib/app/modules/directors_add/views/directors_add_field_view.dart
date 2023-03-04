@@ -59,14 +59,30 @@ class DirectorsAddFieldView extends GetView<DirectorsAddController>
             decoration: TextDecoEmp().lastNameDeco,
             cursorColor: Colors.grey[600],
           ),
-          EmpDrsInvTextField(
-            capType: TextCapitalization.none,
-            validate: isEmailValid,
-            contrlr: Get.find<DirectorsAddController>().mailIdController,
-            required: 'Mail ID',
-            type: TextInputType.emailAddress,
-            deco: TextDecoEmp().mailIdDeco,
+          TextFormField(
+            textCapitalization: TextCapitalization.none,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Email is required';
+              } else if (!isEmailValid(value)) {
+                return 'Invalid Email! Enter a valid one';
+              } else {
+                return null;
+              }
+            },
+            controller: Get.find<DirectorsAddController>().mailIdController,
+            keyboardType: TextInputType.emailAddress,
+            decoration: TextDecoEmp().mailIdDeco,
+            cursorColor: Colors.grey[600],
           ),
+          // EmpDrsInvTextField(
+          //   capType: TextCapitalization.none,
+          //   validate: isEmailValid,
+          //   contrlr: Get.find<DirectorsAddController>().mailIdController,
+          //   required: 'Mail ID',
+          //   type: TextInputType.emailAddress,
+          //   deco: TextDecoEmp().mailIdDeco,
+          // ),
           EmpDrsInvTextField(
             capType: TextCapitalization.none,
             validate: isPhNoValid,

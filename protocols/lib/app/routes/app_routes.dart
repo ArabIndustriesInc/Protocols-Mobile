@@ -30,7 +30,6 @@ abstract class Routes {
   static const INVESTORS_EDIT = _Paths.INVESTORS_EDIT;
   static const TRANSACTIONS_ADD = _Paths.TRANSACTIONS_ADD;
   static const TRANSACTIONS_EDIT = _Paths.TRANSACTIONS_EDIT;
-  static const SETTINGS = _Paths.SETTINGS;
   static const VOTING_ADD = _Paths.VOTING_ADD;
   static const OTP_VERIFY = _Paths.OTP_VERIFY;
   static const UPGRADE_PLAN = _Paths.UPGRADE_PLAN;
@@ -63,7 +62,6 @@ abstract class _Paths {
   static const INVESTORS_EDIT = '/investors-edit';
   static const TRANSACTIONS_ADD = '/transactions-add';
   static const TRANSACTIONS_EDIT = '/transactions-edit';
-  static const SETTINGS = '/settings';
   static const VOTING_ADD = '/voting-add';
   static const OTP_VERIFY = '/otp-verify';
   static const UPGRADE_PLAN = '/upgrade-plan';

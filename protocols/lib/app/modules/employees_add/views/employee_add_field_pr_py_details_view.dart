@@ -28,14 +28,30 @@ class EmployeeAddFieldPersonalDetailsView extends GetView
             validate: isPhNoValid,
             deco: TextDecoEmp().mobNoDeco,
           ),
-          EmpDrsInvTextField(
-            capType: TextCapitalization.none,
-            contrlr: Get.find<EmployeesAddController>().mailIdController,
-            type: TextInputType.emailAddress,
-            validate: isEmailValid,
-            required: 'Mail Id',
-            deco: TextDecoEmp().mailIdDeco,
+          TextFormField(
+            textCapitalization: TextCapitalization.none,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Email is required';
+              } else if (!isEmailValid(value)) {
+                return 'Invalid Email! Enter a valid one';
+              } else {
+                return null;
+              }
+            },
+            controller: Get.find<EmployeesAddController>().mailIdController,
+            keyboardType: TextInputType.emailAddress,
+            decoration: TextDecoEmp().mailIdDeco,
+            cursorColor: Colors.grey[600],
           ),
+          // EmpDrsInvTextField(
+          //   capType: TextCapitalization.none,
+          //   contrlr: Get.find<EmployeesAddController>().mailIdController,
+          //   type: TextInputType.emailAddress,
+          //   validate: isEmailValid,
+          //   required: 'Mail ID',
+          //   deco: TextDecoEmp().mailIdDeco,
+          // ),
           EmpDrsInvTextField(
             capType: TextCapitalization.characters,
             contrlr: Get.find<EmployeesAddController>().panNoController,
@@ -68,7 +84,7 @@ class EmployeeAddFieldPersonalDetailsView extends GetView
             validate: isAddressValid,
             contrlr: Get.find<EmployeesAddController>().addressController,
             required: 'Address',
-            type: TextInputType.streetAddress,
+            type: TextInputType.text,
             deco: TextDecoEmp().addressDeco,
           ),
         ],

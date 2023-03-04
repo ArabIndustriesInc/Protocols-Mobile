@@ -35,7 +35,7 @@ class EmployeesEditFieldPersonalDetailsView
             contrlr: Get.find<EmployeesEditController>().mailIdController,
             type: TextInputType.emailAddress,
             validate: isEmailValid,
-            required: 'Mail Id',
+            required: 'Mail ID',
             deco: TextDecoEmp().mailIdDeco,
           ),
           EmpDrsInvTextField(

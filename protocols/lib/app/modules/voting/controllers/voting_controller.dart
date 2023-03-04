@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:protocols/app/data/consts/api_consts.dart';
 import 'package:protocols/app/data/models/voting_model.dart';
 import 'package:protocols/app/data/providers/voting_provider.dart';
 import 'package:protocols/app/routes/app_pages.dart';
@@ -10,7 +11,7 @@ class VotingController extends GetxController {
   final BuildContext context;
   var loading = true.obs;
   var loadingDelete = false.obs;
-
+  var role = '3'.obs;
   VotingController(this.context);
   getAllVotes() async {
     await VotingProvider().getAllVotes(context);
@@ -26,6 +27,7 @@ class VotingController extends GetxController {
 
   @override
   void onInit() async {
+    role.value = box.read('company_role');
     getAllVotes();
     update();
     super.onInit();

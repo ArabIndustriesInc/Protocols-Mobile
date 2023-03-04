@@ -34,7 +34,9 @@ class DirectorsProvider extends GetConnect {
           headers: {'Authorization': 'Bearer $token'});
       if (response.statusCode == 200) {
         DirectorsModel directors = directorsModelFromJson(response.bodyString!);
-        final isProfileSet = (directors.data == []) ? false : true;
+        final isProfileSet = (directors.data.toString() == '[]') ? false : true;
+        log(directors.data.toString());
+        log(isProfileSet.toString());
         box.write('isProfileSet', isProfileSet);
       }
     } catch (e) {
@@ -48,9 +50,6 @@ class DirectorsProvider extends GetConnect {
       final token = box.read('login_token');
       final response = await get('${baseUrlApi}director/show',
           headers: {'Authorization': 'Bearer $token'});
-      var dataReturn = jsonDecode(response.body.toString());
-      final isProfileSet = (dataReturn['data'] == []) ? false : true;
-      box.write('isProfileSet', isProfileSet);
       if (response.statusCode == 200) {
         isClosedFunctionLoading('loading');
         DirectorsModel directors = directorsModelFromJson(response.bodyString!);

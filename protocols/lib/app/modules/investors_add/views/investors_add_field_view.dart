@@ -42,30 +42,38 @@ class InvestorsAddFieldView extends GetView<InvestorsAddController>
             decoration: TextDecoEmp().midNameDeco,
             cursorColor: Colors.grey[600],
           ),
+          EmpDrsInvTextField(
+            capType: TextCapitalization.words,
+            validate: isNameValid,
+            contrlr: Get.find<InvestorsAddController>().lastNameController,
+            required: 'Last Name',
+            type: TextInputType.name,
+            deco: TextDecoEmp().lastNameDeco,
+          ),
           TextFormField(
-            textCapitalization: TextCapitalization.words,
+            textCapitalization: TextCapitalization.none,
             validator: (value) {
               if (value!.isEmpty) {
-                return null;
-              } else if (!isNameValid(value)) {
-                return 'Invalid data! Enter a valid one';
+                return 'Email is required';
+              } else if (!isEmailValid(value)) {
+                return 'Invalid Email! Enter a valid one';
               } else {
                 return null;
               }
             },
-            controller: Get.find<InvestorsAddController>().lastNameController,
-            keyboardType: TextInputType.name,
-            decoration: TextDecoEmp().lastNameDeco,
+            controller: Get.find<InvestorsAddController>().mailIdController,
+            keyboardType: TextInputType.emailAddress,
+            decoration: TextDecoEmp().mailIdDeco,
             cursorColor: Colors.grey[600],
           ),
-          EmpDrsInvTextField(
-            capType: TextCapitalization.none,
-            validate: isEmailValid,
-            contrlr: Get.find<InvestorsAddController>().mailIdController,
-            required: 'Mail ID',
-            type: TextInputType.emailAddress,
-            deco: TextDecoEmp().mailIdDeco,
-          ),
+          // EmpDrsInvTextField(
+          //   capType: TextCapitalization.none,
+          //   validate: isEmailValid,
+          //   contrlr: Get.find<InvestorsAddController>().mailIdController,
+          //   required: 'Mail ID',
+          //   type: TextInputType.emailAddress,
+          //   deco: TextDecoEmp().mailIdDeco,
+          // ),
           EmpDrsInvTextField(
             capType: TextCapitalization.none,
             validate: isPhNoValid,

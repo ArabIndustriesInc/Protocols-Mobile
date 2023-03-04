@@ -18,6 +18,7 @@ import 'package:protocols/app/modules/pricing_plan/views/pricing_plan_view.dart'
 import 'package:protocols/app/routes/app_pages.dart';
 
 class LoginProvider {
+  static int? role;
   void login(String email, password, BuildContext context) async {
     try {
       final response = await http.post(Uri.parse('${baseUrlApi}login/check'),
@@ -28,18 +29,21 @@ class LoginProvider {
           box.write('email', email);
           box.write('company_role', data["role"]);
           box.write('login_token', data['token']);
+          role = int.parse(data["role"]);
           await DirectorsProvider().getDirectorsForProfile();
           box.write('paid_user', data['paid']);
-          SnackbarMessage().snackBarMessage('Logged in successfully!', context);
           final isProfileSet = box.read('isProfileSet');
-          if (isProfileSet == false) {
+          log(isProfileSet.toString());
+          if (isProfileSet == false && role == 0) {
             Get.offAll(
               () => const DirectorsAddView(
                 title: 'Profile',
               ),
               binding: DirectorsAddBinding(),
             );
-          } else {
+          } else if (isProfileSet == true || role == 1) {
+            SnackbarMessage()
+                .snackBarMessage('Logged in successfully!', context);
             Get.offAllNamed(Routes.HOME);
           }
         } else {

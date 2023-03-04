@@ -18,8 +18,6 @@ import '../modules/notes_add/bindings/notes_add_binding.dart';
 import '../modules/notes_add/views/notes_add_view.dart';
 import '../modules/otp-verify/bindings/otp_verify_binding.dart';
 import '../modules/otp-verify/views/otp_verify_view.dart';
-import '../modules/settings/bindings/settings_binding.dart';
-import '../modules/settings/views/settings_view.dart';
 import '../modules/signup/bindings/signup_binding.dart';
 import '../modules/signup/views/signup_view.dart';
 import '../modules/todo_add/bindings/todo_add_binding.dart';
@@ -102,11 +100,6 @@ class AppPages {
       name: _Paths.TRANSACTIONS_ADD,
       page: () => const TransactionsAddView(),
       binding: TransactionsAddBinding(),
-    ),
-    GetPage(
-      name: _Paths.SETTINGS,
-      page: () => const SettingsView(),
-      binding: SettingsBinding(),
     ),
     GetPage(
       name: _Paths.VOTING_ADD,

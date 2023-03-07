@@ -7,7 +7,7 @@ class SignUpController extends GetxController {
   RxDouble visibleH = 15.w.obs;
   RxDouble visibleW = 60.h.obs;
   RxBool errorIsVisible = false.obs;
-
+  RxString errorMesage = 'Oops something wrong! Try again'.obs;
   loadingOn() {
     isVisible.value = true;
     visibleH.value = 10.h;
@@ -16,8 +16,9 @@ class SignUpController extends GetxController {
     update();
   }
 
-  loadingOff() {
+  loadingOff(String message) {
     errorIsVisible.value = true;
+    errorMesage.value = message;
     isVisible.value = false;
     visibleH.value = 15.h;
     visibleW.value = 60.w;

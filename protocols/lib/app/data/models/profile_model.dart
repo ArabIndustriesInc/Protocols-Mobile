@@ -3,6 +3,7 @@
 //     final profileModel = profileModelFromJson(jsonString);
 
 import 'dart:convert';
+import 'dart:io';
 
 ProfileModel profileModelFromJson(String str) =>
     ProfileModel.fromJson(json.decode(str));
@@ -111,7 +112,6 @@ class Profile {
 
 class AddProfile {
   AddProfile({
-    required this.id,
     required this.firstname,
     required this.lastname,
     required this.email,
@@ -124,15 +124,14 @@ class AddProfile {
     required this.pannumber,
   });
 
-  String id;
   String firstname;
   String lastname;
   String email;
   String address;
   String dob;
   String fathersname;
-  String image;
-  String middlename;
+  File image;
+  String? middlename;
   String mobile;
   String pannumber;
 }

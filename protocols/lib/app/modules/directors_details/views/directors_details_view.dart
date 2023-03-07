@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
+import 'package:protocols/app/modules/consts/empinvdir_consts.dart';
 import 'package:protocols/app/modules/directors/controllers/directors_controller.dart';
 import 'package:protocols/app/modules/directors_details/controllers/directors_details_controller.dart';
 import 'package:protocols/app/modules/drawer/views/drawer_view.dart';
@@ -32,17 +35,7 @@ class DirectorsDetailsView extends GetView<DirectorsController> {
                   child: titleText(),
                 ),
                 SizedBox(height: 25.h),
-                CircleAvatar(
-                  backgroundColor: Colors.grey,
-                  radius: MediaQuery.of(context).size.width / 7,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: MediaQuery.of(context).size.width / 7.15,
-                    backgroundImage: NetworkImage(
-                      Get.find<DirectorsController>().directors[index].image,
-                    ),
-                  ),
-                ),
+                imageLoader(),
                 EmpDrsInvDetailsCardView(
                   title: 'Personal Details',
                   contents: [
@@ -88,6 +81,21 @@ class DirectorsDetailsView extends GetView<DirectorsController> {
         ));
   }
 
+  Widget imageLoader() {
+    try {
+      return EmpInvDirImageShowCircle(
+        img: Get.find<DirectorsController>().directors[index].image,
+      );
+    } catch (e) {
+      log(e.toString());
+      return Text(
+        '${Get.find<DirectorsController>().directors[index].firstname}.png',
+        textAlign: TextAlign.center,
+        style: const TextStyle(color: Colors.black),
+      );
+    }
+  }
+
   Text titleText() {
     final middlename = (Get.find<DirectorsController>()
                     .directors[index]
@@ -127,66 +135,3 @@ class DirectorsDetailsView extends GetView<DirectorsController> {
     );
   }
 }
-
-
-
-// Column(
-                      //   mainAxisAlignment: MainAxisAlignment.start,
-                      //   children: const [
-                      //     DirectorsDetailsCardView(),
-                      //   ],
-                      // ),
-                      // Column(
-                      //   mainAxisAlignment: MainAxisAlignment.S,
-                      //   children: [
-                      //     EmpDrsInvDetailsCardView(
-                      //       title: 'Personal Details',
-                      //       contents: Get.find<DirectorsDetailsController>()
-                      //           .personalDetails,
-                      //     ),
-                      //   ],
-                      // ),
-                      // Column(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: [
-                      //     EmpDrsInvDetailsCardView(
-                      //       title: 'Share Details',
-                      //       contents: Get.find<DirectorsDetailsController>()
-                      //           .shareDetails,
-                      //     ),
-                      //   ],
-                      // ),
-
-                      // Column(
-              //   mainAxisSize: MainAxisSize.min,
-              //   children: [
-              //     SingleChildScrollView(
-              //       physics: const BouncingScrollPhysics(),
-              //       scrollDirection: Axis.horizontal,
-              //       child: Row(
-              //         crossAxisAlignment: CrossAxisAlignment.start,
-              //         children: [
-              //           Column(
-              //             mainAxisAlignment: MainAxisAlignment.start,
-              //             children: const [
-              //               SizedBox(
-              //                 height: 30,
-              //               ),
-              //               DirectorsDetailsCardView(),
-              //             ],
-              //           ),
-              //           EmpDrsInvDetailsCardView(
-              //             title: 'Personal Details',
-              //             contents: Get.find<DirectorsDetailsController>()
-              //                 .personalDetails,
-              //           ),
-              //           EmpDrsInvDetailsCardView(
-              //             title: 'Share Details',
-              //             contents: Get.find<DirectorsDetailsController>()
-              //                 .shareDetails,
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ],
-              // )

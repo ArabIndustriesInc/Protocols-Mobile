@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/data/providers/directors_provider.dart';
@@ -167,19 +169,29 @@ class DirectorsCardView extends GetView {
   }
 
   Widget imageApi(String img) {
-    // final token = box.read('login_token');
-    return EmpInvDirImageShow(
-        img: img,
-        image: ClipRRect(
-          borderRadius: BorderRadius.circular(12.h),
-          child: Image(
-              height: 80.h,
-              width: 70.w,
-              fit: BoxFit.cover,
-              image: NetworkImage(
-                img,
-                // headers: {"Authorization": "Bearer $token"},
-              )),
-        ));
+    try {
+      return EmpInvDirImageShow(
+          img: img,
+          image: ClipRRect(
+            borderRadius: BorderRadius.circular(12.h),
+            child: Image(
+                height: 80.h,
+                width: 70.w,
+                fit: BoxFit.cover,
+                filterQuality: FilterQuality.low,
+                image: NetworkImage(
+                  img,
+
+                  // headers: {"Authorization": "Bearer $token"},
+                )),
+          ));
+    } catch (e) {
+      log(e.toString());
+      return Text(
+        '${Get.find<DirectorsController>().directors[index].firstname}.png',
+        textAlign: TextAlign.center,
+        style: const TextStyle(color: Colors.black),
+      );
+    }
   }
 }

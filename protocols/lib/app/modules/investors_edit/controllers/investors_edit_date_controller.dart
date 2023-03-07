@@ -21,6 +21,7 @@ class InvestorsEditDateController extends GetxController {
       DateFormat.y().format(DateTime.now()).substring(2, 4).obs;
 
   initDatePersonal(DateTime date) {
+    pickedDatePersonal = date;
     todayDatePersonal.value = DateFormat.d().format(date);
     todayMonthPersonal.value = DateFormat.MMM().format(date);
     todayYearPersonal = DateFormat.y().format(date);

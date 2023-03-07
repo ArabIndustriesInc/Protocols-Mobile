@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
+import 'package:protocols/app/modules/consts/empinvdir_consts.dart';
 import 'package:protocols/app/modules/drawer/views/drawer_view.dart';
 import 'package:protocols/app/modules/employees_details/views/employee_details_card_view.dart';
 import 'package:protocols/app/modules/investors/controllers/investors_controller.dart';
@@ -32,17 +35,7 @@ class InvestorsDetailsView extends GetView<InvestorsDetailsController> {
                   child: titleText(),
                 ),
                 SizedBox(height: 25.h),
-                CircleAvatar(
-                  backgroundColor: Colors.grey,
-                  radius: MediaQuery.of(context).size.width / 7,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: MediaQuery.of(context).size.width / 7.15,
-                    backgroundImage: NetworkImage(
-                      Get.find<InvestorsController>().investors[index].image,
-                    ),
-                  ),
-                ),
+                imageLoader(),
                 // CircleAvatar(
                 //   backgroundColor: Colors.grey,
                 //   radius: MediaQuery.of(context).size.width / 8,
@@ -120,6 +113,21 @@ class InvestorsDetailsView extends GetView<InvestorsDetailsController> {
       style: TextStyle(
           fontSize: 25.sp, letterSpacing: .9, fontFamily: 'Montserrat Black'),
     );
+  }
+
+  Widget imageLoader() {
+    try {
+      return EmpInvDirImageShowCircle(
+        img: Get.find<InvestorsController>().investors[index].image,
+      );
+    } catch (e) {
+      log(e.toString());
+      return Text(
+        '${Get.find<InvestorsController>().investors[index].firstname}.png',
+        textAlign: TextAlign.center,
+        style: const TextStyle(color: Colors.black),
+      );
+    }
   }
 
   EmpDrsInvTableContent dobDate() {

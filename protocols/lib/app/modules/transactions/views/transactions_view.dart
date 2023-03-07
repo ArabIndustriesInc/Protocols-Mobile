@@ -38,7 +38,7 @@ class TransactionsView extends GetView<TransactionsController> {
                 height: MediaQuery.of(context).size.height / 20,
               ),
               Padding(
-                  padding: const EdgeInsets.only(left: 35.0, right: 30),
+                  padding: const EdgeInsets.only(left: 35.0, right: 20),
                   child: Obx(
                     () => (Get.find<TransactionsController>().loading.value)
                         ? SizedBox(

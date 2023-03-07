@@ -19,6 +19,7 @@ class TodoEditDateController extends GetxController {
   var todayYearToDo = DateFormat.y().format(DateTime.now());
   var yrShortToDo = DateFormat.y().format(DateTime.now()).substring(2, 4).obs;
   initDateToDo(DateTime date) {
+    pickedDateToDo = date;
     todayDateToDo.value = DateFormat.d().format(date);
     todayMonthToDo.value = DateFormat.MMM().format(date);
     todayYearToDo = DateFormat.y().format(date);

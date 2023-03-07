@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
+import 'package:protocols/app/modules/consts/empinvdir_consts.dart';
 import 'package:protocols/app/modules/drawer/views/drawer_view.dart';
 import 'package:protocols/app/modules/employees/controllers/employees_controller.dart';
 import 'package:protocols/app/modules/employees_details/controllers/employees_details_controller.dart';
@@ -32,18 +35,8 @@ class EmployeesDetailsView extends GetView<EmployeesDetailsController> {
                 Center(
                   child: titleText(),
                 ),
-                SizedBox(height: 15.h),
-                CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  radius: MediaQuery.of(context).size.width / 7,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: MediaQuery.of(context).size.width / 7.15,
-                    backgroundImage: NetworkImage(
-                      Get.find<EmployeesController>().employees[index].image,
-                    ),
-                  ),
-                ),
+                SizedBox(height: 10.h),
+                imageLoader(),
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -70,7 +63,7 @@ class EmployeesDetailsView extends GetView<EmployeesDetailsController> {
                                     .employeeid,
                                 title: 'Employee ID',
                               ),
-                              // joinDate(),
+                              joinDate(),
                               EmpDrsInvTableContent(
                                 content: Get.find<EmployeesController>()
                                     .employees[index]
@@ -100,7 +93,7 @@ class EmployeesDetailsView extends GetView<EmployeesDetailsController> {
                           EmpDrsInvDetailsCardView(
                             title: 'Personal Details',
                             contents: [
-                              // dobDate(),
+                              dobDate(),
                               EmpDrsInvTableContent(
                                 content: Get.find<EmployeesController>()
                                     .employees[index]
@@ -206,6 +199,21 @@ class EmployeesDetailsView extends GetView<EmployeesDetailsController> {
         bottomNavigationBar: EmployeesDetailsButtonView(
           index: index,
         ));
+  }
+
+  Widget imageLoader() {
+    try {
+      return EmpInvDirImageShowCircle(
+        img: Get.find<EmployeesController>().employees[index].image,
+      );
+    } catch (e) {
+      log(e.toString());
+      return Text(
+        '${Get.find<EmployeesController>().employees[index].firstname}.png',
+        textAlign: TextAlign.center,
+        style: const TextStyle(color: Colors.black),
+      );
+    }
   }
 
   Text titleText() {

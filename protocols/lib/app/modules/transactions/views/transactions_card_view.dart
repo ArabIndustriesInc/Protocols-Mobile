@@ -50,90 +50,85 @@ class TransactionsCardView extends GetView {
                       color: const Color(0xff63B263),
                     ),
                   ),
-        trailing: Padding(
-          padding: const EdgeInsets.only(left: 30.0),
-          child: PopupMenuButton(
-            splashRadius: 20,
-            padding: EdgeInsets.zero,
-            //color: Colors.yellow,
-            icon: const Icon(
-              Icons.more_vert_rounded,
-              color: Colors.black,
-            ),
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(15))),
-            itemBuilder: (context) {
-              return Get.find<TransactionsController>()
-                  .menuItems
-                  .map((e) => PopupMenuItem<String>(value: e, child: Text(e)))
-                  .toList();
-            },
-            onSelected: (value) {
-              switch (value) {
-                case 'Edit':
-                  {
-                    Get.to(
-                        () => TransactionsEditView(
-                              index: index,
-                            ),
-                        binding: TransactionsEditBinding());
-                  }
-                  break;
-                case 'Delete':
-                  {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Obx(() {
-                            return DeleteAlertView(
-                              subtitle:
-                                  'Are you sure, you want to delete this transaction? This action can\'t be reversed!',
-                              title: 'Delete Transaction',
-                              action: InkWell(
-                                highlightColor: Colors.grey[200],
-                                onTap: () {
-                                  if (!Get.find<TransactionsController>()
+        trailing: PopupMenuButton(
+          splashRadius: 20,
+          padding: EdgeInsets.zero,
+          //color: Colors.yellow,
+          icon: const Icon(
+            Icons.more_vert_rounded,
+            color: Colors.black,
+          ),
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(15))),
+          itemBuilder: (context) {
+            return Get.find<TransactionsController>()
+                .menuItems
+                .map((e) => PopupMenuItem<String>(value: e, child: Text(e)))
+                .toList();
+          },
+          onSelected: (value) {
+            switch (value) {
+              case 'Edit':
+                {
+                  Get.to(
+                      () => TransactionsEditView(
+                            index: index,
+                          ),
+                      binding: TransactionsEditBinding());
+                }
+                break;
+              case 'Delete':
+                {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Obx(() {
+                          return DeleteAlertView(
+                            subtitle:
+                                'Are you sure, you want to delete this transaction? This action can\'t be reversed!',
+                            title: 'Delete Transaction',
+                            action: InkWell(
+                              highlightColor: Colors.grey[200],
+                              onTap: () {
+                                if (!Get.find<TransactionsController>()
+                                    .loadingDelete
+                                    .value) {
+                                  final id = Get.find<TransactionsController>()
+                                      .transactions[index]
+                                      .id;
+                                  TransactionsProvider()
+                                      .deleteTransactionsModel(id, context);
+                                }
+                              },
+                              child: (!Get.find<TransactionsController>()
                                       .loadingDelete
-                                      .value) {
-                                    final id =
-                                        Get.find<TransactionsController>()
-                                            .transactions[index]
-                                            .id;
-                                    TransactionsProvider()
-                                        .deleteTransactionsModel(id, context);
-                                  }
-                                },
-                                child: (!Get.find<TransactionsController>()
-                                        .loadingDelete
-                                        .value)
-                                    ? const Text(
-                                        "Confirm",
-                                        style: TextStyle(
-                                          fontSize: 15.0,
-                                          color: Color.fromARGB(255, 227, 0, 0),
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                      )
-                                    : Transform.scale(
-                                        scale: 0.8,
-                                        child: Padding(
-                                          padding: EdgeInsets.only(right: 15.w),
-                                          child:
-                                              const CircularProgressIndicator(
-                                            color: Colors.blue,
-                                          ),
+                                      .value)
+                                  ? const Text(
+                                      "Confirm",
+                                      style: TextStyle(
+                                        fontSize: 15.0,
+                                        color: Color.fromARGB(255, 227, 0, 0),
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    )
+                                  : Transform.scale(
+                                      scale: 0.8,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(right: 15.w),
+                                        child: const CircularProgressIndicator(
+                                          color: Colors.blue,
                                         ),
                                       ),
-                              ),
-                            );
-                          });
+                                    ),
+                            ),
+                          );
                         });
-                  }
-                  break;
-                default:
-              }
-            },
-          ),
+                      });
+                }
+                break;
+              default:
+            }
+          },
         ),
         children: [
           SizedBox(

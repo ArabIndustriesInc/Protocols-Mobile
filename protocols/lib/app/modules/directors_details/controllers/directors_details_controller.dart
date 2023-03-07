@@ -14,7 +14,7 @@ class DirectorDetailsButtonView extends GetView {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 25.h, vertical: 15.h),
+      padding: EdgeInsets.only(left: 25.h, right: 25.h, bottom: 20.h, top: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

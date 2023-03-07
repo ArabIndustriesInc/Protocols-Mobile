@@ -5,7 +5,24 @@ import 'package:protocols/app/data/providers/profile_provider.dart';
 
 class SettingsController extends GetxController {
   final BuildContext context;
-  Profile? profile;
+  Rx<Profile> profile = Profile(
+    firstname: '',
+    lastname: '',
+    middlename: '',
+    email: '',
+    mobile: '',
+    dob: '',
+    pannumber: '',
+    fathersname: '',
+    address: '',
+    image: '',
+    companyid: '',
+    id: '',
+    password: '',
+    role: '',
+    v: 1,
+    verified: true,
+  ).obs;
   var loading = true.obs;
   SettingsController(this.context);
   getProfile(BuildContext context) async {

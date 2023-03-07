@@ -10,10 +10,8 @@ import 'package:protocols/app/modules/drawer/views/drawer_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DirectorsAddView extends GetView<DirectorsAddController> {
-  final String title;
   const DirectorsAddView({
     Key? key,
-    required this.title,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -36,7 +34,7 @@ class DirectorsAddView extends GetView<DirectorsAddController> {
               ),
               Center(
                 child: Text(
-                  title,
+                  'Add Director',
                   style: TextStyle(
                       fontSize: 25.sp,
                       letterSpacing: .9,
@@ -134,7 +132,7 @@ class DirectorsAddView extends GetView<DirectorsAddController> {
           ),
         ),
       ),
-      bottomNavigationBar: AddDirectorsButton(action: title),
+      bottomNavigationBar: const AddDirectorsButton(),
     );
   }
 }

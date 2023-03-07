@@ -44,8 +44,9 @@ class DirectorsAddController extends GetxController {
 }
 
 class AddDirectorsButton extends GetView {
-  final String action;
-  const AddDirectorsButton({super.key, required this.action});
+  const AddDirectorsButton({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -54,27 +55,25 @@ class AddDirectorsButton extends GetView {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          (action == 'Add Director')
-              ? ElevatedButton.icon(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_rounded,
-                    color: Colors.black,
-                    size: 23.w,
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    shadowColor: Colors.transparent,
-                    elevation: 0,
-                  ),
-                  label: Text(
-                    'Back',
-                    style: TextStyle(color: Colors.black, fontSize: 18.sp),
-                  ),
-                )
-              : const SizedBox(),
+          ElevatedButton.icon(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Icon(
+              Icons.arrow_back_rounded,
+              color: Colors.black,
+              size: 23.w,
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              shadowColor: Colors.transparent,
+              elevation: 0,
+            ),
+            label: Text(
+              'Back',
+              style: TextStyle(color: Colors.black, fontSize: 18.sp),
+            ),
+          ),
           Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -84,14 +83,14 @@ class AddDirectorsButton extends GetView {
                     end: Alignment.bottomCenter)),
             child: TextButton(
               onPressed: () {
-                if (action == 'add' &&
-                    !Get.find<DirectorsAddController>().loadingAdd.value) {
+                if (!Get.find<DirectorsAddController>().loadingAdd.value) {
                   DirectorsAddFunctions().addFunction(context);
-                } else {
-                  if (!Get.find<DirectorsAddController>().loadingAdd.value) {
-                    DirectorsAddFunctions().addProfile(context);
-                  }
                 }
+                // else {
+                //   if (!Get.find<DirectorsAddController>().loadingAdd.value) {
+                //     DirectorsAddFunctions().addProfile(context);
+                //   }
+                // }
               },
               style: ElevatedButton.styleFrom(
                   shadowColor: Colors.transparent,

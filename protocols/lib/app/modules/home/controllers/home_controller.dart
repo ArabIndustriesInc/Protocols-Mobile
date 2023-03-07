@@ -1,10 +1,8 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
-// import 'package:protocols/app/data/consts/api_consts.dart';
-import 'package:protocols/app/data/providers/login_provider.dart';
+import 'package:protocols/app/data/consts/api_consts.dart';
 import 'package:protocols/app/modules/dashboard/views/dashboard_investors_view.dart';
 import 'package:protocols/app/modules/dashboard/views/dashboard_view.dart';
 import 'package:protocols/app/modules/links/views/links_view.dart';
@@ -14,7 +12,7 @@ class HomeController extends GetxController {
     Column(
       children: [
         Flexible(
-          child: (LoginProvider.role == 0)
+          child: (box.read('company_role') == '0')
               ? DashboardView()
               : DashboardInvestorsView(),
         ),
@@ -24,7 +22,6 @@ class HomeController extends GetxController {
   ];
   RxInt page = 0.obs;
   bottomNav(newIndex) {
-    log(LoginProvider.role.toString());
     page.value = newIndex;
     // log('new index: ${newIndex.toString()}');
     // log('page value: ${page.value.toString()}');

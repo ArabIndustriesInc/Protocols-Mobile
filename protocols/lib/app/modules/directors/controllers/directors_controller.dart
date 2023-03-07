@@ -46,10 +46,7 @@ class DirectorsButtonView extends GetView {
               end: Alignment.bottomCenter)),
       child: TextButton(
         onPressed: () {
-          Get.to(
-              () => const DirectorsAddView(
-                    title: 'Add Director',
-                  ),
+          Get.to(() => const DirectorsAddView(),
               binding: DirectorsAddBinding());
         },
         style: ElevatedButton.styleFrom(

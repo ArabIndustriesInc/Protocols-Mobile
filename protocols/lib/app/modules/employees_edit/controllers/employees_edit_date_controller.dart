@@ -29,6 +29,7 @@ class EmployeesEditDateController extends GetxController {
   var yrShortPersonal =
       DateFormat.y().format(DateTime(1988)).substring(2, 4).obs;
   initDateWork(DateTime date) {
+    pickedDateWork = date;
     todayDateWork.value = DateFormat.d().format(date);
     todayMonthWork.value = DateFormat.MMM().format(date);
     todayYearWork = DateFormat.y().format(date);
@@ -37,6 +38,7 @@ class EmployeesEditDateController extends GetxController {
   }
 
   initDatePersonal(DateTime date) {
+    pickedDatePersonal = date;
     todayDatePersonal.value = DateFormat.d().format(date);
     todayMonthPersonal.value = DateFormat.MMM().format(date);
     todayYearPersonal = DateFormat.y().format(date);

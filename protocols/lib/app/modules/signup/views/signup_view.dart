@@ -30,7 +30,20 @@ class SignUpView extends GetView<SignUpController> {
             ),
             const SignUpFieldView(),
             SizedBox(
-              height: 30.h,
+              height: 15.h,
+            ),
+            Obx(() => (Get.find<SignUpController>().errorIsVisible.value)
+                ? Text(
+                    Get.find<SignUpController>().errorMesage.value,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: const Color(0xFFD40A0A),
+                    ),
+                  )
+                : const SizedBox()),
+            SizedBox(
+              height: 15.h,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -53,7 +66,7 @@ class SignUpView extends GetView<SignUpController> {
                           end: Alignment.bottomCenter)),
                   child: Obx(() {
                     return ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (Get.find<TextFieldController>()
                             .formKey
                             .currentState!
@@ -83,15 +96,8 @@ class SignUpView extends GetView<SignUpController> {
                               .phNoController
                               .text
                               .trim();
-                          register(email, password, firstname, lastname,
+                          await register(email, password, firstname, lastname,
                               companyname, phone);
-                          Get.toNamed(Routes.OTP_VERIFY);
-                          Get.find<TextFieldController>()
-                              .passwordController
-                              .clear();
-                          Get.find<TextFieldController>()
-                              .confirmPasswordController
-                              .clear();
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -108,12 +114,28 @@ class SignUpView extends GetView<SignUpController> {
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         backgroundColor: Colors.transparent,
                       ),
-                      child: Text(
-                        'Sign Up',
-                        style: TextStyle(
-                            fontSize: 16.sp,
-                            fontFamily: 'Montserrat Bold',
-                            color: Colors.white),
+                      child: Row(
+                        children: [
+                          (Get.find<SignUpController>().isVisible.value)
+                              ? Transform.scale(
+                                  scale: 0.8,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 15.w),
+                                    child: const CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 1.5,
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox(),
+                          Text(
+                            'Sign Up',
+                            style: TextStyle(
+                                fontSize: 16.sp,
+                                fontFamily: 'Montserrat Bold',
+                                color: Colors.white),
+                          ),
+                        ],
                       ),
                     );
                   }),

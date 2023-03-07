@@ -9,8 +9,6 @@ import 'package:http/http.dart' as http;
 import 'package:protocols/app/data/consts/api_consts.dart';
 import 'package:protocols/app/data/providers/directors_provider.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
-import 'package:protocols/app/modules/directors_add/bindings/directors_add_binding.dart';
-import 'package:protocols/app/modules/directors_add/views/directors_add_view.dart';
 import 'package:protocols/app/modules/login/controllers/login_controller.dart';
 import 'package:protocols/app/modules/login/controllers/login_field_controller.dart';
 import 'package:protocols/app/modules/pricing_plan/bindings/pricing_plan_binding.dart';
@@ -32,23 +30,9 @@ class LoginProvider {
           role = int.parse(data["role"]);
           await DirectorsProvider().getDirectorsForProfile();
           box.write('paid_user', data['paid']);
-          final isProfileSet = box.read('isProfileSet');
-          log(isProfileSet.toString());
-          if (isProfileSet == false && role == 0) {
-            Get.offAll(
-              () => const DirectorsAddView(
-                title: 'Profile',
-              ),
-              binding: DirectorsAddBinding(),
-            );
-          } else if (isProfileSet == true || role == 1) {
-            SnackbarMessage()
-                .snackBarMessage('Logged in successfully!', context);
-            Get.offAllNamed(Routes.HOME);
-          }
+          SnackbarMessage().snackBarMessage('Logged in successfully!', context);
+          Get.offAllNamed(Routes.HOME);
         } else {
-          box.write('paid_user', data['paid']);
-          box.write('login_token', data['token']);
           Get.to(
               () => const PricingPlanView(
                   title: 'Make The Wise Decision For your Startup Solution'),
@@ -97,3 +81,17 @@ class LoginProvider {
     }
   }
 }
+ // final isProfileSet = box.read('isProfileSet');
+          // log(isProfileSet.toString());
+          // if (isProfileSet == false && role == 0) {
+          //   Get.offAll(
+          //     () => const DirectorsAddView(
+          //       title: 'Profile',
+          //     ),
+          //     binding: DirectorsAddBinding(),
+          //   );
+          // } else if (isProfileSet == true || role == 1) {
+          //   SnackbarMessage()
+          //       .snackBarMessage('Logged in successfully!', context);
+          //   Get.offAllNamed(Routes.HOME);
+          // }

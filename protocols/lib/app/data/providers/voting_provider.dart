@@ -10,6 +10,7 @@ import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/voting/controllers/voting_controller.dart';
 import 'package:protocols/app/modules/voting_add/controllers/voting_add_controller.dart';
 import 'package:protocols/app/modules/voting_details/controllers/voting_details_controller.dart';
+import 'package:protocols/app/routes/app_pages.dart';
 
 class VotingProvider extends GetConnect {
   static var isFinishedVoting = false;
@@ -28,11 +29,16 @@ class VotingProvider extends GetConnect {
       final token = box.read('login_token');
       final response = await get('${baseUrlApi}vote/showvote',
           headers: {'Authorization': 'Bearer $token'});
-
       if (response.statusCode == 200) {
         isClosedFunctionLoading('loading');
         VotingModel voting = votingFromJson(response.bodyString!);
         isClosedList(voting.data);
+      } else if (response.statusCode == 400) {
+        var data = jsonDecode(response.bodyString!);
+        if (data['payment'] == false) {
+          Get.back();
+          Get.toNamed(Routes.UPGRADE_PLAN);
+        }
       } else {
         isClosedFunctionLoading('loading');
         isClosedList([]);

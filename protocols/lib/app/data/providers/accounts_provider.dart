@@ -9,6 +9,7 @@ import 'package:protocols/app/data/consts/api_consts.dart';
 import 'package:protocols/app/data/models/accounts_model.dart';
 import 'package:protocols/app/modules/accounts/controllers/accounts_controller.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
+import 'package:protocols/app/routes/app_pages.dart';
 
 class AccountsModelProvider extends GetConnect {
   static var isFinishedAccounts = false;
@@ -33,6 +34,12 @@ class AccountsModelProvider extends GetConnect {
         isClosedFunctionLoading(false);
         AccountsModel accounts = accountsFromJson(response.bodyString!);
         isClosedList(accounts.data);
+      } else if (response.statusCode == 400) {
+        var data = jsonDecode(response.bodyString!);
+        if (data['payment'] == false) {
+          Get.back();
+          Get.toNamed(Routes.UPGRADE_PLAN);
+        }
       } else {
         isClosedFunctionLoading(false);
         isClosedList([]);

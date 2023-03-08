@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:protocols/app/modules/payment_gateway/controllers/payment_gateway_controller.dart';
 
@@ -48,17 +47,17 @@ class PaymentWidgtes {
       ),
     ],
   );
-  final cardForm = CardFormField(
-    controller: Get.find<PaymentGatewayController>().cardController,
-    style: CardFormStyle(
-      borderWidth: 20,
-      borderRadius: 10,
-      placeholderColor: Colors.grey[600],
-      borderColor: Colors.white,
-      cursorColor: Colors.grey[600],
-      textColor: Colors.grey[600],
-    ),
-  );
+  // final cardForm = CardFormField(
+  //   controller: Get.find<PaymentGatewayController>().cardController,
+  //   style: CardFormStyle(
+  //     borderWidth: 20,
+  //     borderRadius: 10,
+  //     placeholderColor: Colors.grey[600],
+  //     borderColor: Colors.white,
+  //     cursorColor: Colors.grey[600],
+  //     textColor: Colors.grey[600],
+  //   ),
+  // );
   final style = ElevatedButton.styleFrom(
       padding: EdgeInsets.symmetric(vertical: 10.h),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.w)));

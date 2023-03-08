@@ -45,7 +45,7 @@ class WelcomeView extends GetView {
                 horizontal: 55,
               ),
               child: Text(
-                'Your comfort is our key, we have perks of several platforms under one roof to make yourself better each day. Come check this out!',
+                'Protocols is designed to make your work processes more efficient, effective, and productive, enabling you to automate and integrate multiple functions seamlessly.',
                 textAlign: TextAlign.center,
                 style:
                     TextStyle(fontSize: 15.sp, fontFamily: 'Montserrat Medium'),

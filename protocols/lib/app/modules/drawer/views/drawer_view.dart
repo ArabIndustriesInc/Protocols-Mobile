@@ -32,18 +32,12 @@ class DrawerView extends GetView {
               Get.offAllNamed(Routes.HOME);
             },
           ),
-
           DashbaordNavButtons(
             title: 'Profile',
             onTap: () async {
               Scaffold.of(context).closeDrawer();
               Get.to(() => const SettingsView(),
                   binding: SettingsBinding(homeContext!));
-              // Future.delayed(Duration(seconds: 1));
-              // if (context.toString() == 'DirectorsAddView(dirty)') {
-              //   Get.find<DirectorsAddController>().mailIdController.text =
-              //       box.read('email');
-              // }
             },
           ),
           DashbaordNavButtons(
@@ -51,10 +45,6 @@ class DrawerView extends GetView {
             onTap: () {
               Scaffold.of(context).closeDrawer();
               Get.toNamed(Routes.UPGRADE_PLAN);
-              // Get.to(() => const PaymentWebView(),
-              //     binding: PricingPlanBinding());
-              //  Scaffold.of(context).closeDrawer();
-              // Get.offAllNamed(Routes.HOME);
             },
           ),
           DashbaordNavButtons(
@@ -91,101 +81,8 @@ class DrawerView extends GetView {
                   });
             },
           ),
-          // DashbaordNavButtons(
-          //   title: 'Logout',
-          //   onTap: () {
-          //     // Get.offAllNamed(Routes.HOME);
-          //   },
-          // ),
         ],
       ),
     );
   }
 }
-
-//   ListTile drawerItems(
-//       {required String title, required GestureTapCallback onTap}) {
-//     return ListTile(
-//         onTap: onTap,
-//         contentPadding:
-//             const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-//         title: Text(
-//           title,
-//           style: const TextStyle(
-//             fontSize: 20,
-//             color: Colors.black,
-//           ),
-//         ),
-//         trailing: const Icon(
-//           Icons.arrow_forward_ios_rounded,
-//           color: Colors.black,
-//         ));
-//   }
-// }
-// Container(
-            //   height: 140,
-            //   color: const Color(0xffECF5FF),
-            //   child: Column(
-            //     children: [
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.end,
-                  //   children: [
-                  //     Builder(builder: (context) {
-                  //       return IconButton(
-                  //         padding: const EdgeInsets.only(right: 30),
-                  //         onPressed: () {
-                  //           Scaffold.of(context).closeDrawer();
-                  //         },
-                  //         icon: const Icon(
-                  //           Icons.close_rounded,
-                  //           color: Color(0xff2D9CEA),
-                  //           size: 33,
-                  //         ),
-                  //       );
-                  //     }),
-                  //   ],
-                  // ),
-            //       SizedBox(height: MediaQuery.of(context).size.height / 25),
-            //       Image.asset(
-            //         'assets/images/logo.png',
-            //         height: 26,
-            //       )
-            //     ],
-            //   ),
-            // ),
-            // const Expanded(
-            //   child: SizedBox(),
-            // ),
-            // Container(
-            //   height: 8.h,
-            //   color: const Color(0xffECF5FF),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-            //     children: [
-            //       TextButton(
-            //         style: TextButton.styleFrom(shape: const CircleBorder()),
-            //         onPressed: () {},
-            //         child: Image.asset(
-            //           'assets/icons/profile.png',
-            //           height: MediaQuery.of(context).size.height * 0.045,
-            //         ),
-            //       ),
-            //       TextButton(
-            //         style: TextButton.styleFrom(shape: const CircleBorder()),
-            //         onPressed: () {},
-            //         child: Image.asset(
-            //           'assets/icons/notification.png',
-            //           height: MediaQuery.of(context).size.height * 0.045,
-            //         ),
-            //       ),
-            //       TextButton(
-            //         style: TextButton.styleFrom(shape: const CircleBorder()),
-            //         onPressed: () {},
-            //         child: Image.asset(
-            //           'assets/icons/logout.png',
-            //           height: MediaQuery.of(context).size.height * 0.045,
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // )

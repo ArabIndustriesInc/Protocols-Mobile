@@ -1,8 +1,8 @@
-import 'package:flutter_stripe/flutter_stripe.dart';
+// import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 
 class PaymentGatewayController extends GetxController {
-  final CardFormEditController cardController = CardFormEditController();
+  // final CardFormEditController cardController = CardFormEditController();
   // String taxPrice(String plan) {
   //   double tax = 0;
   //   if (plan == 'Trial Plan') {

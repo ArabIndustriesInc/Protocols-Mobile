@@ -10,6 +10,7 @@ import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/employees/controllers/employees_controller.dart';
 import 'package:protocols/app/modules/employees_add/controllers/employees_add_controller.dart';
 import 'package:protocols/app/modules/employees_edit/controllers/employees_edit_controller.dart';
+import 'package:protocols/app/routes/app_pages.dart';
 
 class EmployeesProvider extends GetConnect {
   static var isFinishedEmployees = false;
@@ -34,6 +35,12 @@ class EmployeesProvider extends GetConnect {
         isClosedFunctionLoading('loading');
         EmployeesModel employees = employeesModelFromJson(response.bodyString!);
         isClosedList(employees.data);
+      } else if (response.statusCode == 400) {
+        var data = jsonDecode(response.bodyString!);
+        if (data['payment'] == false) {
+          Get.back();
+          Get.toNamed(Routes.UPGRADE_PLAN);
+        }
       } else {
         isClosedFunctionLoading('loading');
         isClosedList([]);

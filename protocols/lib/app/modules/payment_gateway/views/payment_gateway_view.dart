@@ -84,11 +84,11 @@ class PaymentGatewayView extends GetView<PaymentGatewayController> {
               height: 30.h,
             ),
             PaymentWidgtes().billHeadMethod('Payment Details'),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              decoration: PaymentWidgtes().boxDeco,
-              child: PaymentWidgtes().cardForm,
-            ),
+            // Container(
+            //   padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            //   decoration: PaymentWidgtes().boxDeco,
+            //   child: PaymentWidgtes().cardForm,
+            // ),
             SizedBox(
               height: 30.h,
             ),

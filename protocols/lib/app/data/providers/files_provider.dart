@@ -154,7 +154,6 @@ class FilesProvider extends GetConnect {
       final response = await http.post(
           Uri.parse('${baseUrlApi}folder/deletefile/$fileid'),
           headers: {'Authorization': 'Bearer $token'});
-
       if (response.statusCode == 200) {
         getAllFiles(id, context);
         Get.back();
@@ -163,8 +162,6 @@ class FilesProvider extends GetConnect {
             .snackBarMessage('File deleted successfully!', context);
         Get.find<FolderController>().loadingDelete.value = false;
       } else {
-        log(response.statusCode.toString());
-        log(response.body);
         SnackbarMessage()
             .snackBarMessage('Oops! Action failed, Please try again', context);
       }

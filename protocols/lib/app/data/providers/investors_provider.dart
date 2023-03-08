@@ -12,6 +12,7 @@ import 'package:protocols/app/modules/investors/controllers/investors_controller
 import 'package:http/http.dart' as http;
 import 'package:protocols/app/modules/investors_add/controllers/investors_add_controller.dart';
 import 'package:protocols/app/modules/investors_edit/controllers/investors_edit_controller.dart';
+import 'package:protocols/app/routes/app_pages.dart';
 
 class InvestorsProvider extends GetConnect {
   static var isFinishedInvestors = false;
@@ -37,6 +38,12 @@ class InvestorsProvider extends GetConnect {
         isClosedFunctionLoading('loading');
         InvestorsModel investors = investorsModelFromJson(response.bodyString!);
         isClosedList(investors.data);
+      } else if (response.statusCode == 400) {
+        var data = jsonDecode(response.bodyString!);
+        if (data['payment'] == false) {
+          Get.back();
+          Get.toNamed(Routes.UPGRADE_PLAN);
+        }
       } else {
         isClosedFunctionLoading('loading');
         isClosedList([]);

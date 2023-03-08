@@ -7,12 +7,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:protocols/app/data/consts/api_consts.dart';
-import 'package:protocols/app/data/providers/directors_provider.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/login/controllers/login_controller.dart';
 import 'package:protocols/app/modules/login/controllers/login_field_controller.dart';
-import 'package:protocols/app/modules/pricing_plan/bindings/pricing_plan_binding.dart';
-import 'package:protocols/app/modules/pricing_plan/views/pricing_plan_view.dart';
 import 'package:protocols/app/routes/app_pages.dart';
 
 class LoginProvider {
@@ -21,26 +18,22 @@ class LoginProvider {
     try {
       final response = await http.post(Uri.parse('${baseUrlApi}login/check'),
           body: {'email': email, 'password': password});
-      var data = jsonDecode(response.body.toString());
       if (response.statusCode == 200) {
-        if (data["paid"] == true) {
-          box.write('email', email);
-          box.write('company_role', data["role"]);
-          box.write('login_token', data['token']);
-          role = int.parse(data["role"]);
-          await DirectorsProvider().getDirectorsForProfile();
-          box.write('paid_user', data['paid']);
-          SnackbarMessage().snackBarMessage('Logged in successfully!', context);
-          Get.offAllNamed(Routes.HOME);
-        } else {
-          Get.to(
-              () => const PricingPlanView(
-                  title: 'Make The Wise Decision For your Startup Solution'),
-              binding: PricingPlanBinding());
-        }
-      } else {
+        var data = jsonDecode(response.body.toString());
+        box.write('company_role', data["role"]);
+        box.write('login_token', data['token']);
+        role = int.parse(data["role"]);
+        box.write('paid_user', data['paid']);
+        SnackbarMessage().snackBarMessage('Logged in successfully!', context);
+        Get.offAllNamed(Routes.HOME);
+      } else if (response.statusCode == 400 || response.statusCode == 401) {
+        var data = jsonDecode(response.body.toString());
         Get.find<LoginController>().isVisible.value = false;
         Get.find<LoginController>().visibleOff(data['message'].toString());
+      } else {
+        SnackbarMessage().snackBarMessage(
+            'Oops! Action Failed, Please check internet connection and Try again',
+            context);
       }
     } catch (e) {
       Get.find<LoginController>().isVisible.value = false;

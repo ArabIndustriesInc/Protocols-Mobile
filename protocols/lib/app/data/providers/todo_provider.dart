@@ -1,4 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -8,6 +10,7 @@ import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/todo/controllers/todo_controller.dart';
 import 'package:protocols/app/modules/todo_add/controllers/todo_add_controller.dart';
 import 'package:protocols/app/modules/todo_edit/controllers/todo_edit_controller.dart';
+import 'package:protocols/app/routes/app_pages.dart';
 
 class TodoProvider extends GetConnect {
   static var isFinishedTodo = false;
@@ -31,6 +34,12 @@ class TodoProvider extends GetConnect {
         isClosedFunctionLoading('loading');
         TodoModel todo = todoModelFromJson(response.bodyString!);
         isClosedList(todo.data);
+      } else if (response.statusCode == 400) {
+        var data = jsonDecode(response.bodyString!);
+        if (data['payment'] == false) {
+          Get.back();
+          Get.toNamed(Routes.UPGRADE_PLAN);
+        }
       } else {
         isClosedFunctionLoading('loading');
         isClosedList([]);

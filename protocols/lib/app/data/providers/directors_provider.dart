@@ -27,23 +27,6 @@ class DirectorsProvider extends GetConnect {
     httpClient.baseUrl = '${baseUrlApi}director/';
   }
 
-  getDirectorsForProfile() async {
-    try {
-      final token = box.read('login_token');
-      final response = await get('${baseUrlApi}director/show',
-          headers: {'Authorization': 'Bearer $token'});
-      if (response.statusCode == 200) {
-        DirectorsModel directors = directorsModelFromJson(response.bodyString!);
-        final isProfileSet = (directors.data.toString() == '[]') ? false : true;
-        log(directors.data.toString());
-        log(isProfileSet.toString());
-        box.write('isProfileSet', isProfileSet);
-      }
-    } catch (e) {
-      log(e.toString());
-    }
-  }
-
   getAllDirectors(BuildContext context) async {
     isFinishedDirectors = false;
     try {
@@ -54,6 +37,12 @@ class DirectorsProvider extends GetConnect {
         isClosedFunctionLoading('loading');
         DirectorsModel directors = directorsModelFromJson(response.bodyString!);
         isClosedList(directors.data!);
+      } else if (response.statusCode == 400) {
+        var data = jsonDecode(response.bodyString!);
+        if (data['payment'] == false) {
+          Get.back();
+          Get.toNamed(Routes.UPGRADE_PLAN);
+        }
       } else {
         isClosedFunctionLoading('loading');
         isClosedList([]);

@@ -34,9 +34,8 @@ final textDeco = OutlineInputBorder(
   borderRadius: BorderRadius.circular(15),
   borderSide: const BorderSide(color: Color(0xffCBCBCB), width: .8),
 );
-bool paid = box.read('paid_user') ?? false;
 final token = box.read('login_token');
 final initRoute =
-    (paid == true && token != '') ? Routes.HOME : AppPages.INITIAL;
+    (token == null || token == '') ? AppPages.INITIAL : Routes.HOME;
 // final initRoute = Routes.PRICING_PLAN;
 // const initRoute = Routes.HOME;

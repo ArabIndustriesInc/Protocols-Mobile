@@ -7,6 +7,7 @@ import 'package:protocols/app/data/consts/api_consts.dart';
 import 'package:protocols/app/data/models/folder_model.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/documents/controllers/documents_controller.dart';
+import 'package:protocols/app/routes/app_pages.dart';
 
 class FolderProvider extends GetConnect {
   static var isFinishedDocuments = false;
@@ -30,6 +31,12 @@ class FolderProvider extends GetConnect {
         isClosedFunctionLoading('loading');
         FoldersModel folder = foldersModelFromJson(response.bodyString!);
         isClosedList(folder.data);
+      } else if (response.statusCode == 400) {
+        var data = jsonDecode(response.bodyString!);
+        if (data['payment'] == false) {
+          Get.back();
+          Get.toNamed(Routes.UPGRADE_PLAN);
+        }
       } else {
         isClosedFunctionLoading('loading');
         isClosedList([]);

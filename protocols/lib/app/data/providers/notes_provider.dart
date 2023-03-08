@@ -1,4 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +10,7 @@ import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/notes/controllers/notes_controller.dart';
 import 'package:protocols/app/modules/notes_add/controllers/notes_add_controller.dart';
 import 'package:protocols/app/modules/notes_edit/controllers/notes_edit_controller.dart';
+import 'package:protocols/app/routes/app_pages.dart';
 
 class NotesProvider extends GetConnect {
   static var isFinishedNotes = false;
@@ -32,6 +35,12 @@ class NotesProvider extends GetConnect {
         isClosedFunctionLoading('loading');
         NotesModel notes = notesFromJson(response.bodyString!);
         isClosedList(notes.data);
+      } else if (response.statusCode == 400) {
+        var data = jsonDecode(response.bodyString!);
+        if (data['payment'] == false) {
+          Get.back();
+          Get.toNamed(Routes.UPGRADE_PLAN);
+        }
       } else {
         isClosedFunctionLoading('loading');
         isClosedList([]);

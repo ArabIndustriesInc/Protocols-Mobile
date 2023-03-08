@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:protocols/app/data/models/profile_model.dart';
 import 'package:protocols/app/modules/consts/appbar.dart';
 import 'package:protocols/app/modules/settings/controllers/settings_controller.dart';
 import 'package:protocols/app/modules/settings/controllers/settings_date_controller.dart';
+import 'package:protocols/app/routes/app_pages.dart';
 
 class ProfileProvider extends GetConnect {
   static var isFinishedProfile = false;
@@ -33,6 +35,12 @@ class ProfileProvider extends GetConnect {
       if (response.statusCode == 200) {
         ProfileModel profile = profileModelFromJson(response.bodyString!);
         isClosedList(profile.data);
+      } else if (response.statusCode == 400) {
+        var data = jsonDecode(response.bodyString!);
+        if (data['payment'] == false) {
+          Get.back();
+          Get.toNamed(Routes.UPGRADE_PLAN);
+        }
       } else {
         isClosedFunctionLoading('loading');
       }
